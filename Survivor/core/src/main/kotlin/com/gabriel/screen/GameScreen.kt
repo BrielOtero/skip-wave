@@ -1,8 +1,11 @@
 package com.gabriel.screen
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.Scaling
@@ -11,6 +14,8 @@ import com.gabriel.component.AnimationComponent
 import com.gabriel.component.AnimationModel
 import com.gabriel.component.AnimationType
 import com.gabriel.component.ImageComponent
+import com.gabriel.event.MapChangeEvent
+import com.gabriel.event.fire
 import com.gabriel.system.AnimationSystem
 import com.gabriel.system.RenderSystem
 import com.github.quillraven.fleks.World
@@ -20,7 +25,7 @@ import ktx.log.logger
 
 class GameScreen : KtxScreen {
     private val stage: Stage = Stage(ExtendViewport(16f, 9f));
-    private val textureAtlas = TextureAtlas("assets/graphics/game.atlas")
+    private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game.atlas"))
     private val world: World = World {
         inject(stage);
         inject(textureAtlas);
@@ -35,14 +40,23 @@ class GameScreen : KtxScreen {
     override fun show() {
         log.debug { "GameScreen gets shown" };
 
+        world.systems.forEach { system->
+            if(system is EventListener){
+                stage.addListener(system)
+            }
+        }
+
+        val tiledMap = TmxMapLoader().load(Gdx.files.internal("maps/demo.tmx").path());
+        stage.fire(MapChangeEvent(tiledMap));
+
         world.entity {
             add<ImageComponent> {
                 image = Image().apply {
                     setSize(4f, 4f)
                 }
             }
-            add<AnimationComponent>{
-                nextAnimation(AnimationModel.PLAYER,AnimationType.IDLE)
+            add<AnimationComponent> {
+                nextAnimation(AnimationModel.PLAYER, AnimationType.IDLE)
             }
         }
 
@@ -50,11 +64,11 @@ class GameScreen : KtxScreen {
             add<ImageComponent> {
                 image = Image().apply {
                     setSize(4f, 4f)
-                    setPosition(12f,0f)
+                    setPosition(12f, 0f)
                 }
             }
-            add<AnimationComponent>{
-                nextAnimation(AnimationModel.SLIME,AnimationType.RUN)
+            add<AnimationComponent> {
+                nextAnimation(AnimationModel.SLIME, AnimationType.RUN)
             }
         }
     }

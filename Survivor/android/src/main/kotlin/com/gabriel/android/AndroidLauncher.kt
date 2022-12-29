@@ -12,6 +12,7 @@ class AndroidLauncher : AndroidApplication() {
         super.onCreate(savedInstanceState)
         initialize(Survivor(), AndroidApplicationConfiguration().apply {
             // Configure your application here.
+
         })
     }
 }

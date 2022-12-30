@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -17,6 +18,7 @@ import com.gabriel.component.ImageComponent
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
 import com.gabriel.system.AnimationSystem
+import com.gabriel.system.EntitySpawnSystem
 import com.gabriel.system.RenderSystem
 import com.github.quillraven.fleks.World
 import ktx.app.KtxScreen
@@ -25,13 +27,16 @@ import ktx.log.logger
 
 class GameScreen : KtxScreen {
     private val stage: Stage = Stage(ExtendViewport(16f, 9f));
-    private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game.atlas"))
+    private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game.atlas"));
+    private var currentMap : TiledMap? = null;
+
     private val world: World = World {
         inject(stage);
         inject(textureAtlas);
 
         componentListener<ImageComponent.Companion.ImageComponentListener>();
 
+        system<EntitySpawnSystem>();
         system<AnimationSystem>();
         system<RenderSystem>();
 
@@ -46,31 +51,9 @@ class GameScreen : KtxScreen {
             }
         }
 
-        val tiledMap = TmxMapLoader().load(Gdx.files.internal("maps/demo.tmx").path());
-        stage.fire(MapChangeEvent(tiledMap));
+        currentMap = TmxMapLoader().load(Gdx.files.internal("maps/demo.tmx").path());
+        stage.fire(MapChangeEvent(currentMap!!));
 
-        world.entity {
-            add<ImageComponent> {
-                image = Image().apply {
-                    setSize(4f, 4f)
-                }
-            }
-            add<AnimationComponent> {
-                nextAnimation(AnimationModel.PLAYER, AnimationType.IDLE)
-            }
-        }
-
-        world.entity {
-            add<ImageComponent> {
-                image = Image().apply {
-                    setSize(4f, 4f)
-                    setPosition(12f, 0f)
-                }
-            }
-            add<AnimationComponent> {
-                nextAnimation(AnimationModel.SLIME, AnimationType.RUN)
-            }
-        }
     }
 
     override fun resize(width: Int, height: Int) {
@@ -85,6 +68,7 @@ class GameScreen : KtxScreen {
         stage.disposeSafely();
         textureAtlas.disposeSafely();
         world.dispose();
+        currentMap?.disposeSafely();
     }
 
     companion object {

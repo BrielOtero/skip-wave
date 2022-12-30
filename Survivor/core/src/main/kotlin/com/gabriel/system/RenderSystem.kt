@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.gabriel.Survivor.Companion.UNIT_SCALE
 import com.gabriel.component.ImageComponent
 import com.gabriel.event.MapChangeEvent
 import com.github.quillraven.fleks.AllOf
@@ -28,7 +29,7 @@ class RenderSystem(
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>();
     private val fgdLayers = mutableListOf<TiledMapTileLayer>();
-    private val mapRenderer = OrthogonalTiledMapRenderer(null, 1 / 16f, stage.batch);
+    private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, stage.batch);
     private val orthoCam = stage.camera as OrthographicCamera;
 
     override fun onTick() {

@@ -23,31 +23,31 @@ class AnimationSystem(
 
     ) : IteratingSystem() {
 
-    private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>();
+    private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>()
 
     override fun onTickEntity(entity: Entity) {
-        val aniCmp = animationCmps[entity];
+        val aniCmp = animationCmps[entity]
 
         if (aniCmp.nextAnimation == NO_ANIMATION) {
-            aniCmp.stateTime += deltaTime;
+            aniCmp.stateTime += deltaTime
 
         } else {
-            aniCmp.animation = animation(aniCmp.nextAnimation);
-            aniCmp.stateTime = 0f;
-            aniCmp.nextAnimation = NO_ANIMATION;
+            aniCmp.animation = animation(aniCmp.nextAnimation)
+            aniCmp.stateTime = 0f
+            aniCmp.nextAnimation = NO_ANIMATION
         }
 
-        aniCmp.animation.playMode = aniCmp.playMode;
-        imageCmps[entity].image.drawable = aniCmp.animation.getKeyFrame(aniCmp.stateTime);
+        aniCmp.animation.playMode = aniCmp.playMode
+        imageCmps[entity].image.drawable = aniCmp.animation.getKeyFrame(aniCmp.stateTime)
     }
 
     private fun animation(aniKeyPath: String): Animation<TextureRegionDrawable> {
         return cachedAnimations.getOrPut(aniKeyPath) {
             log.debug { "New animation is created for '$aniKeyPath'" }
-            val regions = textureAtlas.findRegions(aniKeyPath);
+            val regions = textureAtlas.findRegions(aniKeyPath)
 
             if (regions.isEmpty) {
-                gdxError("There aren't texture regions for $aniKeyPath");
+                gdxError("There aren't texture regions for $aniKeyPath")
             }
 
             Animation(DEFAULT_FRAME_DURATION, regions.map { TextureRegionDrawable(it) })
@@ -55,7 +55,7 @@ class AnimationSystem(
     }
 
     companion object {
-        private val log = logger<AnimationSystem>();
-        private const val DEFAULT_FRAME_DURATION = 1 / 8f;
+        private val log = logger<AnimationSystem>()
+        private const val DEFAULT_FRAME_DURATION = 1 / 8f
     }
 }

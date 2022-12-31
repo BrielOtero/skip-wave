@@ -6,14 +6,14 @@ import com.github.quillraven.fleks.ComponentListener
 import com.github.quillraven.fleks.Entity
 
 class ImageComponent : Comparable<ImageComponent> {
-    lateinit var image: Image;
+    lateinit var image: Image
 
     override fun compareTo(other: ImageComponent): Int {
-        val yDiff = other.image.y.compareTo(image.y);
+        val yDiff = other.image.y.compareTo(image.y)
         return if (yDiff != 0) {
-            yDiff;
+            yDiff
         } else {
-            other.image.x.compareTo(image.x);
+            other.image.x.compareTo(image.x)
         }
     }
 
@@ -23,11 +23,11 @@ class ImageComponent : Comparable<ImageComponent> {
         ) : ComponentListener<ImageComponent> {
 
             override fun onComponentAdded(entity: Entity, component: ImageComponent) {
-                stage.addActor(component.image);
+                stage.addActor(component.image)
             }
 
             override fun onComponentRemoved(entity: Entity, component: ImageComponent) {
-                stage.root.removeActor(component.image);
+                stage.root.removeActor(component.image)
             }
 
         }

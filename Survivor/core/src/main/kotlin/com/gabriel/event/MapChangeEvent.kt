@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.Stage
 
 fun Stage.fire(event: Event){
-    this.root.fire(event);
+    this.root.fire(event)
 }
 
 data class MapChangeEvent(val map: TiledMap) : Event() {

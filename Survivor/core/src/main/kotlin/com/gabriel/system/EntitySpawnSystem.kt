@@ -24,6 +24,7 @@ import ktx.math.vec2
 import ktx.tiled.*
 import kotlin.math.log
 import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
+import com.gabriel.actor.FlipImage
 
 @AllOf([SpawnComponent::class])
 class EntitySpawnSystem(
@@ -42,7 +43,7 @@ class EntitySpawnSystem(
 
             world.entity {
                 val imageCmp = add<ImageComponent> {
-                    image = Image().apply {
+                    image = FlipImage().apply {
                         setPosition(location.x, location.y)
                         setSize(relativeSize.x, relativeSize.y)
                         setScaling(Scaling.fill)
@@ -53,12 +54,22 @@ class EntitySpawnSystem(
                     nextAnimation(cfg.model, AnimationType.IDLE)
                 }
 
-                physicCmpFromImage(phWorld, imageCmp.image,cfg.bodyType) { phCmp, width, height ->
+                physicCmpFromImage(phWorld, imageCmp.image, cfg.bodyType) { phCmp, width, height ->
                     val w = width * cfg.physicScaling.x
                     val h = height * cfg.physicScaling.y
 
+                    // hit box
                     box(w, h, cfg.physicOffset) {
-                        isSensor = false
+                        isSensor = cfg.bodyType != StaticBody
+                    }
+
+                    if (cfg.bodyType != StaticBody) {
+                        // collision box
+                        val collH = h * 0.4f
+                        val collOffset = vec2().apply { set(cfg.physicOffset) }
+                        collOffset.y -= h * 0.5f - collH * 0.5f
+                        box(w, collH, collOffset)
+
                     }
 
                 }
@@ -72,6 +83,11 @@ class EntitySpawnSystem(
                 if (cfg.model.name == "PLAYER") {
                     add<PlayerComponent>()
                 }
+
+                if (cfg.bodyType != StaticBody) {
+                    // such entities will create/remove collision objects
+                    add<CollisionComponent>()
+                }
             }
         }
         world.remove(entity)
@@ -84,11 +100,13 @@ class EntitySpawnSystem(
                 physicScaling = vec2(0.3f, 0.3f),
                 physicOffset = vec2(0f, -10f * UNIT_SCALE)
             )
+
             "SLIME" -> SpawnCfg(
                 AnimationModel.SLIME,
                 physicScaling = vec2(0.3f, 0.3f),
                 physicOffset = vec2(0f, -2f * UNIT_SCALE)
             )
+
             "CHEST" -> SpawnCfg(AnimationModel.CHEST, speedScaling = 0f, bodyType = BodyDef.BodyType.StaticBody)
             else -> gdxError("Type $type has no SpawnCfg setup.")
         }

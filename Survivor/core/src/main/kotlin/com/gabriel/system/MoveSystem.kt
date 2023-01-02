@@ -1,5 +1,6 @@
 package com.gabriel.system
 
+import com.gabriel.component.ImageComponent
 import com.gabriel.component.MoveComponent
 import com.gabriel.component.PhysicComponent
 import com.github.quillraven.fleks.AllOf
@@ -13,6 +14,7 @@ import ktx.math.component2
 class MoveSystem(
     private val moveCmps: ComponentMapper<MoveComponent>,
     private val physicCmps: ComponentMapper<PhysicComponent>,
+    private val imageCmps: ComponentMapper<ImageComponent>,
 ) : IteratingSystem() {
 
     override fun onTickEntity(entity: Entity) {
@@ -34,5 +36,11 @@ class MoveSystem(
             mass * (moveCmp.speed * moveCmp.cos - velX),
             mass * (moveCmp.speed * moveCmp.sin - velY)
         )
+
+        imageCmps.getOrNull(entity)?.let { imageCmp ->
+            if (moveCmp.cos != 0f) {
+                imageCmp.image.flipX = moveCmp.cos < 0
+            }
+        }
     }
 }

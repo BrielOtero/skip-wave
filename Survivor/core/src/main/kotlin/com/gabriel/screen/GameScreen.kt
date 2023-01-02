@@ -37,6 +37,8 @@ class GameScreen : KtxScreen {
         componentListener<PhysicComponent.Companion.PhysicComponentListener>()
 
         system<EntitySpawnSystem>()
+        system<CollisionSpawnSystem>()
+        system<CollisionDespawnSystem>()
         system<MoveSystem>()
         system<PhysicSystem>()
         system<AnimationSystem>()

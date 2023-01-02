@@ -28,7 +28,7 @@ class CameraSystem(
             val viewH = camera.viewportHeight * 0.5f
             camera.position.set(
                 image.x.coerceIn(viewW, maxW - viewW),
-                image.y.coerceIn(viewH, maxH - viewH),
+                image.y.coerceIn(viewH, maxH -viewW),
                 camera.position.z
             )
         }

@@ -23,6 +23,7 @@ import ktx.log.logger
 import ktx.math.vec2
 import ktx.tiled.*
 import kotlin.math.log
+import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 
 @AllOf([SpawnComponent::class])
 class EntitySpawnSystem(
@@ -52,20 +53,19 @@ class EntitySpawnSystem(
                     nextAnimation(cfg.model, AnimationType.IDLE)
                 }
 
-                physicCmpFromImage(
-                    phWorld,
-                    imageCmp.image,
-                    BodyDef.BodyType.DynamicBody
-                ) { phCmp, width, height ->
-                    box(width, height) {
+                physicCmpFromImage(phWorld, imageCmp.image,cfg.bodyType) { phCmp, width, height ->
+                    val w = width * cfg.physicScaling.x
+                    val h = height * cfg.physicScaling.y
+
+                    box(w, h, cfg.physicOffset) {
                         isSensor = false
                     }
 
                 }
 
-                if(cfg.speedScaling>0f){
-                    add<MoveComponent>{
-                        speed= DEFAULT_SPEED*cfg.speedScaling
+                if (cfg.speedScaling > 0f) {
+                    add<MoveComponent> {
+                        speed = DEFAULT_SPEED * cfg.speedScaling
                     }
                 }
 
@@ -79,9 +79,17 @@ class EntitySpawnSystem(
 
     private fun spawnCfg(type: String): SpawnCfg = cachedCfgs.getOrPut(type) {
         when (type) {
-            "PLAYER" -> SpawnCfg(AnimationModel.PLAYER)
-            "SLIME" -> SpawnCfg(AnimationModel.SLIME)
-            "CHEST" -> SpawnCfg(AnimationModel.CHEST)
+            "PLAYER" -> SpawnCfg(
+                AnimationModel.PLAYER,
+                physicScaling = vec2(0.3f, 0.3f),
+                physicOffset = vec2(0f, -10f * UNIT_SCALE)
+            )
+            "SLIME" -> SpawnCfg(
+                AnimationModel.SLIME,
+                physicScaling = vec2(0.3f, 0.3f),
+                physicOffset = vec2(0f, -2f * UNIT_SCALE)
+            )
+            "CHEST" -> SpawnCfg(AnimationModel.CHEST, speedScaling = 0f, bodyType = BodyDef.BodyType.StaticBody)
             else -> gdxError("Type $type has no SpawnCfg setup.")
         }
     }

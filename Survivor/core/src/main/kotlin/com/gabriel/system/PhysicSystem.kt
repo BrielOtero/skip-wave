@@ -13,6 +13,9 @@ import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.gabriel.component.CollisionComponent
 import com.gabriel.component.TiledComponent
 
+val Fixture.entity: Entity
+    get() = this.body.userData as Entity
+
 @AllOf([PhysicComponent::class, ImageComponent::class])
 class PhysicSystem(
     private val phWorld: World,
@@ -66,8 +69,7 @@ class PhysicSystem(
         }
     }
 
-    private val Fixture.entity: Entity
-        get() = this.body.userData as Entity
+
 
     override fun beginContact(contact: Contact) {
         val entityA: Entity = contact.fixtureA.entity

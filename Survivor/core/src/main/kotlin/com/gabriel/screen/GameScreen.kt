@@ -7,8 +7,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.gabriel.component.FloatingTextComponent
 import com.gabriel.component.ImageComponent
 import com.gabriel.component.PhysicComponent
+import com.gabriel.component.StateComponent
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
 import com.gabriel.input.PlayerKeyboardInputProcessor
@@ -21,7 +23,8 @@ import ktx.log.logger
 import ktx.math.vec2
 
 class GameScreen : KtxScreen {
-    private val stage: Stage = Stage(ExtendViewport(16f, 9f))
+    private val gameStage: Stage = Stage(ExtendViewport(16f, 9f))
+    private val uiStage: Stage = Stage(ExtendViewport(1280f, 720f))
     private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game.atlas"))
     private var currentMap: TiledMap? = null
     private val phWorld = createWorld(gravity = vec2()).apply {
@@ -29,20 +32,29 @@ class GameScreen : KtxScreen {
     }
 
     private val eWorld: World = World {
-        inject(stage)
+        inject(gameStage)
+        inject("uiStage", uiStage)
         inject(textureAtlas)
         inject(phWorld)
 
         componentListener<ImageComponent.Companion.ImageComponentListener>()
         componentListener<PhysicComponent.Companion.PhysicComponentListener>()
+        componentListener<FloatingTextComponent.Companion.FloatingTextComponentListener>()
+        componentListener<StateComponent.Companion.StateComponentListener>()
 
         system<EntitySpawnSystem>()
         system<CollisionSpawnSystem>()
         system<CollisionDespawnSystem>()
         system<MoveSystem>()
+        system<AttackSystem>()
+        system<LootSystem>()
+        system<DeadSystem>()
+        system<LifeSystem>()
         system<PhysicSystem>()
         system<AnimationSystem>()
+        system<StateSystem>()
         system<CameraSystem>()
+        system<FloatingTextSystem>()
         system<RenderSystem>()
         system<DebugSystem>()
 
@@ -53,19 +65,19 @@ class GameScreen : KtxScreen {
 
         eWorld.systems.forEach { system ->
             if (system is EventListener) {
-                stage.addListener(system)
+                gameStage.addListener(system)
             }
         }
 
         currentMap = TmxMapLoader().load(Gdx.files.internal("maps/demo.tmx").path())
-        stage.fire(MapChangeEvent(currentMap!!))
+        gameStage.fire(MapChangeEvent(currentMap!!))
 
-        PlayerKeyboardInputProcessor(eWorld, eWorld.mapper())
-
+        PlayerKeyboardInputProcessor(eWorld)
     }
 
     override fun resize(width: Int, height: Int) {
-        stage.viewport.update(width, height, true)
+        gameStage.viewport.update(width, height, true)
+        uiStage.viewport.update(width, height, true)
     }
 
     override fun render(delta: Float) {
@@ -73,7 +85,8 @@ class GameScreen : KtxScreen {
     }
 
     override fun dispose() {
-        stage.disposeSafely()
+        gameStage.disposeSafely()
+        uiStage.disposeSafely()
         textureAtlas.disposeSafely()
         eWorld.dispose()
         currentMap?.disposeSafely()

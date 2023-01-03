@@ -23,8 +23,8 @@ class MoveSystem(
         val mass = physicCmp.body.mass
         val (velX, velY) = physicCmp.body.linearVelocity
 
-        if (moveCmp.cos == 0f && moveCmp.sin == 0f) {
-            // no direction specified -> stop entity immediately
+        if ((moveCmp.cos == 0f && moveCmp.sin == 0f) || moveCmp.root) {
+            // no direction specified or rooted-> stop entity immediately
             physicCmp.impulse.set(
                 mass * (0f - velX),
                 mass * (0f - velY),

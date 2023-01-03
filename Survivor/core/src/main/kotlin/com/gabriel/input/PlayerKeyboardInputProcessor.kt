@@ -3,6 +3,7 @@ package com.gabriel.input
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Input.Keys.*
+import com.gabriel.component.AttackComponent
 import com.gabriel.component.MoveComponent
 import com.gabriel.component.PlayerComponent
 import com.github.quillraven.fleks.ComponentMapper
@@ -11,7 +12,8 @@ import ktx.app.KtxInputAdapter
 
 class PlayerKeyboardInputProcessor(
     world: World,
-    private val moveCmps: ComponentMapper<MoveComponent>,
+    private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
+    private val attackCmps: ComponentMapper<AttackComponent> = world.mapper(),
 ) : KtxInputAdapter {
 
     private var playerSin = 0f
@@ -45,6 +47,13 @@ class PlayerKeyboardInputProcessor(
                 LEFT -> playerCos = -1f
             }
             updatePlayerMovement()
+            return true
+        } else if (keycode == SPACE) {
+            playerEntities.forEach {
+                with(attackCmps[it]) {
+                    doAttack = true
+                }
+            }
             return true
         }
         return false

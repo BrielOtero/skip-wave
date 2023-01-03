@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.Survivor.Companion.UNIT_SCALE
 import com.gabriel.component.ImageComponent
 import com.gabriel.event.MapChangeEvent
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.*
 import com.github.quillraven.fleks.collection.compareEntity
 import ktx.assets.disposeSafely
 import ktx.graphics.use
@@ -21,7 +18,8 @@ import ktx.tiled.forEachLayer
 
 @AllOf([ImageComponent::class])
 class RenderSystem(
-    private val stage: Stage,
+    private val gameStage: Stage,
+    @Qualifier("uiStage") private val uiStage: Stage,
     private val imageCmps: ComponentMapper<ImageComponent>
 ) : EventListener, IteratingSystem(
     comparator = compareEntity { e1, e2 -> imageCmps[e1].compareTo(imageCmps[e2]) }
@@ -29,19 +27,19 @@ class RenderSystem(
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>()
     private val fgdLayers = mutableListOf<TiledMapTileLayer>()
-    private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, stage.batch)
-    private val orthoCam = stage.camera as OrthographicCamera
+    private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, gameStage.batch)
+    private val orthoCam = gameStage.camera as OrthographicCamera
 
     override fun onTick() {
         super.onTick()
 
-        with(stage) {
+        with(gameStage) {
             viewport.apply()
 
             AnimatedTiledMapTile.updateAnimationBaseTime()
             mapRenderer.setView(orthoCam)
             if (bgdLayers.isNotEmpty()) {
-                stage.batch.use(orthoCam.combined) {
+                gameStage.batch.use(orthoCam.combined) {
                     bgdLayers.forEach { mapRenderer.renderTileLayer(it) }
                 }
             }
@@ -50,11 +48,20 @@ class RenderSystem(
             draw()
 
             if (fgdLayers.isNotEmpty()) {
-                stage.batch.use(orthoCam.combined) {
+                gameStage.batch.use(orthoCam.combined) {
                     fgdLayers.forEach { mapRenderer.renderTileLayer(it) }
                 }
             }
         }
+
+        // render UI
+        with(uiStage){
+            viewport.apply()
+            act(deltaTime)
+            draw()
+        }
+
+
     }
 
     override fun onTickEntity(entity: Entity) {

@@ -9,7 +9,7 @@ import ktx.math.vec2
 
 @AllOf([FloatingTextComponent::class])
 class FloatingTextSystem(
-    private val gameStage: Stage,
+    @Qualifier("gameStage") private val gameStage: Stage,
     @Qualifier("uiStage") private val uiStage: Stage,
     private val textCmps: ComponentMapper<FloatingTextComponent>,
 ) : IteratingSystem() {

@@ -1,18 +1,19 @@
 package com.gabriel.system
 
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.AnimationComponent
 import com.gabriel.component.AnimationType
 import com.gabriel.component.LootComponent
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.IteratingSystem
+import com.gabriel.event.EntityLootEvent
+import com.gabriel.event.fire
+import com.github.quillraven.fleks.*
 
 @AllOf([LootComponent::class])
 class LootSystem(
     private val lootCmps: ComponentMapper<LootComponent>,
-    private val aniCmps: ComponentMapper<AnimationComponent>,
+    private val animationCmps: ComponentMapper<AnimationComponent>,
+    @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : IteratingSystem() {
 
@@ -22,8 +23,9 @@ class LootSystem(
                 return
             }
 
+            gameStage.fire(EntityLootEvent(animationCmps[entity].model))
             configureEntity(entity) { lootCmps.remove(it) }
-            aniCmps.getOrNull(entity)?.let { aniCmp ->
+            animationCmps.getOrNull(entity)?.let { aniCmp ->
                 aniCmp.nextAnimation(AnimationType.OPEN)
                 aniCmp.playMode = Animation.PlayMode.NORMAL
             }

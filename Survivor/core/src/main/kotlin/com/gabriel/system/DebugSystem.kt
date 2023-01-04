@@ -6,13 +6,14 @@ import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.system.AttackSystem.Companion.AABB_RECT
 import com.github.quillraven.fleks.IntervalSystem
+import com.github.quillraven.fleks.Qualifier
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
 class DebugSystem(
     private val phWorld: World,
-    private val stage: Stage
-) : IntervalSystem(enabled = false) {
+    @Qualifier("gameStage") private val gameStage: Stage
+) : IntervalSystem(enabled = true) {
 
     private lateinit var physicRenderer: Box2DDebugRenderer
     private lateinit var shapeRenderer: ShapeRenderer
@@ -25,8 +26,8 @@ class DebugSystem(
     }
 
     override fun onTick() {
-        physicRenderer.render(phWorld, stage.camera.combined)
-        shapeRenderer.use(ShapeRenderer.ShapeType.Line, stage.camera.combined) {
+        physicRenderer.render(phWorld, gameStage.camera.combined)
+        shapeRenderer.use(ShapeRenderer.ShapeType.Line, gameStage.camera.combined) {
             it.setColor(1f, 0f, 0f, 0f)
             it.rect(AABB_RECT.x, AABB_RECT.y, AABB_RECT.width - AABB_RECT.x, AABB_RECT.height - AABB_RECT.y)
         }

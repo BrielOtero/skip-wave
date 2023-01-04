@@ -6,21 +6,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.ImageComponent
 import com.gabriel.component.PlayerComponent
 import com.gabriel.event.MapChangeEvent
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.*
 import ktx.tiled.height
 import ktx.tiled.width
 
 @AllOf([PlayerComponent::class, ImageComponent::class])
 class CameraSystem(
     private val imageCmps: ComponentMapper<ImageComponent>,
-    stage: Stage,
+    @Qualifier("gameStage") gameStage: Stage,
 ) : EventListener, IteratingSystem() {
     private var maxW = 0f
     private var maxH = 0f
-    private val camera = stage.camera
+    private val camera = gameStage.camera
 
     override fun onTickEntity(entity: Entity) {
         with(imageCmps[entity]) {

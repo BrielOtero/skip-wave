@@ -18,7 +18,7 @@ import ktx.tiled.forEachLayer
 
 @AllOf([ImageComponent::class])
 class RenderSystem(
-    private val gameStage: Stage,
+    @Qualifier("gameStage") private val gameStage: Stage,
     @Qualifier("uiStage") private val uiStage: Stage,
     private val imageCmps: ComponentMapper<ImageComponent>
 ) : EventListener, IteratingSystem(

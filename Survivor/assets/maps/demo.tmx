@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.1" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="9">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="9">
  <properties>
-  <property name="music" value="fields.ogg"/>
+  <property name="music" value="audio/fields.ogg"/>
  </properties>
  <tileset firstgid="1" name="map" tilewidth="16" tileheight="16" spacing="6" margin="3" tilecount="121" columns="11">
   <image source="../graphics/map.png" width="242" height="242"/>

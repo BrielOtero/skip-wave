@@ -3,15 +3,13 @@ package com.gabriel.system
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.World
-import com.gabriel.component.ImageComponent
-import com.gabriel.component.PhysicComponent
 import com.github.quillraven.fleks.*
 import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
 import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
-import com.gabriel.component.CollisionComponent
-import com.gabriel.component.TiledComponent
+import com.gabriel.component.*
+import com.gabriel.system.EntitySpawnSystem.Companion.AI_SENSOR
 
 val Fixture.entity: Entity
     get() = this.body.userData as Entity
@@ -23,6 +21,7 @@ class PhysicSystem(
     private val physicCmps: ComponentMapper<PhysicComponent>,
     private val tiledCmps: ComponentMapper<TiledComponent>,
     private val collisionCmps: ComponentMapper<CollisionComponent>,
+    private val aiCmps: ComponentMapper<AiComponent>,
 ) : ContactListener, IteratingSystem(interval = Fixed(1 / 60f)) {
     init {
         phWorld.setContactListener(this)
@@ -70,7 +69,6 @@ class PhysicSystem(
     }
 
 
-
     override fun beginContact(contact: Contact) {
         val entityA: Entity = contact.fixtureA.entity
         val entityB: Entity = contact.fixtureB.entity
@@ -78,6 +76,9 @@ class PhysicSystem(
         val isEntityBCollisionFixture = entityB in collisionCmps && !contact.fixtureB.isSensor
         val isEntityACollisionFixture = entityA in collisionCmps && !contact.fixtureA.isSensor
         val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
+        val isEntityAAiSensor = entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
+        val isEntityBAiSensor = entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
+
 
         when {
             isEntityATiledCollisionSensor && isEntityBCollisionFixture -> {
@@ -87,6 +88,14 @@ class PhysicSystem(
             isEntityBTiledCollisionSensor && isEntityACollisionFixture -> {
                 tiledCmps[entityB].nearbyEntities += entityA
             }
+
+            isEntityAAiSensor && isEntityBCollisionFixture -> {
+                aiCmps[entityA].nearbyEntitites += entityB
+            }
+
+            isEntityBAiSensor && isEntityACollisionFixture -> {
+                aiCmps[entityB].nearbyEntitites += entityA
+            }
         }
     }
 
@@ -95,14 +104,24 @@ class PhysicSystem(
         val entityB: Entity = contact.fixtureB.entity
         val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
         val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
+        val isEntityAAiSensor = entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
+        val isEntityBAiSensor = entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
 
         when {
-            isEntityATiledCollisionSensor && !contact.fixtureB.isSensor-> {
+            isEntityATiledCollisionSensor && !contact.fixtureB.isSensor -> {
                 tiledCmps[entityA].nearbyEntities -= entityB
             }
 
             isEntityBTiledCollisionSensor && !contact.fixtureA.isSensor -> {
                 tiledCmps[entityB].nearbyEntities -= entityA
+            }
+
+            isEntityAAiSensor && !contact.fixtureB.isSensor -> {
+                aiCmps[entityA].nearbyEntitites -= entityB
+            }
+
+            isEntityBAiSensor && !contact.fixtureA.isSensor -> {
+                aiCmps[entityB].nearbyEntitites -= entityA
             }
         }
     }

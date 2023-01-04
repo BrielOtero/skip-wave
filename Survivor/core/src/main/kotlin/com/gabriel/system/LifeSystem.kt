@@ -5,9 +5,12 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.gabriel.component.*
+import com.gabriel.event.EntityDeathEvent
+import com.gabriel.event.fire
 import com.github.quillraven.fleks.*
 import ktx.assets.disposeSafely
 
@@ -18,9 +21,10 @@ class LifeSystem(
     private val deadCmps: ComponentMapper<DeadComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
     private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val aniCmps: ComponentMapper<AnimationComponent>,
+    private val animationCmps: ComponentMapper<AnimationComponent>,
+    @Qualifier("gameStage") private val gameStage: Stage,
 ) : IteratingSystem() {
-    private val damageFont = BitmapFont(Gdx.files.internal("damage.fnt"))
+    private val damageFont = BitmapFont(Gdx.files.internal("damage.fnt")).apply { data.setScale(0.33f) }
     private val floatingTextStyle = LabelStyle(damageFont, Color.WHITE)
 
     override fun onTickEntity(entity: Entity) {
@@ -35,7 +39,8 @@ class LifeSystem(
         }
 
         if (lifeCmp.isDead) {
-            aniCmps.getOrNull(entity)?.let { aniCmp ->
+            gameStage.fire(EntityDeathEvent(animationCmps[entity].model))
+            animationCmps.getOrNull(entity)?.let { aniCmp ->
                 aniCmp.nextAnimation(AnimationType.DEATH)
                 aniCmp.playMode = Animation.PlayMode.NORMAL
             }

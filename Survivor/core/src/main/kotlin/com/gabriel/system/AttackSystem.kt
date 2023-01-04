@@ -3,12 +3,12 @@ package com.gabriel.system
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.*
+import com.gabriel.event.EntityAttackEvent
+import com.gabriel.event.fire
 import com.gabriel.system.EntitySpawnSystem.Companion.HIT_BOX_SENSOR
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.*
 import ktx.box2d.query
 import ktx.math.component1
 import ktx.math.component2
@@ -23,6 +23,7 @@ class AttackSystem(
     private val lootCmps: ComponentMapper<LootComponent>,
     private val animationCmps: ComponentMapper<AnimationComponent>,
     private val phWorld: World,
+    @Qualifier("gameStage") private val gameStage: Stage,
 ) : IteratingSystem() {
 
     override fun onTickEntity(entity: Entity) {
@@ -38,6 +39,7 @@ class AttackSystem(
             attackCmp.doAttack = false
             attackCmp.state = AttackState.ATTACKING
             attackCmp.delay = attackCmp.maxDelay
+            gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
             return
         }
 
@@ -82,12 +84,19 @@ class AttackSystem(
                     return@query true
                 }
 
+                // turn off firendly fire
+                val isAttackerPlayer = entity in playerCmps
+                if (isAttackerPlayer && fixtureEntity in playerCmps) {
+                    return@query true
+                } else if (!isAttackerPlayer && fixtureEntity !in playerCmps) {
+                    return@query true
+                }
 
                 configureEntity(fixtureEntity) {
                     lifeCmps.getOrNull(it)?.let { lifeCmp ->
                         lifeCmp.takeDamage += attackCmp.damage * MathUtils.random(0.9f, 1.1f)
                     }
-                    if (entity in playerCmps) {
+                    if (isAttackerPlayer) {
                         lootCmps.getOrNull(it)?.let { lootCmp ->
                             lootCmp.interactEntity = entity
                         }
@@ -97,6 +106,7 @@ class AttackSystem(
                 return@query true
             }
         }
+
         val isDone = animationCmps.getOrNull(entity)?.isAnimationDone ?: true
         if (isDone) {
             attackCmp.state = AttackState.READY

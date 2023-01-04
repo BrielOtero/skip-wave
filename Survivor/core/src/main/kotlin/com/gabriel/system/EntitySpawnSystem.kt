@@ -25,6 +25,8 @@ import ktx.tiled.*
 import kotlin.math.log
 import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.gabriel.actor.FlipImage
+import com.gabriel.ai.DefaultGlobalState
+import ktx.box2d.circle
 import kotlin.math.roundToInt
 
 @AllOf([SpawnComponent::class])
@@ -55,7 +57,7 @@ class EntitySpawnSystem(
                     nextAnimation(cfg.model, AnimationType.IDLE)
                 }
 
-                physicCmpFromImage(phWorld, imageCmp.image, cfg.bodyType) { phCmp, width, height ->
+                val physicCmp = physicCmpFromImage(phWorld, imageCmp.image, cfg.bodyType) { phCmp, width, height ->
                     val w = width * cfg.physicScaling.x
                     val h = height * cfg.physicScaling.y
                     phCmp.offset.set(cfg.physicOffset)
@@ -101,7 +103,9 @@ class EntitySpawnSystem(
 
                 if (cfg.model.name == "PLAYER") {
                     add<PlayerComponent>()
-                    add<StateComponent>()
+                    add<StateComponent>() {
+                        stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
+                    }
                 }
 
                 if (cfg.lootable) {
@@ -111,6 +115,16 @@ class EntitySpawnSystem(
                 if (cfg.bodyType != StaticBody) {
                     // such entities will create/remove collision objects
                     add<CollisionComponent>()
+                }
+
+                if (cfg.aiTreePath.isNotBlank()) {
+                    add<AiComponent> {
+                        treePath = cfg.aiTreePath
+                    }
+                    physicCmp.body.circle(4f) {
+                        isSensor = true
+                        userData = AI_SENSOR
+                    }
                 }
             }
         }
@@ -124,14 +138,15 @@ class EntitySpawnSystem(
                 attackExtraRange = 0.6f,
                 attackScaling = 1.25f,
                 physicScaling = vec2(0.3f, 0.3f),
-                physicOffset = vec2(0f, -10f * UNIT_SCALE)
+                physicOffset = vec2(0f, -10f * UNIT_SCALE),
             )
 
             "SLIME" -> SpawnCfg(
                 AnimationModel.SLIME,
                 lifeScaling = 0.75f,
                 physicScaling = vec2(0.3f, 0.3f),
-                physicOffset = vec2(0f, -2f * UNIT_SCALE)
+                physicOffset = vec2(0f, -2f * UNIT_SCALE),
+                aiTreePath = "ai/slime.tree"
             )
 
             "CHEST" -> SpawnCfg(
@@ -162,7 +177,7 @@ class EntitySpawnSystem(
                 val entityLayer = event.map.layer("entities")
                 entityLayer.objects.forEach { mapObj ->
                     val typeStr = mapObj.name
-                        ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME")
+                        ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME!")
                     world.entity {
                         add<SpawnComponent> {
                             this.type = typeStr
@@ -178,5 +193,6 @@ class EntitySpawnSystem(
 
     companion object {
         const val HIT_BOX_SENSOR = "Hitbox"
+        const val AI_SENSOR = "AiSensor"
     }
 }

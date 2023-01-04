@@ -53,11 +53,19 @@ enum class DefaultState : EntityState {
             }
         }
     },
+
     DEAD {
         override fun enter(entity: AiEntity) {
             entity.root(true)
         }
+
+        override fun update(entity: AiEntity) {
+            if (!entity.isDead) {
+                entity.state(RESURRECT)
+            }
+        }
     },
+
     RESURRECT {
         override fun enter(entity: AiEntity) {
             entity.enableGlobalState(true)

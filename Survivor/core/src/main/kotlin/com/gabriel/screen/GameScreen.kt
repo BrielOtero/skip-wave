@@ -1,63 +1,71 @@
 package com.gabriel.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.gabriel.component.FloatingTextComponent
-import com.gabriel.component.ImageComponent
-import com.gabriel.component.PhysicComponent
-import com.gabriel.component.StateComponent
+import com.gabriel.component.*
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
 import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.system.*
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.log.logger
 import ktx.math.vec2
+import java.time.Clock.system
 
 class GameScreen : KtxScreen {
     private val gameStage: Stage = Stage(ExtendViewport(16f, 9f))
-    private val uiStage: Stage = Stage(ExtendViewport(1280f, 720f))
+    private val uiStage: Stage = Stage(ExtendViewport(320f, 180f))
     private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game.atlas"))
     private var currentMap: TiledMap? = null
     private val phWorld = createWorld(gravity = vec2()).apply {
         autoClearForces = false
     }
 
-    private val eWorld: World = World {
-        inject(gameStage)
-        inject("uiStage", uiStage)
-        inject(textureAtlas)
-        inject(phWorld)
+    private val eWorld= world {
+        injectables{
+            add("gameStage",gameStage)
+            add("uiStage", uiStage)
+            add(textureAtlas)
+            add(phWorld)
+        }
 
-        componentListener<ImageComponent.Companion.ImageComponentListener>()
-        componentListener<PhysicComponent.Companion.PhysicComponentListener>()
-        componentListener<FloatingTextComponent.Companion.FloatingTextComponentListener>()
-        componentListener<StateComponent.Companion.StateComponentListener>()
+        components{
+            add<ImageComponent.Companion.ImageComponentListener>()
+            add<PhysicComponent.Companion.PhysicComponentListener>()
+            add<FloatingTextComponent.Companion.FloatingTextComponentListener>()
+            add<StateComponent.Companion.StateComponentListener>()
+            add<AiComponent.Companion.AiComponentListener>()
+        }
 
-        system<EntitySpawnSystem>()
-        system<CollisionSpawnSystem>()
-        system<CollisionDespawnSystem>()
-        system<MoveSystem>()
-        system<AttackSystem>()
-        system<LootSystem>()
-        system<DeadSystem>()
-        system<LifeSystem>()
-        system<PhysicSystem>()
-        system<AnimationSystem>()
-        system<StateSystem>()
-        system<CameraSystem>()
-        system<FloatingTextSystem>()
-        system<RenderSystem>()
-        system<DebugSystem>()
-
+        systems{
+            add<EntitySpawnSystem>()
+            add<CollisionSpawnSystem>()
+            add<CollisionDespawnSystem>()
+            add<MoveSystem>()
+            add<AttackSystem>()
+            add<LootSystem>()
+            add<DeadSystem>()
+            add<LifeSystem>()
+            add<PhysicSystem>()
+            add<AnimationSystem>()
+            add<StateSystem>()
+            add<AiSystem>()
+            add<CameraSystem>()
+            add<FloatingTextSystem>()
+            add<RenderSystem>()
+            add<AudioSystem>()
+            add<DebugSystem>()
+        }
     }
 
     override fun show() {
@@ -81,7 +89,9 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
-        eWorld.update(delta.coerceAtMost(0.25f))
+        val dt = delta.coerceAtMost(0.25f)
+        GdxAI.getTimepiece().update(dt)
+        eWorld.update(dt)
     }
 
     override fun dispose() {

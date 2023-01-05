@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.gabriel.component.*
+import com.gabriel.event.EntityDamageEvent
 import com.gabriel.event.EntityDeathEvent
 import com.gabriel.event.fire
 import com.github.quillraven.fleks.*
@@ -34,6 +35,7 @@ class LifeSystem(
         if (lifeCmp.takeDamage > 0f) {
             val physicCmp = physicCmps[entity]
             lifeCmp.life -= lifeCmp.takeDamage
+            gameStage.fire(EntityDamageEvent(entity))
             floatingText(lifeCmp.takeDamage.toInt().toString(), physicCmp.body.position, physicCmp.size)
             lifeCmp.takeDamage = 0f
         }

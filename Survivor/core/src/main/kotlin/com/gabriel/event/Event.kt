@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.AnimationModel
+import com.github.quillraven.fleks.Entity
 
 fun Stage.fire(event: Event) {
     this.root.fire(event)
@@ -15,3 +16,5 @@ class CollisionDespawnEvent(val cell: Cell) : Event()
 class EntityAttackEvent(val model: AnimationModel) : Event()
 class EntityDeathEvent(val model: AnimationModel) : Event()
 class EntityLootEvent(val model: AnimationModel) : Event()
+class EntityDamageEvent(val entity: Entity) : Event()
+class EntityAggroEvent(val entity: Entity) : Event()

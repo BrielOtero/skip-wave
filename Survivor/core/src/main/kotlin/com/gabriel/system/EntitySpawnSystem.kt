@@ -146,6 +146,7 @@ class EntitySpawnSystem(
                 lifeScaling = 0.75f,
                 physicScaling = vec2(0.3f, 0.3f),
                 physicOffset = vec2(0f, -2f * UNIT_SCALE),
+                speedScaling = 0.1f,
                 aiTreePath = "ai/slime.tree"
             )
 

@@ -8,6 +8,8 @@ import com.badlogic.gdx.ai.utils.random.FloatDistribution
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.MathUtils
 import com.gabriel.component.AnimationType
+import com.gabriel.event.EntityAggroEvent
+import com.github.quillraven.fleks.Entity
 import ktx.math.vec2
 
 abstract class Action : LeafTask<AiEntity>() {
@@ -16,6 +18,51 @@ abstract class Action : LeafTask<AiEntity>() {
 
     override fun copyTo(task: Task<AiEntity>): Task<AiEntity> = task
 }
+
+class AttackTask : Action() {
+
+    override fun execute(): Status {
+        if (status != Status.RUNNING) {
+            entity.doAndStartAttack()
+            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
+            entity.fireEvent(EntityAggroEvent(entity.entity))
+            return Status.RUNNING
+        }
+
+        if (entity.isAnimationDone) {
+            entity.animation(AnimationType.RUN)
+            entity.stopMovement()
+            return Status.SUCCEEDED
+        }
+
+        return Status.RUNNING
+    }
+}
+
+class MoveTask(
+    @JvmField
+    @TaskAttribute(required = true)
+    var range: Float = 0f
+) : Action() {
+    override fun execute(): Status {
+        if (status != Status.RUNNING) {
+            entity.animation(AnimationType.RUN)
+            return Status.RUNNING
+        }
+        entity.setPlayerForTarget()
+        entity.moveToTarget()
+        if (entity.inTargetRange(range)) {
+            return Status.SUCCEEDED
+        }
+        return Status.RUNNING
+    }
+
+    override fun copyTo(task: Task<AiEntity>): Task<AiEntity> {
+        (task as MoveTask).range = range
+        return task
+    }
+}
+
 
 class IdleTask(
     @JvmField
@@ -76,21 +123,3 @@ class WanderTask : Action() {
     }
 }
 
-class AttackTask : Action() {
-
-    override fun execute(): Status {
-        if (status != Status.RUNNING) {
-            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
-            entity.doAndStartAttack()
-            return Status.RUNNING
-        }
-
-        if(entity.isAnimationDone){
-            entity.animation(AnimationType.IDLE)
-            entity.stopMovement()
-            return Status.SUCCEEDED
-        }
-
-        return Status.RUNNING
-    }
-}

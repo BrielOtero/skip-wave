@@ -3,12 +3,17 @@ package com.gabriel.input
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Input.Keys.*
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad
+import com.gabriel.Survivor
 import com.gabriel.component.AttackComponent
 import com.gabriel.component.MoveComponent
 import com.gabriel.component.PlayerComponent
 import com.github.quillraven.fleks.ComponentMapper
+import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import ktx.app.KtxInputAdapter
+import ktx.style.skin
 
 class PlayerKeyboardInputProcessor(
     world: World,
@@ -36,7 +41,6 @@ class PlayerKeyboardInputProcessor(
             }
         }
     }
-
 
     override fun keyDown(keycode: Int): Boolean {
         if (keycode.isMovementKey()) {

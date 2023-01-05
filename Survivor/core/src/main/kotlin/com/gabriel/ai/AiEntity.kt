@@ -4,20 +4,28 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Event
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.*
+import com.gabriel.component.AiComponent.Companion.NO_TARGET
+import com.gabriel.event.fire
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.vec2
 
-private val TMP_RECT = Rectangle()
+val TMP_RECT = Rectangle()
+val TMP_RECT1 = Rectangle()
+val TMP_RECT2 = Rectangle()
 
 data class AiEntity(
 
-    private val entity: Entity,
+    val entity: Entity,
     private val world: World,
+    @Qualifier("gameStage") private val gameStage: Stage,
     private val animationCmps: ComponentMapper<AnimationComponent> = world.mapper(),
     private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
     private val attackCmps: ComponentMapper<AttackComponent> = world.mapper(),
@@ -27,9 +35,12 @@ data class AiEntity(
     private val aiCmps: ComponentMapper<AiComponent> = world.mapper(),
     private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper(),
 ) {
-
+    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
     val position: Vector2
         get() = physicCmps[entity].body.position
+
+    val target: Entity
+        get() = aiCmps[entity].target
 
     val wantsToRun: Boolean
         get() {
@@ -91,10 +102,17 @@ data class AiEntity(
         with(attackCmps[entity]) { startAttack() }
     }
 
-    fun doAndStartAttack(){
-        with(attackCmps[entity]){
-            doAttack=true
+    fun doAndStartAttack() {
+        with(attackCmps[entity]) {
+            doAttack = true
             startAttack()
+        }
+    }
+
+    fun setPlayerForTarget(): Boolean {
+        with(aiCmps[entity]) {
+            target = playerEntities.first()
+            return true
         }
     }
 
@@ -107,6 +125,52 @@ data class AiEntity(
             cos = MathUtils.cos(angleRad)
             sin = MathUtils.sin(angleRad)
         }
+    }
+
+    fun moveToTarget() {
+        val aiCmp = aiCmps[entity]
+//        if (aiCmp.target == NO_TARGET) {
+//            with(moveCmps[entity]) {
+//                cos = 0f
+//                sin = 0f
+//            }
+//            return
+//        }
+        val targetPhysicCmp = physicCmps[aiCmp.target]
+        moveTo(targetPhysicCmp.body.position)
+    }
+
+
+    fun inTargetRange(range: Float): Boolean {
+        val aiCmp = aiCmps[entity]
+        if (aiCmp.target == NO_TARGET) {
+            return true
+        }
+
+        val physicCmp = physicCmps[entity]
+        val targetPhysicCmp = physicCmps[aiCmp.target]
+        val (sourceX, sourceY) = physicCmp.body.position
+        val (sourceOffX, sourceOffY) = physicCmp.offset
+        var (sourceSizeX, sourceSizeY) = physicCmp.size
+        sourceSizeX += range
+        sourceSizeY += range
+        val (targetX, targetY) = targetPhysicCmp.body.position
+        val (targetOffX, targetOffY) = targetPhysicCmp.offset
+        val (targetSizeX, targetSizeY) = targetPhysicCmp.size
+
+        TMP_RECT1.set(
+            sourceOffX + sourceX - sourceSizeX * 0.5f,
+            sourceOffY + sourceY - sourceSizeY * 0.5f,
+            sourceSizeX,
+            sourceSizeY
+        )
+        TMP_RECT2.set(
+            targetOffX + targetX - targetSizeX * 0.5f,
+            targetOffY + targetY - targetSizeY * 0.5f,
+            targetSizeX,
+            targetSizeY
+        )
+        return TMP_RECT1.overlaps(TMP_RECT2)
     }
 
     fun inRange(range: Float, targetPos: Vector2): Boolean {
@@ -156,6 +220,9 @@ data class AiEntity(
     }
 
     fun hasEnemyNearby() = nearbyEnemies().isNotEmpty()
+    fun fireEvent(entityAggroEvent: Event) {
+        gameStage.fire(entityAggroEvent)
+    }
 
 
 }

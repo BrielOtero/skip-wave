@@ -1,5 +1,6 @@
 # Actions
 import idle:"com.gabriel.ai.IdleTask"
+import move:"com.gabriel.ai.MoveTask"
 import wander:"com.gabriel.ai.WanderTask"
 import attack:"com.gabriel.ai.AttackTask"
 
@@ -12,8 +13,16 @@ subtree name:"attack"
         (isEnemyNearby?) (canAttack?) attack
         wait seconds:"uniform,1.25,2.1"
 
+subtree name:"move"
+  sequence
+    move range:2.0
+
 root
   selector
     $attack
-    (random success:0.25) idle duration:"uniform,2.0,3.5"
-    wander
+    $move
+
+
+
+# (random success:0.25) idle duration:"uniform,2.0,3.5"
+# wander

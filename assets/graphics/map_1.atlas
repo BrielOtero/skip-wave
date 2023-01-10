@@ -1,0 +1,202 @@
+
+map_1.png
+size: 2048, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Boat
+  rotate: false
+  xy: 1904, 320
+  size: 80, 32
+  orig: 80, 32
+  offset: 0, 0
+  index: -1
+BottomSheet16x16
+  rotate: false
+  xy: 1760, 208
+  size: 48, 16
+  orig: 48, 16
+  offset: 0, 0
+  index: -1
+Crane
+  rotate: false
+  xy: 432, 108
+  size: 33, 36
+  orig: 33, 36
+  offset: 0, 0
+  index: -1
+FishNet
+  rotate: false
+  xy: 1840, 295
+  size: 33, 25
+  orig: 33, 25
+  offset: 0, 0
+  index: -1
+FishNetFull
+  rotate: false
+  xy: 1078, 70
+  size: 33, 25
+  orig: 33, 25
+  offset: 0, 0
+  index: -1
+Left
+  rotate: false
+  xy: 1584, 176
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+Middle
+  rotate: false
+  xy: 1664, 192
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+MiddleSheet16x16
+  rotate: false
+  xy: 1328, 96
+  size: 80, 16
+  orig: 80, 16
+  offset: 0, 0
+  index: -1
+Pipes
+  rotate: false
+  xy: 784, 0
+  size: 240, 48
+  orig: 240, 48
+  offset: 0, 0
+  index: -1
+Right
+  rotate: false
+  xy: 1984, 336
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+Sail
+  rotate: false
+  xy: 256, 21
+  size: 30, 43
+  orig: 30, 43
+  offset: 0, 0
+  index: -1
+SpriteSheet
+  rotate: false
+  xy: 976, 59
+  size: 102, 36
+  orig: 102, 36
+  offset: 0, 0
+  index: -1
+SpriteSheet16x16
+  rotate: false
+  xy: 1520, 160
+  size: 64, 16
+  orig: 64, 16
+  offset: 0, 0
+  index: -1
+SpriteSheet64x64
+  rotate: false
+  xy: 0, 0
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+TilesetDungeon
+  rotate: false
+  xy: 1328, 112
+  size: 192, 64
+  orig: 192, 64
+  offset: 0, 0
+  index: -1
+TilesetElement
+  rotate: false
+  xy: 528, 0
+  size: 256, 240
+  orig: 256, 240
+  offset: 0, 0
+  index: -1
+TilesetField
+  rotate: false
+  xy: 1760, 224
+  size: 80, 96
+  orig: 80, 96
+  offset: 0, 0
+  index: -1
+TilesetFloor
+  rotate: false
+  xy: 976, 95
+  size: 352, 417
+  orig: 352, 417
+  offset: 0, 0
+  index: -1
+TilesetFloorB
+  rotate: false
+  xy: 1584, 208
+  size: 176, 112
+  orig: 176, 112
+  offset: 0, 0
+  index: -1
+TilesetFloorDetail
+  rotate: false
+  xy: 0, 64
+  size: 256, 80
+  orig: 256, 80
+  offset: 0, 0
+  index: -1
+TilesetHole
+  rotate: false
+  xy: 256, 64
+  size: 176, 80
+  orig: 176, 80
+  offset: 0, 0
+  index: -1
+TilesetHouse
+  rotate: false
+  xy: 0, 144
+  size: 528, 368
+  orig: 528, 368
+  offset: 0, 0
+  index: -1
+TilesetLogic
+  rotate: false
+  xy: 1904, 352
+  size: 128, 160
+  orig: 128, 160
+  offset: 0, 0
+  index: -1
+TilesetNature
+  rotate: false
+  xy: 1328, 176
+  size: 256, 336
+  orig: 256, 336
+  offset: 0, 0
+  index: -1
+TilesetRelief
+  rotate: false
+  xy: 1584, 320
+  size: 320, 192
+  orig: 320, 192
+  offset: 0, 0
+  index: -1
+TilesetReliefDetail
+  rotate: false
+  xy: 784, 48
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+TilesetWater
+  rotate: false
+  xy: 528, 240
+  size: 448, 272
+  orig: 448, 272
+  offset: 0, 0
+  index: -1
+TopSheet16x16
+  rotate: false
+  xy: 1584, 192
+  size: 80, 16
+  orig: 80, 16
+  offset: 0, 0
+  index: -1

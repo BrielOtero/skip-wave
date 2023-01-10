@@ -1,0 +1,55 @@
+
+ui_new.png
+size: 1024, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+font
+  rotate: false
+  xy: 300, 148
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+frame_bgd
+  rotate: false
+  xy: 556, 388
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+frame_fgd
+  rotate: false
+  xy: 300, 129
+  size: 19, 19
+  orig: 19, 19
+  offset: 0, 0
+  index: -1
+joy_ext
+  rotate: false
+  xy: 0, 104
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+joy_int
+  rotate: false
+  xy: 0, 4
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+life_progress
+  rotate: false
+  xy: 100, 100
+  size: 18, 4
+  orig: 18, 4
+  offset: 0, 0
+  index: -1
+life_under
+  rotate: false
+  xy: 0, 0
+  size: 18, 4
+  orig: 18, 4
+  offset: 0, 0
+  index: -1

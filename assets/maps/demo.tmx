@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="32">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="40">
+ <editorsettings>
+  <export target="../../../videogame/Survivor/assets/maps/demo..tmx" format="tmx"/>
+ </editorsettings>
+ <properties>
+  <property name="music" value="audio/fields.ogg"/>
+ </properties>
  <tileset firstgid="1" name="TilesetWater" tilewidth="16" tileheight="16" tilecount="476" columns="28">
   <image source="images/TilesetWater.png" width="448" height="272"/>
   <tile id="1">
@@ -140,16 +146,19 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="1236" name="entities" tilewidth="48" tileheight="48" tilecount="2" columns="0">
+ <tileset firstgid="1236" name="entities" tilewidth="32" tileheight="32" tilecount="3" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
-  <tile id="0">
-   <image width="32" height="32" source="images/slime.png"/>
+  <tile id="3" class="SLASH">
+   <image width="32" height="32" source="images/slash.png"/>
   </tile>
-  <tile id="1">
-   <image width="48" height="48" source="images/player.png"/>
+  <tile id="4">
+   <image width="16" height="16" source="../raw/actors/player/idle_00.png"/>
+  </tile>
+  <tile id="5">
+   <image width="16" height="16" source="../raw/actors/skull/run_00.png"/>
   </tile>
  </tileset>
- <tileset firstgid="1238" name="TilesetFloor" tilewidth="16" tileheight="16" tilecount="572" columns="22">
+ <tileset firstgid="1242" name="TilesetFloor" tilewidth="16" tileheight="16" tilecount="572" columns="22">
   <image source="images/TilesetFloor.png" width="352" height="417"/>
   <tile id="88" probability="0.5"/>
   <tile id="89" probability="0.5"/>
@@ -171,7 +180,7 @@
  </layer>
  <layer id="5" name="randbackground" width="64" height="64">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer id="2" name="door" width="64" height="64">
@@ -180,7 +189,9 @@
   </data>
  </layer>
  <objectgroup id="4" name="entities" offsetx="56" offsety="37.3333">
-  <object id="3" name="PLAYER" gid="1237" x="138" y="118" width="48" height="48"/>
-  <object id="4" name="SLIME" gid="1236" x="369" y="273" width="32" height="32"/>
+  <object id="35" name="SLASH" gid="1239" x="176" y="96" width="32" height="32"/>
+  <object id="37" name="PLAYER" gid="1240" x="164.909" y="86" width="16" height="16"/>
+  <object id="38" name="SKULL" gid="1241" x="271.333" y="102.667" width="16" height="16"/>
+  <object id="39" name="SLASH" gid="2147484887" x="135.636" y="95.9394" width="32" height="32"/>
  </objectgroup>
 </map>

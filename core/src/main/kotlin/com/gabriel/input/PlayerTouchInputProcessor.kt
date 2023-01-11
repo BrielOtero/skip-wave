@@ -23,7 +23,6 @@ class PlayerTouchInputProcessor(
         multiplexer.addProcessor(uiStage) // set your game input precessor as second
         multiplexer.addProcessor(this) // set stage as first input processor
 
-
         Gdx.input.inputProcessor = multiplexer
 
     }
@@ -31,9 +30,12 @@ class PlayerTouchInputProcessor(
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         uiStage.fire(StartMovementEvent(screenX.toFloat(), screenY.toFloat()))
+        log.debug { "TOUCHUP1" }
         uiStage.touchDown(screenX, screenY, pointer, button)
         return true
     }
+
+
 
     companion object{
         private val log = logger<PlayerTouchInputProcessor>()

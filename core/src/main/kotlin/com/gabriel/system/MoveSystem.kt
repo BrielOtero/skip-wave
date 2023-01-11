@@ -1,8 +1,7 @@
 package com.gabriel.system
 
-import com.gabriel.component.ImageComponent
-import com.gabriel.component.MoveComponent
-import com.gabriel.component.PhysicComponent
+import com.badlogic.gdx.math.Vector2
+import com.gabriel.component.*
 import com.github.quillraven.fleks.AllOf
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
@@ -15,13 +14,30 @@ class MoveSystem(
     private val moveCmps: ComponentMapper<MoveComponent>,
     private val physicCmps: ComponentMapper<PhysicComponent>,
     private val imageCmps: ComponentMapper<ImageComponent>,
+    private val weaponCmps: ComponentMapper<WeaponComponent>,
 ) : IteratingSystem() {
+    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
     override fun onTickEntity(entity: Entity) {
-        val moveCmp = moveCmps[entity]
-        val physicCmp = physicCmps[entity]
-        val mass = physicCmp.body.mass
-        val (velX, velY) = physicCmp.body.linearVelocity
+        val moveCmp: MoveComponent
+        val physicCmp: PhysicComponent
+        val mass: Float
+        val velocity: Vector2
+
+        if (entity in weaponCmps) {
+//            moveCmp = moveCmps[playerEntities.first()]
+//            physicCmp = physicCmps[playerEntities.first()]
+//            mass = physicCmp.body.mass
+//            velocity = physicCmp.body.linearVelocity
+        } else {
+        }
+            moveCmp = moveCmps[entity]
+            physicCmp = physicCmps[entity]
+            mass = physicCmp.body.mass
+            velocity = physicCmp.body.linearVelocity
+
+        val (velX, velY) = velocity
+
 
         if ((moveCmp.cos == 0f && moveCmp.sin == 0f) || moveCmp.root) {
             // no direction specified or rooted-> stop entity immediately

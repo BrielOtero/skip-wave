@@ -9,6 +9,7 @@ import com.gabriel.Survivor
 import com.gabriel.component.AttackComponent
 import com.gabriel.component.MoveComponent
 import com.gabriel.component.PlayerComponent
+import com.gabriel.component.WeaponComponent
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
@@ -27,6 +28,7 @@ class PlayerKeyboardInputProcessor(
     private var playerCos = 0f
     private val tmpVec = vec2()
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
 
 
     init {
@@ -41,6 +43,12 @@ class PlayerKeyboardInputProcessor(
         tmpVec.set(playerCos, playerSin).nor()
         playerEntities.forEach { player ->
             with(moveCmps[player]) {
+                cos = tmpVec.x
+                sin = tmpVec.y
+            }
+        }
+        weaponEntities.forEach { weapon ->
+            with(moveCmps[weapon]) {
                 cos = tmpVec.x
                 sin = tmpVec.y
             }

@@ -25,7 +25,6 @@ class CharacterInfo(
         this += lifeBar.apply { setPosition(0f, 0f) }
     }
 
-
     override fun getPrefWidth() = background.drawable.minWidth
 
     override fun getPrefHeight() = background.drawable.minHeight

@@ -18,7 +18,7 @@ import ktx.graphics.use
 class DebugSystem(
     private val phWorld: World,
     @Qualifier("gameStage") private val gameStage: Stage
-) : IntervalSystem(enabled = false) {
+) : IntervalSystem(enabled = true) {
     private val physicRenderer by lazy { Box2DDebugRenderer() }
     private val shapeRenderer by lazy { ShapeRenderer() }
     private val profiler by lazy { GLProfiler(Gdx.graphics).apply { enable() } }

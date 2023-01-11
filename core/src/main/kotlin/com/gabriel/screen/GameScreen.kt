@@ -1,5 +1,6 @@
 package com.gabriel.screen
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -11,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.gabriel.component.*
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
+import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.input.PlayerTouchInputProcessor
 import com.gabriel.system.*
 import com.gabriel.ui.model.GameModel
@@ -31,7 +33,7 @@ class GameScreen(
 ) : KtxScreen {
     private val gameStage: Stage = Stage(gameViewport)
     private val uiStage: Stage = Stage(uiViewport)
-    private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game.atlas"))
+    private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game_assets.atlas"))
     private var currentMap: TiledMap? = null
 
     private val phWorld = createWorld(gravity = vec2()).apply {
@@ -58,6 +60,7 @@ class GameScreen(
             add<CollisionSpawnSystem>()
             add<CollisionDespawnSystem>()
             add<MoveSystem>()
+            add<WeaponSystem>()
             add<AttackSystem>()
             add<LootSystem>()
             add<DeadSystem>()
@@ -94,8 +97,12 @@ class GameScreen(
         currentMap = TmxMapLoader().load(Gdx.files.internal("maps/demo.tmx").path())
         gameStage.fire(MapChangeEvent(currentMap!!))
 
-//        PlayerKeyboardInputProcessor(eWorld, uiStage)
-        PlayerTouchInputProcessor(eWorld, uiStage)
+        if (Gdx.app.type == Application.ApplicationType.Desktop) {
+            PlayerKeyboardInputProcessor(eWorld, uiStage)
+        } else {
+            PlayerTouchInputProcessor(eWorld, uiStage)
+        }
+
     }
 
     override fun resize(width: Int, height: Int) {

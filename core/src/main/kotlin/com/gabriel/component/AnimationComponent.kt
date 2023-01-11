@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 enum class AnimationModel {
-    PLAYER, SLIME, CHEST, UNDEFINED;
+    PLAYER, SKULL, CHEST, SLASH, UNDEFINED;
 
     val atlasKey: String = this.toString().lowercase()
 }

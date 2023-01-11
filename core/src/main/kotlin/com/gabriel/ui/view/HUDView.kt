@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.gabriel.event.MovementEvent
 import com.gabriel.ui.model.HUDModel
+import com.gabriel.ui.model.propertyNotify
 import ktx.actors.*
 import ktx.log.logger
+import ktx.math.vec2
 import ktx.scene2d.*
 
 
@@ -18,6 +20,8 @@ class HUDView(
     private var positionX: Float = 0f
     private var positionY: Float = 0f
     private var scale: Float = 0f
+        get() = (this@HUDView.stage.width / this@HUDView.stage.viewport.screenWidth)
+
 
     init {
         alpha = 0f
@@ -30,32 +34,27 @@ class HUDView(
             this@HUDView.model.knobPercentX = knobPercentX
             this@HUDView.model.knobPercentY = knobPercentY
             this@HUDView.fire(MovementEvent())
-            if (!isTouched) {
-                log.debug { "TouchUP" }
-                this@HUDView.alpha=0f
+
+            this@HUDView.model.isTouch = isTouched
+
+            if (!isTouched && knobPercentX == 0f && knobPercentY == 0f) {
+                this@HUDView.alpha = 1f
+                this@HUDView.model.touchpadLocation = vec2(knobPercentX, knobPercentY - 200f)
             }
         }
 
         //Data binding
-        model.onPropertyChange(HUDModel::touchpadX) { touchpadX ->
-            scale = this@HUDView.stage.width / this@HUDView.stage.viewport.screenWidth
-            positionX = touchpadX * scale
-        }
-
-        model.onPropertyChange(HUDModel::touchpadY) { touchpadY ->
-            positionY = touchpadY * scale
+        model.onPropertyChange(HUDModel::touchpadLocation) { touchpadLocation ->
+            positionX = touchpadLocation.x * scale
+            positionY = touchpadLocation.y * scale
             setPosition(positionX, this@HUDView.stage.height - positionY)
         }
 
         model.onPropertyChange(HUDModel::opacity) { opacity ->
             this.alpha = opacity
         }
+        setPosition(-100f, 0f)
     }
-
-    override fun setPosition(x: Float, y: Float) {
-        super.setPosition(x, y)
-    }
-
 
     companion object {
         private val log = logger<HUDModel>()

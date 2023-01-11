@@ -1,20 +1,16 @@
 package com.gabriel.ui.model
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.scenes.scene2d.Event
-import com.badlogic.gdx.scenes.scene2d.EventListener
-import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.*
 import com.gabriel.component.*
 import com.gabriel.event.MovementEvent
 import com.gabriel.event.StartMovementEvent
+import com.gabriel.ui.view.HUDView
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
-import ktx.app.KtxInputAdapter
 import ktx.log.logger
 import ktx.math.vec2
+
 
 class HUDModel(
     world: World,
@@ -24,14 +20,15 @@ class HUDModel(
 
     private val tmpVec = vec2()
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
     private var playerCos = 0f
     private var playerSin = 0f
     var knobPercentX = 0f
     var knobPercentY = 0f
 
-    var touchpadX by propertyNotify(0f)
-    var touchpadY by propertyNotify(0f)
+    var touchpadLocation by propertyNotify(vec2(0f, -50f))
     var opacity by propertyNotify(0f)
+    var isTouch: Boolean = false
 
 
     init {
@@ -42,15 +39,18 @@ class HUDModel(
         log.debug { "Event ${event}" }
         when (event) {
             is StartMovementEvent -> {
-                touchpadX = event.x
-                touchpadY = event.y
-                opacity=0.4f
+                if (!isTouch) {
+                    touchpadLocation = vec2(event.x, event.y)
+                    opacity = 0.4f
+                }
             }
+
             is MovementEvent -> updatePlayerMovement()
             else -> return false
         }
         return true
     }
+
 
     private fun updatePlayerMovement() {
         val death = 0.25f
@@ -70,6 +70,12 @@ class HUDModel(
         tmpVec.set(playerCos, playerSin).nor()
         playerEntities.forEach { player ->
             with(moveCmps[player]) {
+                cos = tmpVec.x
+                sin = tmpVec.y
+            }
+        }
+        weaponEntities.forEach { weapon ->
+            with(moveCmps[weapon]) {
                 cos = tmpVec.x
                 sin = tmpVec.y
             }

@@ -23,6 +23,7 @@ import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.gabriel.actors.FlipImage
 import com.gabriel.ai.DefaultGlobalState
 import ktx.box2d.circle
+import ktx.log.logger
 import kotlin.math.roundToInt
 
 @AllOf([SpawnComponent::class])
@@ -104,6 +105,11 @@ class EntitySpawnSystem(
                     }
                 }
 
+                if (cfg.isWeapon) {
+                    add<WeaponComponent>()
+                }
+
+
                 if (cfg.lootable) {
                     add<LootComponent>()
                 }
@@ -128,6 +134,7 @@ class EntitySpawnSystem(
     }
 
     private fun spawnCfg(type: String): SpawnCfg = cachedCfgs.getOrPut(type) {
+        log.debug { "Type $type" }
         when (type) {
             "PLAYER" -> SpawnCfg(
                 AnimationModel.PLAYER,
@@ -138,8 +145,8 @@ class EntitySpawnSystem(
                 physicOffset = vec2(0f, -10f * UNIT_SCALE),
             )
 
-            "SLIME" -> SpawnCfg(
-                AnimationModel.SLIME,
+            "SKULL" -> SpawnCfg(
+                AnimationModel.SKULL,
                 lifeScaling = 0.75f,
                 physicScaling = vec2(0.3f, 0.3f),
                 speedScaling = 0.8f,
@@ -154,6 +161,18 @@ class EntitySpawnSystem(
                 canAttack = false,
                 lifeScaling = 0f,
                 lootable = true,
+            )
+
+            //Weapons
+            "SLASH" -> SpawnCfg(
+                AnimationModel.SLASH,
+                attackExtraRange = 0.6f,
+                attackScaling = 1.25f,
+                speedScaling = 2.25f,
+                physicScaling = vec2(0.3f, 0.3f),
+                physicOffset = vec2(0f, -10f * UNIT_SCALE),
+                isWeapon = true
+
             )
 
             else -> gdxError("Type $type has no SpawnCfg setup.")
@@ -192,5 +211,6 @@ class EntitySpawnSystem(
     companion object {
         const val HIT_BOX_SENSOR = "Hitbox"
         const val AI_SENSOR = "AiSensor"
+        private val log = logger<EntitySpawnSystem>()
     }
 }

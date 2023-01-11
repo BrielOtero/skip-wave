@@ -13,6 +13,7 @@ data class SpawnCfg(
     val model: AnimationModel,
     val speedScaling: Float = 1f,
     val canAttack: Boolean = true,
+    val isWeapon: Boolean = false,
     val attackScaling: Float = 1f,
     val attackDelay: Float = 0.2f,
     val attackExtraRange: Float = 0f,

@@ -2,17 +2,22 @@ package com.gabriel.component
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
-import com.badlogic.gdx.utils.Scaling
 import ktx.math.vec2
 
 const val DEFAULT_SPEED = 3f
 const val DEFAULT_ATTACK_DAMAGE = 5
 const val DEFAULT_LIFE = 15
 
+enum class EntityType {
+    PLAYER, ENEMY, WEAPON, NOTHING
+}
+
+
 data class SpawnCfg(
     val model: AnimationModel,
     val speedScaling: Float = 1f,
     val canAttack: Boolean = true,
+    val entityType: EntityType = EntityType.NOTHING,
     val isWeapon: Boolean = false,
     val attackScaling: Float = 1f,
     val attackDelay: Float = 0.2f,

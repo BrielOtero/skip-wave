@@ -31,6 +31,8 @@ class DebugSystem(
             buildString {
                 append("FPS:${Gdx.graphics.framesPerSecond},")
                 append("DrawCalls:${profiler.drawCalls},")
+                append("ContactCount:${phWorld.contactCount},")
+                append("FixtureCount:${phWorld.fixtureCount},")
                 append("Binds:${profiler.textureBindings},")
                 append("Entities:${world.numEntities}")
             }

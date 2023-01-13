@@ -23,6 +23,7 @@ import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.gabriel.actors.FlipImage
 import com.gabriel.ai.DefaultGlobalState
 import ktx.box2d.circle
+import ktx.box2d.loop
 import ktx.log.logger
 import kotlin.math.roundToInt
 
@@ -61,20 +62,36 @@ class EntitySpawnSystem(
                     phCmp.size.set(w, h)
 
                     // hit box
-                    box(w, h, cfg.physicOffset) {
-                        isSensor = cfg.bodyType != StaticBody
+                    box(width, height, cfg.physicOffset) {
+//                        isSensor = cfg.bodyType == StaticBody
+                        isSensor = false
                         userData = HIT_BOX_SENSOR
                     }
 
                     if (cfg.bodyType != StaticBody) {
-                        // collision box
-                        val collH = h * 0.4f
-                        val collOffset = vec2().apply { set(cfg.physicOffset) }
-                        collOffset.y -= h * 0.5f - collH * 0.5f
-                        box(w, collH, collOffset)
 
+                        when (cfg.entityType) {
+
+                            EntityType.ENEMY -> {
+//                                val collH = h
+//                                val collOffset = vec2().apply { set(cfg.physicOffset) }
+//                                collOffset.y -= h * 0.5f - collH * 0.5f
+//                                box(width, height) {
+//                                    friction = 0f
+//                                }
+
+
+                            }
+
+                            else -> {
+                                // collision box
+                                val collH = h * 0.4f
+                                val collOffset = vec2().apply { set(cfg.physicOffset) }
+                                collOffset.y -= h * 0.5f - collH * 0.5f
+                                box(w, collH, collOffset)
+                            }
+                        }
                     }
-
                 }
 
                 if (cfg.speedScaling > 0f) {
@@ -98,11 +115,19 @@ class EntitySpawnSystem(
                     }
                 }
 
-                if (cfg.model.name == "PLAYER") {
-                    add<PlayerComponent>()
-                    add<StateComponent>() {
-                        stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
+                when (cfg.entityType) {
+                    EntityType.PLAYER -> {
+                        add<PlayerComponent>()
+                        add<StateComponent>() {
+                            stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
+                        }
                     }
+
+                    EntityType.ENEMY -> {
+                        add<EnemyComponent>()
+                    }
+
+                    else -> {}
                 }
 
                 if (cfg.isWeapon) {
@@ -138,15 +163,17 @@ class EntitySpawnSystem(
         when (type) {
             "PLAYER" -> SpawnCfg(
                 AnimationModel.PLAYER,
+                entityType = EntityType.PLAYER,
                 attackExtraRange = 0.6f,
                 attackScaling = 1.25f,
                 speedScaling = 2.25f,
-                physicScaling = vec2(0.3f, 0.3f),
-                physicOffset = vec2(0f, -10f * UNIT_SCALE),
+                physicScaling = vec2(1f, 0.5f),
+                physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
 
             "SKULL" -> SpawnCfg(
                 AnimationModel.SKULL,
+                entityType = EntityType.ENEMY,
                 lifeScaling = 0.75f,
                 physicScaling = vec2(0.3f, 0.3f),
                 speedScaling = 0.8f,
@@ -166,6 +193,7 @@ class EntitySpawnSystem(
             //Weapons
             "SLASH" -> SpawnCfg(
                 AnimationModel.SLASH,
+                entityType = EntityType.WEAPON,
                 attackExtraRange = 0.6f,
                 attackScaling = 1.25f,
                 speedScaling = 2.25f,

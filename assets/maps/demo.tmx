@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="40">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="1281">
  <editorsettings>
   <export target="../../../videogame/Survivor/assets/maps/demo..tmx" format="tmx"/>
  </editorsettings>
@@ -132,17 +132,52 @@
   </tile>
   <tile id="250">
    <objectgroup draworder="index" id="2">
-    <object id="8" x="0" y="0" width="16" height="14"/>
+    <object id="10" x="0" y="0" width="16" height="16"/>
    </objectgroup>
   </tile>
   <tile id="251">
    <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="15"/>
+    <object id="1" x="0" y="0" width="16" height="16"/>
    </objectgroup>
   </tile>
   <tile id="252">
    <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="14"/>
+    <object id="1" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="689">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="2" y="4" width="14" height="12"/>
+   </objectgroup>
+  </tile>
+  <tile id="690">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="2" width="16" height="14"/>
+   </objectgroup>
+  </tile>
+  <tile id="691">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="4" width="14" height="12"/>
+   </objectgroup>
+  </tile>
+  <tile id="722">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="724">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="755">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="9"/>
+   </objectgroup>
+  </tile>
+  <tile id="757">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="8.97778"/>
    </objectgroup>
   </tile>
  </tileset>
@@ -152,10 +187,10 @@
    <image width="32" height="32" source="images/slash.png"/>
   </tile>
   <tile id="4">
-   <image width="16" height="16" source="../raw/actors/player/idle_00.png"/>
+   <image width="16" height="16" source="../raw/graphics/actors/player/run_00.png"/>
   </tile>
   <tile id="5">
-   <image width="16" height="16" source="../raw/actors/skull/run_00.png"/>
+   <image width="16" height="16" source="../raw/graphics/actors/skull/run_00.png"/>
   </tile>
  </tileset>
  <tileset firstgid="1242" name="TilesetFloor" tilewidth="16" tileheight="16" tilecount="572" columns="22">
@@ -175,17 +210,22 @@
  </tileset>
  <layer id="1" name="background" width="64" height="64">
   <data encoding="base64" compression="zlib">
-   eJzt0EEKQEAYhuHJPVCcAsUJ3ZmNsjAkDeJZvLu/5numCCEUNzXudNeGraq5NlH1SX/KLbFd5cG2K+Un/Sm3xHalfLNZ/fne3XLTfcz/1vj5+fn5+fmf38PPz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz88f9/dz2c8aVv4/NwFvPvnH
+   eJzt0jEKgDAMQNHiPaygp1BBT+idzeBQwbkV+oY/J48kp5Ry5aboisYGs/8Q/7/8c7RVbH/8a+W5ZcvHPXqq/D3+9vvw8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pzv/1HNHTWWfh77gYZJ8c8
   </data>
  </layer>
  <layer id="5" name="randbackground" width="64" height="64">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
- <layer id="2" name="door" width="64" height="64">
+ <layer id="2" name="door" width="64" height="64" visible="0">
   <data encoding="base64" compression="zlib">
    eJztz7kNAkEURMHRjxnIBMiEMxCWIxMWiXbHWwtjqJKe01639huram2dNumcLula/T6ybf7t0j490jO9qt9Hdsi/Yzqld5rTp/p9ZLf8m9K9lu2jm//sLwAAAAAAAAAAAAAAAAAALPEFwmwYkA==
+  </data>
+ </layer>
+ <layer id="6" name="Tile Layer 4" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJztz7ERgDAQA8EPXD+4E6ATcEWoAGIceHdGua6Kv22tas96m/1kjiPdZ3Yt2n+n+8nGov0AAAAAAAAAAAAAAAAAAMC3F/EgBlU=
   </data>
  </layer>
  <objectgroup id="4" name="entities" offsetx="56" offsety="37.3333">
@@ -193,5 +233,196 @@
   <object id="37" name="PLAYER" gid="1240" x="164.909" y="86" width="16" height="16"/>
   <object id="38" name="SKULL" gid="1241" x="271.333" y="102.667" width="16" height="16"/>
   <object id="39" name="SLASH" gid="2147484887" x="135.636" y="95.9394" width="32" height="32"/>
+  <object id="628" name="SKULL" gid="1241" x="309.333" y="88.6667" width="16" height="16"/>
+  <object id="801" name="SKULL" gid="1241" x="442.667" y="92.6667" width="16" height="16"/>
+  <object id="802" name="SKULL" gid="1241" x="482.667" y="144.667" width="16" height="16"/>
+  <object id="803" name="SKULL" gid="1241" x="481.333" y="200.667" width="16" height="16"/>
+  <object id="804" name="SKULL" gid="1241" x="423.333" y="217.333" width="16" height="16"/>
+  <object id="805" name="SKULL" gid="1241" x="302.667" y="182.667" width="16" height="16"/>
+  <object id="806" name="SKULL" gid="1241" x="280" y="172" width="16" height="16"/>
+  <object id="807" name="SKULL" gid="1241" x="233.333" y="258.667" width="16" height="16"/>
+  <object id="808" name="SKULL" gid="1241" x="317.333" y="325.333" width="16" height="16"/>
+  <object id="809" name="SKULL" gid="1241" x="412" y="333.333" width="16" height="16"/>
+  <object id="810" name="SKULL" gid="1241" x="474" y="313.333" width="16" height="16"/>
+  <object id="811" name="SKULL" gid="1241" x="415.333" y="250" width="16" height="16"/>
+  <object id="812" name="SKULL" gid="1241" x="362.667" y="248" width="16" height="16"/>
+  <object id="813" name="SKULL" gid="1241" x="370.667" y="168.667" width="16" height="16"/>
+  <object id="814" name="SKULL" gid="1241" x="405.333" y="143.333" width="16" height="16"/>
+  <object id="815" name="SKULL" gid="1241" x="534" y="173.333" width="16" height="16"/>
+  <object id="816" name="SKULL" gid="1241" x="572" y="268.667" width="16" height="16"/>
+  <object id="817" name="SKULL" gid="1241" x="558.667" y="323.333" width="16" height="16"/>
+  <object id="818" name="SKULL" gid="1241" x="525.333" y="357.333" width="16" height="16"/>
+  <object id="819" name="SKULL" gid="1241" x="468.667" y="380" width="16" height="16"/>
+  <object id="820" name="SKULL" gid="1241" x="374" y="393.333" width="16" height="16"/>
+  <object id="821" name="SKULL" gid="1241" x="304.667" y="395.333" width="16" height="16"/>
+  <object id="822" name="SKULL" gid="1241" x="236" y="359.333" width="16" height="16"/>
+  <object id="823" name="SKULL" gid="1241" x="220" y="319.333" width="16" height="16"/>
+  <object id="824" name="SKULL" gid="1241" x="296.667" y="290.667" width="16" height="16"/>
+  <object id="825" name="SKULL" gid="1241" x="314" y="240.667" width="16" height="16"/>
+  <object id="826" name="SKULL" gid="1241" x="306.667" y="262.667" width="16" height="16"/>
+  <object id="827" name="SKULL" gid="1241" x="400" y="348" width="16" height="16"/>
+  <object id="828" name="SKULL" gid="1241" x="423.333" y="383.333" width="16" height="16"/>
+  <object id="829" name="SKULL" gid="1241" x="452.667" y="414.667" width="16" height="16"/>
+  <object id="830" name="SKULL" gid="1241" x="465.333" y="430" width="16" height="16"/>
+  <object id="831" name="SKULL" gid="1241" x="358" y="437.333" width="16" height="16"/>
+  <object id="832" name="SKULL" gid="1241" x="270" y="446" width="16" height="16"/>
+  <object id="833" name="SKULL" gid="1241" x="230.667" y="449.333" width="16" height="16"/>
+  <object id="834" name="SKULL" gid="1241" x="334" y="471.333" width="16" height="16"/>
+  <object id="835" name="SKULL" gid="1241" x="475.333" y="469.333" width="16" height="16"/>
+  <object id="836" name="SKULL" gid="1241" x="584" y="584" width="16" height="16"/>
+  <object id="837" name="SKULL" gid="1241" x="506.667" y="612" width="16" height="16"/>
+  <object id="838" name="SKULL" gid="1241" x="354.667" y="586.667" width="16" height="16"/>
+  <object id="839" name="SKULL" gid="1241" x="306.667" y="636" width="16" height="16"/>
+  <object id="840" name="SKULL" gid="1241" x="428" y="724" width="16" height="16"/>
+  <object id="841" name="SKULL" gid="1241" x="554.667" y="734.667" width="16" height="16"/>
+  <object id="842" name="SKULL" gid="1241" x="578.667" y="633.333" width="16" height="16"/>
+  <object id="843" name="SKULL" gid="1241" x="549.333" y="516" width="16" height="16"/>
+  <object id="844" name="SKULL" gid="1241" x="602.667" y="457.333" width="16" height="16"/>
+  <object id="845" name="SKULL" gid="1241" x="658.667" y="498.667" width="16" height="16"/>
+  <object id="846" name="SKULL" gid="1241" x="652" y="682.667" width="16" height="16"/>
+  <object id="847" name="SKULL" gid="1241" x="517.333" y="812" width="16" height="16"/>
+  <object id="848" name="SKULL" gid="1241" x="360" y="818.667" width="16" height="16"/>
+  <object id="849" name="SKULL" gid="1241" x="281.333" y="722.667" width="16" height="16"/>
+  <object id="850" name="SKULL" gid="1241" x="214.667" y="568" width="16" height="16"/>
+  <object id="851" name="SKULL" gid="1241" x="332" y="541.333" width="16" height="16"/>
+  <object id="852" name="SKULL" gid="1241" x="440" y="589.333" width="16" height="16"/>
+  <object id="853" name="SKULL" gid="1241" x="505.333" y="624" width="16" height="16"/>
+  <object id="854" name="SKULL" gid="1241" x="569.333" y="392" width="16" height="16"/>
+  <object id="855" name="SKULL" gid="1241" x="625.333" y="322.667" width="16" height="16"/>
+  <object id="856" name="SKULL" gid="1241" x="648" y="344" width="16" height="16"/>
+  <object id="857" name="SKULL" gid="1241" x="696" y="618.667" width="16" height="16"/>
+  <object id="858" name="SKULL" gid="1241" x="482.667" y="680" width="16" height="16"/>
+  <object id="859" name="SKULL" gid="1241" x="378.667" y="650.667" width="16" height="16"/>
+  <object id="860" name="SKULL" gid="1241" x="458.667" y="736" width="16" height="16"/>
+  <object id="861" name="SKULL" gid="1241" x="662.667" y="797.333" width="16" height="16"/>
+  <object id="862" name="SKULL" gid="1241" x="694.667" y="529.333" width="16" height="16"/>
+  <object id="863" name="SKULL" gid="1241" x="686.667" y="418.667" width="16" height="16"/>
+  <object id="864" name="SKULL" gid="1241" x="677.333" y="301.333" width="16" height="16"/>
+  <object id="865" name="SKULL" gid="1241" x="638.667" y="197.333" width="16" height="16"/>
+  <object id="866" name="SKULL" gid="1241" x="570.667" y="201.333" width="16" height="16"/>
+  <object id="867" name="SKULL" gid="1241" x="508" y="241.333" width="16" height="16"/>
+  <object id="868" name="SKULL" gid="1241" x="446.667" y="266.667" width="16" height="16"/>
+  <object id="869" name="SKULL" gid="1241" x="514.667" y="378.667" width="16" height="16"/>
+  <object id="870" name="SKULL" gid="1241" x="618.667" y="474.667" width="16" height="16"/>
+  <object id="871" name="SKULL" gid="1241" x="482.667" y="608" width="16" height="16"/>
+  <object id="872" name="SKULL" gid="1241" x="377.333" y="578.667" width="16" height="16"/>
+  <object id="873" name="SKULL" gid="1241" x="426.667" y="481.333" width="16" height="16"/>
+  <object id="874" name="SKULL" gid="1241" x="606.667" y="489.333" width="16" height="16"/>
+  <object id="875" name="SKULL" gid="1241" x="737.333" y="329.333" width="16" height="16"/>
+  <object id="876" name="SKULL" gid="1241" x="633.333" y="313.333" width="16" height="16"/>
+  <object id="877" name="SKULL" gid="1241" x="462.667" y="846.667" width="16" height="16"/>
+  <object id="878" name="SKULL" gid="1241" x="429.333" y="832" width="16" height="16"/>
+  <object id="879" name="SKULL" gid="1241" x="372" y="781.333" width="16" height="16"/>
+  <object id="880" name="SKULL" gid="1241" x="237.333" y="624" width="16" height="16"/>
+  <object id="881" name="SKULL" gid="1241" x="217.333" y="534.667" width="16" height="16"/>
+  <object id="882" name="SKULL" gid="1241" x="209.333" y="490.667" width="16" height="16"/>
+  <object id="883" name="SKULL" gid="1241" x="273.333" y="482.667" width="16" height="16"/>
+  <object id="884" name="SKULL" gid="1241" x="194.667" y="741.333" width="16" height="16"/>
+  <object id="885" name="SKULL" gid="1241" x="169.333" y="664" width="16" height="16"/>
+  <object id="886" name="SKULL" gid="1241" x="140" y="577.333" width="16" height="16"/>
+  <object id="887" name="SKULL" gid="1241" x="117.333" y="501.333" width="16" height="16"/>
+  <object id="888" name="SKULL" gid="1241" x="101.333" y="420" width="16" height="16"/>
+  <object id="889" name="SKULL" gid="1241" x="114.667" y="330.667" width="16" height="16"/>
+  <object id="890" name="SKULL" gid="1241" x="124" y="317.333" width="16" height="16"/>
+  <object id="891" name="SKULL" gid="1241" x="165.333" y="402.667" width="16" height="16"/>
+  <object id="892" name="SKULL" gid="1241" x="145.333" y="458.667" width="16" height="16"/>
+  <object id="893" name="SKULL" gid="1241" x="70.6667" y="556" width="16" height="16"/>
+  <object id="894" name="SKULL" gid="1241" x="90.6667" y="637.333" width="16" height="16"/>
+  <object id="895" name="SKULL" gid="1241" x="137.333" y="690.667" width="16" height="16"/>
+  <object id="896" name="SKULL" gid="1241" x="198.667" y="745.333" width="16" height="16"/>
+  <object id="897" name="SKULL" gid="1241" x="86.6667" y="822.667" width="16" height="16"/>
+  <object id="898" name="SKULL" gid="1241" x="66.6667" y="772" width="16" height="16"/>
+  <object id="899" name="SKULL" gid="1241" x="132" y="733.333" width="16" height="16"/>
+  <object id="900" name="SKULL" gid="1241" x="208" y="784" width="16" height="16"/>
+  <object id="901" name="SKULL" gid="1241" x="272" y="806.667" width="16" height="16"/>
+  <object id="902" name="SKULL" gid="1241" x="349.333" y="829.333" width="16" height="16"/>
+  <object id="903" name="SKULL" gid="1241" x="332" y="736" width="16" height="16"/>
+  <object id="904" name="SKULL" gid="1241" x="337.333" y="652" width="16" height="16"/>
+  <object id="905" name="SKULL" gid="1241" x="465.333" y="532" width="16" height="16"/>
+  <object id="906" name="SKULL" gid="1241" x="550.667" y="416" width="16" height="16"/>
+  <object id="907" name="SKULL" gid="1241" x="600" y="320" width="16" height="16"/>
+  <object id="908" name="SKULL" gid="1241" x="636" y="209.333" width="16" height="16"/>
+  <object id="909" name="SKULL" gid="1241" x="660" y="150.667" width="16" height="16"/>
+  <object id="910" name="SKULL" gid="1241" x="690.667" y="206.667" width="16" height="16"/>
+  <object id="911" name="SKULL" gid="1241" x="697.333" y="417.333" width="16" height="16"/>
+  <object id="912" name="SKULL" gid="1241" x="666.667" y="544" width="16" height="16"/>
+  <object id="913" name="SKULL" gid="1241" x="586.667" y="656" width="16" height="16"/>
+  <object id="914" name="SKULL" gid="1241" x="474.667" y="732" width="16" height="16"/>
+  <object id="915" name="SKULL" gid="1241" x="350.667" y="696" width="16" height="16"/>
+  <object id="916" name="SKULL" gid="1241" x="209.333" y="390.667" width="16" height="16"/>
+  <object id="917" name="SKULL" gid="1241" x="197.333" y="352" width="16" height="16"/>
+  <object id="918" name="SKULL" gid="1241" x="193.333" y="337.333" width="16" height="16"/>
+  <object id="919" name="SKULL" gid="1241" x="193.333" y="337.333" width="16" height="16"/>
+  <object id="920" name="SKULL" gid="1241" x="193.333" y="337.333" width="16" height="16"/>
+  <object id="921" name="SKULL" gid="1241" x="193.333" y="326.667" width="16" height="16"/>
+  <object id="922" name="SKULL" gid="1241" x="193.333" y="310.667" width="16" height="16"/>
+  <object id="923" name="SKULL" gid="1241" x="193.333" y="296" width="16" height="16"/>
+  <object id="924" name="SKULL" gid="1241" x="193.333" y="296" width="16" height="16"/>
+  <object id="925" name="SKULL" gid="1241" x="193.333" y="296" width="16" height="16"/>
+  <object id="926" name="SKULL" gid="1241" x="193.333" y="296" width="16" height="16"/>
+  <object id="927" name="SKULL" gid="1241" x="194.667" y="290.667" width="16" height="16"/>
+  <object id="928" name="SKULL" gid="1241" x="206.667" y="274.667" width="16" height="16"/>
+  <object id="929" name="SKULL" gid="1241" x="216" y="264" width="16" height="16"/>
+  <object id="930" name="SKULL" gid="1241" x="228" y="258.667" width="16" height="16"/>
+  <object id="931" name="SKULL" gid="1241" x="237.333" y="256" width="16" height="16"/>
+  <object id="932" name="SKULL" gid="1241" x="253.333" y="252" width="16" height="16"/>
+  <object id="933" name="SKULL" gid="1241" x="281.333" y="240" width="16" height="16"/>
+  <object id="934" name="SKULL" gid="1241" x="325.333" y="226.667" width="16" height="16"/>
+  <object id="935" name="SKULL" gid="1241" x="362.667" y="221.333" width="16" height="16"/>
+  <object id="936" name="SKULL" gid="1241" x="398.667" y="226.667" width="16" height="16"/>
+  <object id="937" name="SKULL" gid="1241" x="454.667" y="241.333" width="16" height="16"/>
+  <object id="938" name="SKULL" gid="1241" x="481.333" y="248" width="16" height="16"/>
+  <object id="939" name="SKULL" gid="1241" x="492" y="253.333" width="16" height="16"/>
+  <object id="940" name="SKULL" gid="1241" x="502.667" y="261.333" width="16" height="16"/>
+  <object id="941" name="SKULL" gid="1241" x="521.333" y="278.667" width="16" height="16"/>
+  <object id="942" name="SKULL" gid="1241" x="542.667" y="308" width="16" height="16"/>
+  <object id="943" name="SKULL" gid="1241" x="564" y="346.667" width="16" height="16"/>
+  <object id="944" name="SKULL" gid="1241" x="580" y="377.333" width="16" height="16"/>
+  <object id="945" name="SKULL" gid="1241" x="588" y="425.333" width="16" height="16"/>
+  <object id="946" name="SKULL" gid="1241" x="588" y="442.667" width="16" height="16"/>
+  <object id="947" name="SKULL" gid="1241" x="581.333" y="469.333" width="16" height="16"/>
+  <object id="948" name="SKULL" gid="1241" x="568" y="492" width="16" height="16"/>
+  <object id="949" name="SKULL" gid="1241" x="540" y="530.667" width="16" height="16"/>
+  <object id="950" name="SKULL" gid="1241" x="496" y="574.667" width="16" height="16"/>
+  <object id="951" name="SKULL" gid="1241" x="468" y="590.667" width="16" height="16"/>
+  <object id="952" name="SKULL" gid="1241" x="452" y="596" width="16" height="16"/>
+  <object id="953" name="SKULL" gid="1241" x="430.667" y="609.333" width="16" height="16"/>
+  <object id="954" name="SKULL" gid="1241" x="408" y="626.667" width="16" height="16"/>
+  <object id="955" name="SKULL" gid="1241" x="393.333" y="638.667" width="16" height="16"/>
+  <object id="956" name="SKULL" gid="1241" x="364" y="658.667" width="16" height="16"/>
+  <object id="957" name="SKULL" gid="1241" x="332" y="674.667" width="16" height="16"/>
+  <object id="958" name="SKULL" gid="1241" x="318.667" y="674.667" width="16" height="16"/>
+  <object id="959" name="SKULL" gid="1241" x="306.667" y="674.667" width="16" height="16"/>
+  <object id="960" name="SKULL" gid="1241" x="282.667" y="681.333" width="16" height="16"/>
+  <object id="961" name="SKULL" gid="1241" x="257.333" y="694.667" width="16" height="16"/>
+  <object id="962" name="SKULL" gid="1241" x="218.667" y="708" width="16" height="16"/>
+  <object id="963" name="SKULL" gid="1241" x="205.333" y="718.667" width="16" height="16"/>
+  <object id="964" name="SKULL" gid="1241" x="197.333" y="721.333" width="16" height="16"/>
+  <object id="965" name="SKULL" gid="1241" x="196" y="726.667" width="16" height="16"/>
+  <object id="966" name="SKULL" gid="1241" x="196" y="740" width="16" height="16"/>
+  <object id="967" name="SKULL" gid="1241" x="204" y="754.667" width="16" height="16"/>
+  <object id="968" name="SKULL" gid="1241" x="220" y="772" width="16" height="16"/>
+  <object id="969" name="SKULL" gid="1241" x="240" y="785.333" width="16" height="16"/>
+  <object id="970" name="SKULL" gid="1241" x="266.667" y="792" width="16" height="16"/>
+  <object id="971" name="SKULL" gid="1241" x="336" y="801.333" width="16" height="16"/>
+  <object id="972" name="SKULL" gid="1241" x="405.333" y="817.333" width="16" height="16"/>
+  <object id="973" name="SKULL" gid="1241" x="460" y="832" width="16" height="16"/>
+  <object id="974" name="SKULL" gid="1241" x="486.667" y="828" width="16" height="16"/>
+  <object id="975" name="SKULL" gid="1241" x="512" y="789.333" width="16" height="16"/>
+  <object id="976" name="SKULL" gid="1241" x="530.667" y="734.667" width="16" height="16"/>
+  <object id="977" name="SKULL" gid="1241" x="541.333" y="689.333" width="16" height="16"/>
+  <object id="978" name="SKULL" gid="1241" x="544" y="637.333" width="16" height="16"/>
+  <object id="979" name="SKULL" gid="1241" x="524" y="593.333" width="16" height="16"/>
+  <object id="980" name="SKULL" gid="1241" x="516" y="565.333" width="16" height="16"/>
+  <object id="981" name="SKULL" gid="1241" x="510.667" y="552" width="16" height="16"/>
+  <object id="982" name="SKULL" gid="1241" x="470.667" y="489.333" width="16" height="16"/>
+  <object id="983" name="SKULL" gid="1241" x="413.333" y="429.333" width="16" height="16"/>
+  <object id="984" name="SKULL" gid="1241" x="380" y="412" width="16" height="16"/>
+  <object id="985" name="SKULL" gid="1241" x="332" y="406.667" width="16" height="16"/>
+  <object id="986" name="SKULL" gid="1241" x="309.333" y="410.667" width="16" height="16"/>
+  <object id="987" name="SKULL" gid="1241" x="276" y="421.333" width="16" height="16"/>
+  <object id="988" name="SKULL" gid="1241" x="252" y="433.333" width="16" height="16"/>
+  <object id="989" name="SKULL" gid="1241" x="226.667" y="458.667" width="16" height="16"/>
+  <object id="990" name="SKULL" gid="1241" x="214.667" y="489.333" width="16" height="16"/>
  </objectgroup>
 </map>

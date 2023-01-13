@@ -47,6 +47,7 @@ class GameScreen(
             add(textureAtlas)
             add(phWorld)
         }
+        entityCapacity=10000
         components {
             add<ImageComponent.Companion.ImageComponentListener>()
             add<PhysicComponent.Companion.PhysicComponentListener>()

@@ -19,14 +19,22 @@ class MoveSystem(
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
     override fun onTickEntity(entity: Entity) {
-
+        val moveCmp: MoveComponent
+        val physicCmp: PhysicComponent
+        val mass: Float
         val velocity: Vector2
 
-
-        val moveCmp = moveCmps[entity]
-        val physicCmp = physicCmps[entity]
-        val mass = physicCmp.body.mass
-        velocity = physicCmp.body.linearVelocity
+        if (entity in weaponCmps) {
+//            moveCmp = moveCmps[playerEntities.first()]
+//            physicCmp = physicCmps[playerEntities.first()]
+//            mass = physicCmp.body.mass
+//            velocity = physicCmp.body.linearVelocity
+        } else {
+        }
+            moveCmp = moveCmps[entity]
+            physicCmp = physicCmps[entity]
+            mass = physicCmp.body.mass
+            velocity = physicCmp.body.linearVelocity
 
         val (velX, velY) = velocity
 

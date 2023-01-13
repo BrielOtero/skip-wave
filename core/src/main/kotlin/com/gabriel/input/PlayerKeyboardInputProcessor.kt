@@ -66,11 +66,11 @@ class PlayerKeyboardInputProcessor(
             updatePlayerMovement()
             return true
         } else if (keycode == SPACE) {
-            playerEntities.forEach {
-                with(attackCmps[it]) {
-                    doAttack = true
-                }
-            }
+//            weaponEntities.forEach {
+//                with(attackCmps[it]) {
+//                    doAttack = true
+//                }
+//            }
             return true
         }
         return false

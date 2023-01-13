@@ -23,7 +23,6 @@ class PhysicSystem(
     private val collisionCmps: ComponentMapper<CollisionComponent>,
     private val aiCmps: ComponentMapper<AiComponent>,
     private val enemyCmps: ComponentMapper<EnemyComponent>,
-    private val playerCmps: ComponentMapper<PlayerComponent>,
 ) : ContactListener, IteratingSystem(interval = Fixed(1 / 60f)) {
     init {
         phWorld.setContactListener(this)
@@ -72,60 +71,60 @@ class PhysicSystem(
 
 
     override fun beginContact(contact: Contact) {
-//        val entityA: Entity = contact.fixtureA.entity
-//        val entityB: Entity = contact.fixtureB.entity
-//        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
-//        val isEntityBCollisionFixture = entityB in collisionCmps && !contact.fixtureB.isSensor
-//        val isEntityACollisionFixture = entityA in collisionCmps && !contact.fixtureA.isSensor
-//        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
-//        val isEntityAAiSensor = entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
-//        val isEntityBAiSensor = entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
-//
-//
-//        when {
-//            isEntityATiledCollisionSensor && isEntityBCollisionFixture -> {
-//                tiledCmps[entityA].nearbyEntities += entityB
-//            }
-//
-//            isEntityBTiledCollisionSensor && isEntityACollisionFixture -> {
-//                tiledCmps[entityB].nearbyEntities += entityA
-//            }
-//
-//            isEntityAAiSensor && isEntityBCollisionFixture -> {
-//                aiCmps[entityA].nearbyEntitites += entityB
-//            }
-//
-//            isEntityBAiSensor && isEntityACollisionFixture -> {
-//                aiCmps[entityB].nearbyEntitites += entityA
-//            }
-//        }
+        val entityA: Entity = contact.fixtureA.entity
+        val entityB: Entity = contact.fixtureB.entity
+        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
+        val isEntityBCollisionFixture = entityB in collisionCmps && !contact.fixtureB.isSensor
+        val isEntityACollisionFixture = entityA in collisionCmps && !contact.fixtureA.isSensor
+        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
+        val isEntityAAiSensor = entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
+        val isEntityBAiSensor = entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
+
+
+        when {
+            isEntityATiledCollisionSensor && isEntityBCollisionFixture -> {
+                tiledCmps[entityA].nearbyEntities += entityB
+            }
+
+            isEntityBTiledCollisionSensor && isEntityACollisionFixture -> {
+                tiledCmps[entityB].nearbyEntities += entityA
+            }
+
+            isEntityAAiSensor && isEntityBCollisionFixture -> {
+                aiCmps[entityA].nearbyEntitites += entityB
+            }
+
+            isEntityBAiSensor && isEntityACollisionFixture -> {
+                aiCmps[entityB].nearbyEntitites += entityA
+            }
+        }
     }
 
     override fun endContact(contact: Contact) {
-//        val entityA: Entity = contact.fixtureA.entity
-//        val entityB: Entity = contact.fixtureB.entity
-//        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
-//        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
-//        val isEntityAAiSensor = entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
-//        val isEntityBAiSensor = entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
-//
-//        when {
-//            isEntityATiledCollisionSensor && !contact.fixtureB.isSensor -> {
-//                tiledCmps[entityA].nearbyEntities -= entityB
-//            }
-//
-//            isEntityBTiledCollisionSensor && !contact.fixtureA.isSensor -> {
-//                tiledCmps[entityB].nearbyEntities -= entityA
-//            }
-//
-//            isEntityAAiSensor && !contact.fixtureB.isSensor -> {
-//                aiCmps[entityA].nearbyEntitites -= entityB
-//            }
-//
-//            isEntityBAiSensor && !contact.fixtureA.isSensor -> {
-//                aiCmps[entityB].nearbyEntitites -= entityA
-//            }
-//        }
+        val entityA: Entity = contact.fixtureA.entity
+        val entityB: Entity = contact.fixtureB.entity
+        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
+        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
+        val isEntityAAiSensor = entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
+        val isEntityBAiSensor = entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
+
+        when {
+            isEntityATiledCollisionSensor && !contact.fixtureB.isSensor -> {
+                tiledCmps[entityA].nearbyEntities -= entityB
+            }
+
+            isEntityBTiledCollisionSensor && !contact.fixtureA.isSensor -> {
+                tiledCmps[entityB].nearbyEntities -= entityA
+            }
+
+            isEntityAAiSensor && !contact.fixtureB.isSensor -> {
+                aiCmps[entityA].nearbyEntitites -= entityB
+            }
+
+            isEntityBAiSensor && !contact.fixtureA.isSensor -> {
+                aiCmps[entityB].nearbyEntitites -= entityA
+            }
+        }
     }
 
     private fun Fixture.isStaticBody() = this.body.type == StaticBody
@@ -133,14 +132,11 @@ class PhysicSystem(
     private fun Fixture.isDinamicBody() = this.body.type == DynamicBody
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
-
         if (contact.fixtureA.isStaticBody() && contact.fixtureB.isDinamicBody() || contact.fixtureB.isStaticBody() && contact.fixtureA.isDinamicBody()) {
             contact.isEnabled = true
         } else {
-            contact.isEnabled = !(contact.fixtureA.entity in playerCmps || contact.fixtureB.entity in playerCmps)
+            contact.isEnabled = (contact.fixtureA.entity in enemyCmps && contact.fixtureB.entity in enemyCmps)
         }
-
-
     }
 
     override fun postSolve(contact: Contact?, impulse: ContactImpulse?) = Unit

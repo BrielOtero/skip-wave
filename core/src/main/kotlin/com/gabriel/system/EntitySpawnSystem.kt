@@ -22,8 +22,6 @@ import ktx.tiled.*
 import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.gabriel.actors.FlipImage
 import com.gabriel.ai.DefaultGlobalState
-import ktx.box2d.circle
-import ktx.box2d.loop
 import ktx.log.logger
 import kotlin.math.roundToInt
 
@@ -62,36 +60,20 @@ class EntitySpawnSystem(
                     phCmp.size.set(w, h)
 
                     // hit box
-                    box(width, height, cfg.physicOffset) {
-//                        isSensor = cfg.bodyType == StaticBody
+                    box(w, h, cfg.physicOffset) {
                         isSensor = false
                         userData = HIT_BOX_SENSOR
                     }
 
                     if (cfg.bodyType != StaticBody) {
+                        // collision box
+                        val collH = h * 0.4f
+                        val collOffset = vec2().apply { set(cfg.physicOffset) }
+                        collOffset.y -= h * 0.5f - collH * 0.5f
+                        box(w, collH, collOffset)
 
-                        when (cfg.entityType) {
-
-                            EntityType.ENEMY -> {
-//                                val collH = h
-//                                val collOffset = vec2().apply { set(cfg.physicOffset) }
-//                                collOffset.y -= h * 0.5f - collH * 0.5f
-//                                box(width, height) {
-//                                    friction = 0f
-//                                }
-
-
-                            }
-
-                            else -> {
-                                // collision box
-                                val collH = h * 0.4f
-                                val collOffset = vec2().apply { set(cfg.physicOffset) }
-                                collOffset.y -= h * 0.5f - collH * 0.5f
-                                box(w, collH, collOffset)
-                            }
-                        }
                     }
+
                 }
 
                 if (cfg.speedScaling > 0f) {
@@ -127,11 +109,12 @@ class EntitySpawnSystem(
                         add<EnemyComponent>()
                     }
 
-                    else -> {}
-                }
+                    EntityType.WEAPON -> {
+                        add<WeaponComponent>()
 
-                if (cfg.isWeapon) {
-                    add<WeaponComponent>()
+                    }
+
+                    else -> {}
                 }
 
 
@@ -148,7 +131,7 @@ class EntitySpawnSystem(
                     add<AiComponent> {
                         treePath = cfg.aiTreePath
                     }
-                    physicCmp.body.circle(4f) {
+                    physicCmp.body.box(1f, 1f) {
                         isSensor = true
                         userData = AI_SENSOR
                     }
@@ -167,18 +150,19 @@ class EntitySpawnSystem(
                 attackExtraRange = 0.6f,
                 attackScaling = 1.25f,
                 speedScaling = 2.25f,
+                lifeScaling = 10000f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
 
             "SKULL" -> SpawnCfg(
                 AnimationModel.SKULL,
-                entityType = EntityType.ENEMY,
+                EntityType.ENEMY,
                 lifeScaling = 0.75f,
-                physicScaling = vec2(0.3f, 0.3f),
                 speedScaling = 0.8f,
-                physicOffset = vec2(0f, -2f * UNIT_SCALE),
-                aiTreePath = "ai/slime.tree"
+                physicScaling = vec2(1f, 0.5f),
+                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/enemy.tree"
             )
 
             "CHEST" -> SpawnCfg(
@@ -193,13 +177,14 @@ class EntitySpawnSystem(
             //Weapons
             "SLASH" -> SpawnCfg(
                 AnimationModel.SLASH,
-                entityType = EntityType.WEAPON,
+                EntityType.WEAPON,
                 attackExtraRange = 0.6f,
-                attackScaling = 1.25f,
+                attackScaling = 5.25f,
                 speedScaling = 2.25f,
-                physicScaling = vec2(0.3f, 0.3f),
-                physicOffset = vec2(0f, -10f * UNIT_SCALE),
-                isWeapon = true
+                lifeScaling = 0f,
+                physicScaling = vec2(1f, 1f),
+                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/slash.tree"
 
             )
 

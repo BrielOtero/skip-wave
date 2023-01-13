@@ -34,7 +34,7 @@ prettyPrint=false
 legacyOutput=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../actors,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:false}]
+inputFiles=[{path:../graphics/actors,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:false}]
 keepInputFileExtensions=false
 
 

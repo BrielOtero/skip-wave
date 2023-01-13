@@ -36,6 +36,7 @@ data class AiEntity(
     private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper(),
 ) {
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
     val position: Vector2
         get() = physicCmps[entity].body.position
 

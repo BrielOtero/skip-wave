@@ -33,7 +33,7 @@ enum class DefaultState : EntityState {
     ATTACK {
         override fun enter(entity: AiEntity) {
             entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL)
-            entity.root(true)
+            entity.root(false)
             entity.startAttack()
         }
 

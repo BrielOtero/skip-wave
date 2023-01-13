@@ -107,7 +107,7 @@ tasks.matching { it.name.contains("merge") && it.name.contains("JniLibFolders") 
 
 task run(type: Exec) {
 	def path
-	def localProperties = project.file("../local.properties")
+	def localProperties =  project.file("../local.properties")
 	if (localProperties.exists()) {
 		Properties properties = new Properties()
 		localProperties.withInputStream { instr ->

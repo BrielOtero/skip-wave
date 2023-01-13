@@ -22,6 +22,7 @@ abstract class Action : LeafTask<AiEntity>() {
 class AttackTask : Action() {
 
     override fun execute(): Status {
+        println("Attack")
         if (status != Status.RUNNING) {
             entity.doAndStartAttack()
             entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
@@ -32,6 +33,26 @@ class AttackTask : Action() {
         if (entity.isAnimationDone) {
             entity.animation(AnimationType.RUN)
             entity.stopMovement()
+            return Status.SUCCEEDED
+        }
+
+        return Status.RUNNING
+    }
+}
+
+class AttackWeaponTask : Action() {
+    override fun execute(): Status {
+            println("AttackWeapon")
+        if (status != Status.RUNNING) {
+            entity.doAndStartAttack()
+            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
+//            entity.fireEvent(EntityAggroEvent(entity.entity))
+            return Status.RUNNING
+        }
+
+        if (entity.isAnimationDone) {
+            entity.animation(AnimationType.IDLE)
+//            entity.stopMovement()
             return Status.SUCCEEDED
         }
 

@@ -10,6 +10,7 @@ import com.gabriel.event.fire
 import com.gabriel.system.EntitySpawnSystem.Companion.HIT_BOX_SENSOR
 import com.github.quillraven.fleks.*
 import ktx.box2d.query
+import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
 
@@ -20,6 +21,7 @@ class AttackSystem(
     private val imgCmps: ComponentMapper<ImageComponent>,
     private val lifeCmps: ComponentMapper<LifeComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
+    private val weaponCmps: ComponentMapper<WeaponComponent>,
     private val lootCmps: ComponentMapper<LootComponent>,
     private val animationCmps: ComponentMapper<AnimationComponent>,
     private val phWorld: World,
@@ -31,6 +33,7 @@ class AttackSystem(
 
         if (attackCmp.isReady && !attackCmp.doAttack) {
             // entity does not want to attack and is not executing an attack -> do nothing
+
             return
         }
 
@@ -40,6 +43,7 @@ class AttackSystem(
             attackCmp.state = AttackState.ATTACKING
             attackCmp.delay = attackCmp.maxDelay
             gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
+
             return
         }
 
@@ -86,9 +90,12 @@ class AttackSystem(
 
                 // turn off firendly fire
                 val isAttackerPlayer = entity in playerCmps
+                val isAttackerWeapon = entity in weaponCmps
                 if (isAttackerPlayer && fixtureEntity in playerCmps) {
                     return@query true
-                } else if (!isAttackerPlayer && fixtureEntity !in playerCmps) {
+                } else if (!isAttackerPlayer && !isAttackerWeapon && fixtureEntity !in playerCmps) {
+                    return@query true
+                } else if (isAttackerWeapon && fixtureEntity in playerCmps) {
                     return@query true
                 }
 
@@ -115,5 +122,6 @@ class AttackSystem(
 
     companion object {
         val AABB_RECT = Rectangle()
+        private val log = logger<AttackSystem>()
     }
 }

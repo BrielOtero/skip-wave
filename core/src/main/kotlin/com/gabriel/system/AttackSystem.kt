@@ -41,14 +41,14 @@ class AttackSystem(
             // attack intention and is ready to attack -> start attack
             attackCmp.doAttack = false
             attackCmp.state = AttackState.ATTACKING
-            attackCmp.delay = attackCmp.maxDelay
+            attackCmp.cooldown = attackCmp.maxCooldown
             gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
 
             return
         }
 
-        attackCmp.delay -= deltaTime
-        if (attackCmp.delay <= 0f && attackCmp.isAttacking) {
+        attackCmp.cooldown -= deltaTime
+        if (attackCmp.cooldown <= 0f && attackCmp.isAttacking) {
             // deal damage to nearby enemies
             attackCmp.state = AttackState.DEAL_DAMAGE
 

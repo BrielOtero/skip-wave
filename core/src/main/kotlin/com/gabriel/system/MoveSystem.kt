@@ -16,27 +16,12 @@ class MoveSystem(
     private val imageCmps: ComponentMapper<ImageComponent>,
     private val weaponCmps: ComponentMapper<WeaponComponent>,
 ) : IteratingSystem() {
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
     override fun onTickEntity(entity: Entity) {
-        val moveCmp: MoveComponent
-        val physicCmp: PhysicComponent
-        val mass: Float
-        val velocity: Vector2
-
-        if (entity in weaponCmps) {
-//            moveCmp = moveCmps[playerEntities.first()]
-//            physicCmp = physicCmps[playerEntities.first()]
-//            mass = physicCmp.body.mass
-//            velocity = physicCmp.body.linearVelocity
-        } else {
-        }
-            moveCmp = moveCmps[entity]
-            physicCmp = physicCmps[entity]
-            mass = physicCmp.body.mass
-            velocity = physicCmp.body.linearVelocity
-
-        val (velX, velY) = velocity
+        val moveCmp = moveCmps[entity]
+        val physicCmp = physicCmps[entity]
+        val mass = physicCmp.body.mass
+        val (velX, velY) = physicCmp.body.linearVelocity
 
 
         if ((moveCmp.cos == 0f && moveCmp.sin == 0f) || moveCmp.root) {
@@ -53,9 +38,11 @@ class MoveSystem(
             mass * (moveCmp.speed * moveCmp.sin - velY)
         )
 
-        imageCmps.getOrNull(entity)?.let { imageCmp ->
-            if (moveCmp.cos != 0f) {
-                imageCmp.image.flipX = moveCmp.cos < 0
+        if (entity !in weaponCmps) {
+            imageCmps.getOrNull(entity)?.let { imageCmp ->
+                if (moveCmp.cos != 0f) {
+                    imageCmp.image.flipX = moveCmp.cos < 0
+                }
             }
         }
     }

@@ -25,6 +25,7 @@ class CameraSystem(
         // we center on the image because it has an
         // interpolated position for rendering which makes
         // the game smoother
+
         with(imageCmps[entity]) {
             val viewW = camera.viewportWidth * 0.5f
             val viewH = camera.viewportHeight * 0.5f
@@ -37,6 +38,7 @@ class CameraSystem(
                 image.y.coerceIn(camMinH, camMaxH),
                 camera.position.z
             )
+
         }
     }
 

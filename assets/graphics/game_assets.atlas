@@ -74,205 +74,289 @@ dragon/run
   orig: 16, 16
   offset: 0, 0
   index: 3
-player/attack
+player/death
   rotate: false
   xy: 320, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: 0
-player/attack
+player/death
   rotate: false
   xy: 352, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: 1
-player/attack
+player/death
   rotate: false
   xy: 384, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: 2
-player/attack
+player/death
   rotate: false
   xy: 416, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: 3
 player/death
   rotate: false
   xy: 448, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 0
-player/idle
+  index: 4
+player/death
   rotate: false
   xy: 480, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 0
-player/run
+  index: 5
+player/death
   rotate: false
   xy: 512, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 0
-player/run
+  index: 6
+player/death
   rotate: false
   xy: 544, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 1
-player/run
+  index: 7
+player/idle
   rotate: false
   xy: 576, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 2
+  index: 0
 player/run
   rotate: false
   xy: 608, 0
-  size: 16, 16
-  orig: 16, 16
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 3
-skull/attack
+  index: 0
+player/run
   rotate: false
   xy: 640, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+player/run
+  rotate: false
+  xy: 672, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+player/run
+  rotate: false
+  xy: 704, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+player/run
+  rotate: false
+  xy: 736, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+player/run
+  rotate: false
+  xy: 768, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+player/run
+  rotate: false
+  xy: 800, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 6
+player/run
+  rotate: false
+  xy: 832, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 7
+skull/attack
+  rotate: false
+  xy: 864, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 skull/attack
   rotate: false
-  xy: 672, 0
+  xy: 896, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 skull/attack
   rotate: false
-  xy: 704, 0
+  xy: 928, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 2
 skull/attack
   rotate: false
-  xy: 736, 0
+  xy: 960, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 4
 skull/death
   rotate: false
-  xy: 768, 0
+  xy: 992, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 skull/idle
   rotate: false
-  xy: 800, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-skull/run
-  rotate: false
-  xy: 832, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-skull/run
-  rotate: false
-  xy: 864, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 1
-skull/run
-  rotate: false
-  xy: 896, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 2
-skull/run
-  rotate: false
-  xy: 928, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 3
-slash/attack
-  rotate: false
-  xy: 960, 0
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-slash/attack
-  rotate: false
-  xy: 992, 0
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-slash/attack
-  rotate: false
   xy: 1024, 0
-  size: 32, 32
-  orig: 32, 32
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
-  index: 2
-slash/attack
+  index: 0
+skull/run
   rotate: false
   xy: 1056, 0
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-slash/idle
-  rotate: false
-  xy: 1088, 0
-  size: 32, 32
-  orig: 32, 32
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: 0
-spirit/run
+skull/run
+  rotate: false
+  xy: 1088, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skull/run
   rotate: false
   xy: 1120, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
+  index: 2
+skull/run
+  rotate: false
+  xy: 1152, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+slash_left/attack
+  rotate: false
+  xy: 1184, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+slash_left/attack
+  rotate: false
+  xy: 1216, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+slash_left/attack
+  rotate: false
+  xy: 1248, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+slash_left/attack
+  rotate: false
+  xy: 1280, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+slash_left/idle
+  rotate: false
+  xy: 1312, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+slash_right/attack
+  rotate: false
+  xy: 1344, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+slash_right/attack
+  rotate: false
+  xy: 1376, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+slash_right/attack
+  rotate: false
+  xy: 1408, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+slash_right/attack
+  rotate: false
+  xy: 1440, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+slash_right/idle
+  rotate: false
+  xy: 1472, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
   index: 0
 spirit/run
   rotate: false
-  xy: 1152, 0
+  xy: 1504, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+spirit/run
+  rotate: false
+  xy: 1536, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 spirit/run
   rotate: false
-  xy: 1184, 0
+  xy: 1568, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 2
 spirit/run
   rotate: false
-  xy: 1216, 0
+  xy: 1600, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

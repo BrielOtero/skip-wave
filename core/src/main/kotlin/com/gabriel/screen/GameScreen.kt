@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.gabriel.component.*
+import com.gabriel.event.EntityAddEvent
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
 import com.gabriel.input.PlayerKeyboardInputProcessor
@@ -63,8 +64,11 @@ class GameScreen(
             add<WeaponSystem>()
             add<AttackSystem>()
             add<LootSystem>()
+            add<ExperienceSystem>()
             add<DeadSystem>()
             add<LifeSystem>()
+            add<LevelSystem>()
+            add<EnemySystem>()
             add<PhysicSystem>()
             add<AnimationSystem>()
             add<StateSystem>()

@@ -23,6 +23,7 @@ class PhysicSystem(
     private val collisionCmps: ComponentMapper<CollisionComponent>,
     private val aiCmps: ComponentMapper<AiComponent>,
     private val enemyCmps: ComponentMapper<EnemyComponent>,
+    private val weaponCmps: ComponentMapper<WeaponComponent>,
 ) : ContactListener, IteratingSystem(interval = Fixed(1 / 60f)) {
     init {
         phWorld.setContactListener(this)
@@ -133,7 +134,7 @@ class PhysicSystem(
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
         if (contact.fixtureA.isStaticBody() && contact.fixtureB.isDinamicBody() || contact.fixtureB.isStaticBody() && contact.fixtureA.isDinamicBody()) {
-            contact.isEnabled = true
+            contact.isEnabled = !(contact.fixtureA.entity in weaponCmps || contact.fixtureB.entity in weaponCmps)
         } else {
             contact.isEnabled = (contact.fixtureA.entity in enemyCmps && contact.fixtureB.entity in enemyCmps)
         }

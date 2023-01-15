@@ -75,7 +75,7 @@ class CollisionSpawnSystem(
         }
     }
 
-    override fun handle(event: Event?): Boolean {
+    override fun handle(event: Event): Boolean {
         when (event) {
             is MapChangeEvent -> {
                 event.map.layers.getByType(TiledMapTileLayer::class.java, tiledLayers)

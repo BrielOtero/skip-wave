@@ -11,23 +11,27 @@ const val DEFAULT_LIFE = 15
 
 
 enum class EntityType {
-    PLAYER, ENEMY, WEAPON, NOTHING
+    PLAYER, ENEMY, WEAPON, SPAWN, NOTHING
 }
 
 data class SpawnCfg(
     val model: AnimationModel,
     val entityType: EntityType = EntityType.NOTHING,
     val bodyType: BodyType = BodyType.DynamicBody,
-    val speedScaling: Float = 1f,
+    val isFlip: Boolean = false,
     val canAttack: Boolean = true,
-    val attackScaling: Float = 1f,
-    val attackDelay: Float = 0.2f,
-    val attackExtraRange: Float = 0f,
-    val lifeScaling: Float = 1f,
     val lootable: Boolean = false,
     val aiTreePath: String = "",
     val physicScaling: Vector2 = vec2(1f, 1f),
     val physicOffset: Vector2 = vec2(0f, 0f),
+
+    // Stats
+    val speedScaling: Float = 1f,
+    val attackScaling: Float = 1f,
+    val attackDelay: Float = 0.2f,
+    val attackExtraRange: Float = 0f,
+    val lifeScaling: Float = 1f,
+    val dropExperience:Float = 0f,
 )
 
 data class SpawnComponent(

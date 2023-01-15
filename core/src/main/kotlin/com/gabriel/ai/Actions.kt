@@ -22,7 +22,7 @@ abstract class Action : LeafTask<AiEntity>() {
 class AttackTask : Action() {
 
     override fun execute(): Status {
-        println("Attack")
+//        println("Attack")
         if (status != Status.RUNNING) {
             entity.doAndStartAttack()
             entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
@@ -42,7 +42,7 @@ class AttackTask : Action() {
 
 class AttackWeaponTask : Action() {
     override fun execute(): Status {
-            println("AttackWeapon")
+//            println("AttackWeapon")
         if (status != Status.RUNNING) {
             entity.doAndStartAttack()
             entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)

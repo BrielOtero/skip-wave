@@ -29,7 +29,7 @@ class AudioSystem : EventListener, IntervalSystem() {
         soundRequests.clear()
     }
 
-    override fun handle(event: Event?): Boolean {
+    override fun handle(event: Event): Boolean {
         when (event) {
             is MapChangeEvent -> {
                 event.map.propertyOrNull<String>("music")?.let { path ->
@@ -53,7 +53,7 @@ class AudioSystem : EventListener, IntervalSystem() {
     }
 
     private fun queueSound(soundPath: String) {
-        log.debug { "Queuing sound $soundPath" }
+//        log.debug { "Queuing sound $soundPath" }
         if (soundPath in soundRequests) {
             // already queued -> do nothing
             return

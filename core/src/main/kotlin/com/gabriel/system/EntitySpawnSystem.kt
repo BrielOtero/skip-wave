@@ -11,17 +11,17 @@ import com.gabriel.Survivor.Companion.UNIT_SCALE
 import com.gabriel.component.*
 import com.gabriel.component.PhysicComponent.Companion.physicCmpFromImage
 import com.gabriel.event.MapChangeEvent
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.IteratingSystem
 import ktx.app.gdxError
 import ktx.box2d.box
 import ktx.math.vec2
 import ktx.tiled.*
 import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.actors.FlipImage
 import com.gabriel.ai.DefaultGlobalState
+import com.gabriel.event.EntityAddEvent
+import com.gabriel.event.fire
+import com.github.quillraven.fleks.*
 import ktx.log.logger
 import kotlin.math.roundToInt
 
@@ -30,6 +30,7 @@ class EntitySpawnSystem(
     private val phWorld: World,
     private val atlas: TextureAtlas,
     private val spawnCmps: ComponentMapper<SpawnComponent>,
+    @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : EventListener, IteratingSystem() {
     private val cachedCfgs = mutableMapOf<String, SpawnCfg>()
@@ -37,8 +38,10 @@ class EntitySpawnSystem(
 
     override fun onTickEntity(entity: Entity) {
         with(spawnCmps[entity]) {
+            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
             val cfg = spawnCfg(type)
             var relativeSize = size(cfg.model)
+
 
             world.entity {
                 val imageCmp = add<ImageComponent> {
@@ -47,6 +50,7 @@ class EntitySpawnSystem(
                         setSize(relativeSize.x, relativeSize.y)
                         setScaling(Scaling.fill)
                     }
+                    image.flipX = cfg.isFlip
                 }
 
                 add<AnimationComponent> {
@@ -67,13 +71,15 @@ class EntitySpawnSystem(
 
                     if (cfg.bodyType != StaticBody) {
                         // collision box
-                        val collH = h * 0.4f
-                        val collOffset = vec2().apply { set(cfg.physicOffset) }
-                        collOffset.y -= h * 0.5f - collH * 0.5f
-                        box(w, collH, collOffset)
+                        if (cfg.entityType != EntityType.ENEMY) {
+
+                            val collH = h * 0.4f
+                            val collOffset = vec2().apply { set(cfg.physicOffset) }
+                            collOffset.y -= h * 0.5f - collH * 0.5f
+                            box(w, collH, collOffset)
+                        }
 
                     }
-
                 }
 
                 if (cfg.speedScaling > 0f) {
@@ -84,7 +90,7 @@ class EntitySpawnSystem(
 
                 if (cfg.canAttack) {
                     add<AttackComponent> {
-                        maxDelay = cfg.attackDelay
+                        maxCooldown = cfg.attackDelay
                         damage = (DEFAULT_ATTACK_DAMAGE * cfg.attackScaling).roundToInt()
                         extraRange = cfg.attackExtraRange
                     }
@@ -100,6 +106,8 @@ class EntitySpawnSystem(
                 when (cfg.entityType) {
                     EntityType.PLAYER -> {
                         add<PlayerComponent>()
+                        add<ExperienceComponent>()
+                        add<LevelComponent>()
                         add<StateComponent>() {
                             stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
                         }
@@ -107,10 +115,17 @@ class EntitySpawnSystem(
 
                     EntityType.ENEMY -> {
                         add<EnemyComponent>()
+                        add<ExperienceComponent>() {
+                            dropExperience = cfg.dropExperience
+                        }
                     }
 
                     EntityType.WEAPON -> {
                         add<WeaponComponent>()
+                        log.debug { "$location" }
+                    }
+
+                    EntityType.SPAWN -> {
 
                     }
 
@@ -137,9 +152,33 @@ class EntitySpawnSystem(
                     }
                 }
             }
+
+            if (cfg.entityType == EntityType.PLAYER) {
+                log.debug { " Before A Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
+                gameStage.fire(
+                    EntityAddEvent(
+                        vec2((location.x / UNIT_SCALE) + 25, (location.y / UNIT_SCALE) - 5),
+                        "SLASH_RIGHT"
+                    )
+                )
+                log.debug { " After A Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
+                log.debug { " Before B Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
+
+                gameStage.fire(
+                    EntityAddEvent(
+                        vec2((location.x / UNIT_SCALE) - 25, (location.y / UNIT_SCALE) - 5),
+                        "SLASH_LEFT"
+                    )
+                )
+                log.debug { " After B Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
+
+
+            }
+
         }
         world.remove(entity)
     }
+
 
     private fun spawnCfg(type: String): SpawnCfg = cachedCfgs.getOrPut(type) {
         log.debug { "Type $type" }
@@ -150,7 +189,7 @@ class EntitySpawnSystem(
                 attackExtraRange = 0.6f,
                 attackScaling = 1.25f,
                 speedScaling = 2.25f,
-                lifeScaling = 10000f,
+                lifeScaling = 100f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
@@ -160,8 +199,9 @@ class EntitySpawnSystem(
                 EntityType.ENEMY,
                 lifeScaling = 0.75f,
                 speedScaling = 0.8f,
-                physicScaling = vec2(1f, 0.5f),
-                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                dropExperience = 5f,
+//                physicScaling = vec2(1f, 0.5f),
+//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -175,8 +215,23 @@ class EntitySpawnSystem(
             )
 
             //Weapons
-            "SLASH" -> SpawnCfg(
-                AnimationModel.SLASH,
+            "SLASH_LEFT" -> SpawnCfg(
+                AnimationModel.SLASH_LEFT,
+                EntityType.WEAPON,
+                isFlip = true,
+                attackExtraRange = 0.6f,
+                attackScaling = 5.25f,
+                speedScaling = 2.25f,
+                lifeScaling = 0f,
+                physicScaling = vec2(1f, 1f),
+                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/slash.tree",
+
+
+                )
+
+            "SLASH_RIGHT" -> SpawnCfg(
+                AnimationModel.SLASH_RIGHT,
                 EntityType.WEAPON,
                 attackExtraRange = 0.6f,
                 attackScaling = 5.25f,
@@ -187,6 +242,8 @@ class EntitySpawnSystem(
                 aiTreePath = "ai/slash.tree"
 
             )
+
+            "SPAWN" -> SpawnCfg(AnimationModel.UNDEFINED, EntityType.SPAWN)
 
             else -> gdxError("Type $type has no SpawnCfg setup.")
         }
@@ -207,7 +264,7 @@ class EntitySpawnSystem(
                 val entityLayer = event.map.layer("entities")
                 entityLayer.objects.forEach { mapObj ->
                     val typeStr = mapObj.name
-                        ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME!")
+                        ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME! MapChangeEvent")
                     world.entity {
                         add<SpawnComponent> {
                             this.type = typeStr
@@ -216,6 +273,15 @@ class EntitySpawnSystem(
                     }
                 }
                 return true
+            }
+
+            is EntityAddEvent -> {
+                world.entity {
+                    add<SpawnComponent> {
+                        this.type = event.name
+                        this.location.set(event.location.x * UNIT_SCALE, event.location.y * UNIT_SCALE)
+                    }
+                }
             }
         }
         return false

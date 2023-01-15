@@ -35,7 +35,8 @@ class RenderSystem(
 
         with(gameStage) {
             viewport.apply()
-
+//            orthoCam.zoom = 1.2f
+            orthoCam.zoom = 5.0f
             AnimatedTiledMapTile.updateAnimationBaseTime()
             mapRenderer.setView(orthoCam)
             if (bgdLayers.isNotEmpty()) {
@@ -55,7 +56,7 @@ class RenderSystem(
         }
 
         // render UI
-        with(uiStage){
+        with(uiStage) {
             viewport.apply()
             act(deltaTime)
             draw()

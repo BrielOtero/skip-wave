@@ -189,7 +189,7 @@ class EntitySpawnSystem(
                 attackExtraRange = 0.6f,
                 attackScaling = 1.25f,
                 speedScaling = 2.25f,
-                lifeScaling = 100f,
+                lifeScaling = 10000f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )

@@ -47,12 +47,6 @@ class PlayerKeyboardInputProcessor(
                 sin = tmpVec.y
             }
         }
-        weaponEntities.forEach { weapon ->
-            with(moveCmps[weapon]) {
-                cos = tmpVec.x
-                sin = tmpVec.y
-            }
-        }
     }
 
     override fun keyDown(keycode: Int): Boolean {

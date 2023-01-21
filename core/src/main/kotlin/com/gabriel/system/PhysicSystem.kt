@@ -10,6 +10,8 @@ import ktx.math.component2
 import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.gabriel.component.*
 import com.gabriel.system.EntitySpawnSystem.Companion.AI_SENSOR
+import ktx.box2d.fixture
+import ktx.log.debug
 
 val Fixture.entity: Entity
     get() = this.body.userData as Entity
@@ -24,7 +26,12 @@ class PhysicSystem(
     private val aiCmps: ComponentMapper<AiComponent>,
     private val enemyCmps: ComponentMapper<EnemyComponent>,
     private val weaponCmps: ComponentMapper<WeaponComponent>,
+    private val playerCmps: ComponentMapper<PlayerComponent>,
+    private val moveCmps: ComponentMapper<MoveComponent>,
 ) : ContactListener, IteratingSystem(interval = Fixed(1 / 60f)) {
+
+    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
+
     init {
         phWorld.setContactListener(this)
     }
@@ -44,6 +51,7 @@ class PhysicSystem(
     }
 
     override fun onTickEntity(entity: Entity) {
+
         val physicCmp = physicCmps[entity]
 
         physicCmp.prevPos.set(physicCmp.body.position)
@@ -53,10 +61,10 @@ class PhysicSystem(
             physicCmp.impulse.setZero()
         }
 
-
     }
 
     override fun onAlphaEntity(entity: Entity, alpha: Float) {
+
         val physicCmp = physicCmps[entity]
         val imageCmp = imageCmps[entity]
 
@@ -134,7 +142,8 @@ class PhysicSystem(
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
         if (contact.fixtureA.isStaticBody() && contact.fixtureB.isDinamicBody() || contact.fixtureB.isStaticBody() && contact.fixtureA.isDinamicBody()) {
-            contact.isEnabled = !(contact.fixtureA.entity in weaponCmps || contact.fixtureB.entity in weaponCmps)
+//            contact.isEnabled = !(contact.fixtureA.entity in weaponCmps || contact.fixtureB.entity in weaponCmps)
+            contact.isEnabled=true
         } else {
             contact.isEnabled = (contact.fixtureA.entity in enemyCmps && contact.fixtureB.entity in enemyCmps)
         }

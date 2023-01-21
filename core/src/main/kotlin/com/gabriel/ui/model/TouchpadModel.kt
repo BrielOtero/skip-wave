@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.*
 import com.gabriel.component.*
 import com.gabriel.event.MovementEvent
 import com.gabriel.event.StartMovementEvent
-import com.gabriel.ui.view.HUDView
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
@@ -12,7 +11,7 @@ import ktx.log.logger
 import ktx.math.vec2
 
 
-class HUDModel(
+class TouchpadModel(
     world: World,
     @Qualifier("gameStage") val stage: Stage,
     private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
@@ -74,15 +73,9 @@ class HUDModel(
                 sin = tmpVec.y
             }
         }
-        weaponEntities.forEach { weapon ->
-            with(moveCmps[weapon]) {
-                cos = tmpVec.x
-                sin = tmpVec.y
-            }
-        }
     }
 
     companion object {
-        private val log = logger<HUDModel>()
+        private val log = logger<TouchpadModel>()
     }
 }

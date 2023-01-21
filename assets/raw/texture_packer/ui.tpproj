@@ -1,8 +1,8 @@
 name=ui_new
 filename=
-output=.
+output=../../ui
 
-alias=true
+alias=false
 alphaThreshold=0
 debug=false
 duplicatePadding=false
@@ -34,7 +34,7 @@ prettyPrint=false
 legacyOutput=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../joy_ext.png,type:Input,regionName:null},{path:../joy_int.png,type:Input,regionName:null},{path:../../assets_raw/NinjaAdventure(SupporterEdition)/NinjaAdventure/HUD/life_under.png,type:Input,regionName:null},{path:../../assets_raw/NinjaAdventure(SupporterEdition)/NinjaAdventure/HUD/life_progress.png,type:Input,regionName:null},{path:../../assets_raw/NinjaAdventure(SupporterEdition)/NinjaAdventure/HUD/NinePathRect/frame_bgd.png,type:Input,regionName:null},{path:../font.png,type:Input,regionName:null},{path:../../assets_raw/NinjaAdventure(SupporterEdition)/NinjaAdventure/HUD/NinePathRect/frame_fgd.png,type:Input,regionName:null}]
+inputFiles=[{path:../ui/frame_bgd.png,type:Input,regionName:null},{path:../ui/frame_fgd.png,type:Input,regionName:null},{path:../ui/life_progress.png,type:Input,regionName:null},{path:../ui/life_under.png,type:Input,regionName:null},{path:../ui/font.png,type:Input,regionName:null},{path:../ui/joy_int.png,type:Input,regionName:null},{path:../ui/joy_ext.png,type:Input,regionName:null}]
 keepInputFileExtensions=false
 
 

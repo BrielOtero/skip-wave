@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="2519">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="62" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="2521">
  <editorsettings>
   <export target="../../../../../Documents/videogame/Survivor/assets/maps/demo..tmx" format="tmx"/>
  </editorsettings>
@@ -205,22 +205,17 @@
   <tile id="124" probability="0.5"/>
   <tile id="125" probability="0.5"/>
  </tileset>
- <layer id="1" name="background" width="64" height="64">
+ <layer id="1" name="background" width="62" height="60">
   <data encoding="base64" compression="zlib">
-   eJzt0jEKgDAMQNHiPaygp1BBT+idzeBQwbkV+oY/J48kp5Ry5aboisYGs/8Q/7/8c7RVbH/8a+W5ZcvHPXqq/D3+9vvw8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pzv/1HNHTWWfh77gYZJ8c8
+   eJztz0ENgEAQALELPggJuOABCvHM+ug8KqDnWuvGXOMYH2bvTelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbZHfz9gw7/gB7ImZjA==
   </data>
  </layer>
- <layer id="5" name="randbackground" width="64" height="64">
+ <layer id="5" name="randbackground" width="62" height="60">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
- <layer id="6" name="Tile Layer 4" width="64" height="64">
-  <data encoding="base64" compression="zlib">
-   eJztz7ERgDAQA8EPXD+4E6ATcEWoAGIceHdGua6Kv22tas96m/1kjiPdZ3Yt2n+n+8nGov0AAAAAAAAAAAAAAAAAAMC3F/EgBlU=
-  </data>
- </layer>
- <objectgroup id="4" name="entities" offsetx="56" offsety="37.3333">
-  <object id="37" name="PLAYER" gid="1240" x="129" y="127.25" width="16" height="16"/>
+ <objectgroup id="4" name="entities" offsetx="0" offsety="16">
+  <object id="37" name="PLAYER" gid="1240" x="467.667" y="456.583" width="16" height="16"/>
  </objectgroup>
 </map>

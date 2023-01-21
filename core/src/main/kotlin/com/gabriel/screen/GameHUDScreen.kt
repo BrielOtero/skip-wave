@@ -7,24 +7,23 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.gabriel.component.MoveComponent
 import com.gabriel.component.PlayerComponent
 import com.gabriel.input.PlayerTouchInputProcessor
-import com.gabriel.ui.model.HUDModel
-import com.gabriel.ui.view.HUDView
-import com.gabriel.ui.view.hudView
+import com.gabriel.ui.model.TouchpadModel
+import com.gabriel.ui.view.TouchpadView
+import com.gabriel.ui.view.touchpadView
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class GameHUD(
+class GameHUDScreen(
     val viewport: ExtendViewport
 ) : KtxScreen {
     private val eWorld = world { }
     private val playerEntity: Entity
     val stage: Stage = Stage(viewport)
-    private val model = HUDModel(eWorld, stage)
-    private lateinit var hudView: HUDView
+    private val model = TouchpadModel(eWorld, stage)
+    private lateinit var hudView: TouchpadView
 
     init {
         playerEntity = eWorld.entity {
@@ -41,7 +40,7 @@ class GameHUD(
         stage.clear()
         stage.addListener(model)
         stage.actors {
-            hudView(HUDModel(eWorld, stage))
+            touchpadView(TouchpadModel(eWorld, stage))
         }
         PlayerTouchInputProcessor(eWorld, stage)
         stage.isDebugAll = true

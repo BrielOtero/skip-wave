@@ -27,7 +27,7 @@ class GameModel(
     private val animationCmps: ComponentMapper<AnimationComponent> = world.mapper()
 
     var playerLife by propertyNotify(1f)
-
+    var playerExperience by propertyNotify(0f)
     var lootText by propertyNotify("")
 
 

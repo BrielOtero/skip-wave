@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.event.StartMovementEvent
 import com.gabriel.event.fire
-import com.gabriel.ui.model.HUDModel
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import ktx.app.KtxInputAdapter

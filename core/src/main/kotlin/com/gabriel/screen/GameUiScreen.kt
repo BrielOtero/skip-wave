@@ -6,12 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.gabriel.component.LifeComponent
 import com.gabriel.component.PlayerComponent
-import com.gabriel.event.EntityDamageEvent
-import com.gabriel.event.fire
-import com.gabriel.ui.Drawables
 import com.gabriel.ui.model.GameModel
 import com.gabriel.ui.view.GameView
-import com.gabriel.ui.view.HUDView
 import com.gabriel.ui.view.gameView
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.world
@@ -58,6 +54,10 @@ class GameUiScreen : KtxScreen {
             gameView.playerLife(0.5f)
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
             gameView.playerLife(1f)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            gameView.playerExperience(0f)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            gameView.playerExperience(1f)
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             gameView.popup("You found something [#ff0000]cool[]!")
         }

@@ -25,8 +25,9 @@ class LifeSystem(
     private val animationCmps: ComponentMapper<AnimationComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 ) : IteratingSystem() {
-    private val damageFont = BitmapFont(Gdx.files.internal("damage.fnt")).apply { data.setScale(0.33f) }
-    private val floatingTextStyle = LabelStyle(damageFont, Color.WHITE)
+    private val damageFont = BitmapFont(Gdx.files.internal("damage.fnt")).apply { data.setScale(0.23f) }
+    private val floatingTextStyle = LabelStyle(damageFont, Color.YELLOW)
+    private val floatingTextStylePlayer = LabelStyle(damageFont, Color.RED)
 
     override fun onTickEntity(entity: Entity) {
         val lifeCmp = lifeCmps[entity]
@@ -36,7 +37,7 @@ class LifeSystem(
             val physicCmp = physicCmps[entity]
             lifeCmp.life -= lifeCmp.takeDamage
             gameStage.fire(EntityDamageEvent(entity))
-            floatingText(lifeCmp.takeDamage.toInt().toString(), physicCmp.body.position, physicCmp.size)
+            floatingText(entity, lifeCmp.takeDamage.toInt().toString(), physicCmp.body.position, physicCmp.size)
             lifeCmp.takeDamage = 0f
         }
 
@@ -58,12 +59,14 @@ class LifeSystem(
         }
     }
 
-    private fun floatingText(text: String, entityPosition: Vector2, entitySize: Vector2) {
+    private fun floatingText(entity: Entity, text: String, entityPosition: Vector2, entitySize: Vector2) {
         world.entity {
+            val style = if (entity in playerCmps) floatingTextStylePlayer else floatingTextStyle
+
             add<FloatingTextComponent> {
                 txtLocation.set(entityPosition.x, entityPosition.y - entitySize.y * 0.5f)
                 lifeSpan = 1.5f
-                label = Label(text, floatingTextStyle)
+                label = Label(text, style)
             }
         }
     }

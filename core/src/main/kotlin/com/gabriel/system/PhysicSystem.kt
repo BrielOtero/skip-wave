@@ -28,7 +28,7 @@ class PhysicSystem(
     private val weaponCmps: ComponentMapper<WeaponComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
     private val moveCmps: ComponentMapper<MoveComponent>,
-) : ContactListener, IteratingSystem(interval = Fixed(1 / 60f)) {
+) : ContactListener, IteratingSystem(interval = Fixed(1 / 30f)) {
 
     private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
 

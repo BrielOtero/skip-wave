@@ -10,16 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.gabriel.component.*
-import com.gabriel.event.EntityAddEvent
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
 import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.input.PlayerTouchInputProcessor
 import com.gabriel.system.*
 import com.gabriel.ui.model.GameModel
-import com.gabriel.ui.model.HUDModel
+import com.gabriel.ui.model.TouchpadModel
 import com.gabriel.ui.view.gameView
-import com.gabriel.ui.view.hudView
+import com.gabriel.ui.view.touchpadView
 import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
@@ -84,7 +83,7 @@ class GameScreen(
     init {
         uiStage.actors {
             gameView(GameModel(eWorld, gameStage))
-            hudView(HUDModel(eWorld, uiStage))
+            touchpadView(TouchpadModel(eWorld, uiStage))
         }
 
     }
@@ -112,6 +111,19 @@ class GameScreen(
     override fun resize(width: Int, height: Int) {
         gameStage.viewport.update(width, height, true)
         uiStage.viewport.update(width, height, true)
+    }
+
+    private fun pauseWorld(pause: Boolean) {
+        val mandatorySystems = setOf(
+            AnimationSystem::class,
+            CameraSystem::class,
+            RenderSystem::class,
+            DebugSystem::class,
+        )
+
+        eWorld.systems
+            .filter { it::class !in mandatorySystems }
+            .forEach { it.enabled = !pause }
     }
 
     override fun render(delta: Float) {

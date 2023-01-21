@@ -6,50 +6,50 @@ filter: Nearest, Nearest
 repeat: none
 font
   rotate: false
-  xy: 300, 148
+  xy: 0, 0
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 frame_bgd
   rotate: false
-  xy: 556, 388
+  xy: 256, 140
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 frame_fgd
   rotate: false
-  xy: 300, 129
+  xy: 949, 479
   size: 19, 19
   orig: 19, 19
   offset: 0, 0
   index: -1
 joy_ext
   rotate: false
-  xy: 0, 104
+  xy: 649, 198
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 joy_int
   rotate: false
-  xy: 0, 4
+  xy: 256, 156
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 life_progress
   rotate: false
-  xy: 100, 100
-  size: 18, 4
-  orig: 18, 4
+  xy: 0, 256
+  size: 649, 121
+  orig: 649, 121
   offset: 0, 0
   index: -1
 life_under
   rotate: false
-  xy: 0, 0
-  size: 18, 4
-  orig: 18, 4
+  xy: 0, 377
+  size: 649, 121
+  orig: 649, 121
   offset: 0, 0
   index: -1

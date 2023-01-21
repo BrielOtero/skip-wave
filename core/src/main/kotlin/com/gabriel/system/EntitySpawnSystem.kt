@@ -1,6 +1,7 @@
 package com.gabriel.system
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
@@ -19,6 +20,7 @@ import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.actors.FlipImage
 import com.gabriel.ai.DefaultGlobalState
+import com.gabriel.event.EnemyAddEvent
 import com.gabriel.event.EntityAddEvent
 import com.gabriel.event.fire
 import com.github.quillraven.fleks.*
@@ -153,16 +155,14 @@ class EntitySpawnSystem(
                 }
             }
 
+            //Spawn weapons
             if (cfg.entityType == EntityType.PLAYER) {
-                log.debug { " Before A Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
                 gameStage.fire(
                     EntityAddEvent(
                         vec2((location.x / UNIT_SCALE) + 25, (location.y / UNIT_SCALE) - 5),
                         "SLASH_RIGHT"
                     )
                 )
-                log.debug { " After A Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
-                log.debug { " Before B Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
 
                 gameStage.fire(
                     EntityAddEvent(
@@ -170,9 +170,6 @@ class EntitySpawnSystem(
                         "SLASH_LEFT"
                     )
                 )
-                log.debug { " After B Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
-
-
             }
 
         }
@@ -187,9 +184,9 @@ class EntitySpawnSystem(
                 AnimationModel.PLAYER,
                 entityType = EntityType.PLAYER,
                 attackExtraRange = 0.6f,
-                attackScaling = 1.25f,
+                attackScaling = 0f,
                 speedScaling = 2.25f,
-                lifeScaling = 10000f,
+                lifeScaling = 100f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
@@ -198,9 +195,10 @@ class EntitySpawnSystem(
                 AnimationModel.SKULL,
                 EntityType.ENEMY,
                 lifeScaling = 0.75f,
-                speedScaling = 0.8f,
+                speedScaling = 0.2f,
+                attackScaling = 5f,
                 dropExperience = 5f,
-//                physicScaling = vec2(1f, 0.5f),
+                physicScaling = vec2(0.9f, 0.9f),
 //                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
@@ -221,8 +219,8 @@ class EntitySpawnSystem(
                 bodyType = KinematicBody,
                 speedScaling = 0f,
                 isFlip = true,
-                attackExtraRange = 0.6f,
-                attackScaling = 5.25f,
+                attackExtraRange = 0f,
+                attackScaling = 5f,
                 lifeScaling = 0f,
                 physicScaling = vec2(1f, 1f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
@@ -236,8 +234,8 @@ class EntitySpawnSystem(
                 EntityType.WEAPON,
                 bodyType = KinematicBody,
                 speedScaling = 0f,
-                attackExtraRange = 0.6f,
-                attackScaling = 5.25f,
+                attackExtraRange = 0f,
+                attackScaling = 5f,
                 lifeScaling = 0f,
                 physicScaling = vec2(1f, 1f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
@@ -246,7 +244,6 @@ class EntitySpawnSystem(
             )
 
             "SPAWN" -> SpawnCfg(AnimationModel.UNDEFINED, EntityType.SPAWN)
-
             else -> gdxError("Type $type has no SpawnCfg setup.")
         }
     }
@@ -264,6 +261,7 @@ class EntitySpawnSystem(
         when (event) {
             is MapChangeEvent -> {
                 val entityLayer = event.map.layer("entities")
+                MAP_SIZE = vec2(event.map.width.toFloat(), event.map.height.toFloat())
                 entityLayer.objects.forEach { mapObj ->
                     val typeStr = mapObj.name
                         ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME! MapChangeEvent")
@@ -285,11 +283,24 @@ class EntitySpawnSystem(
                     }
                 }
             }
+
+            is EnemyAddEvent -> {
+                world.entity {
+                    add<SpawnComponent> {
+                        this.type = event.name
+                        this.location.set(
+                            MathUtils.random(2f, MAP_SIZE.x - 2f) ,
+                            MathUtils.random(2f, MAP_SIZE.y - 2f)
+                        )
+                    }
+                }
+            }
         }
         return false
     }
 
     companion object {
+        var MAP_SIZE = vec2(0f, 0f)
         const val HIT_BOX_SENSOR = "Hitbox"
         const val AI_SENSOR = "AiSensor"
         private val log = logger<EntitySpawnSystem>()

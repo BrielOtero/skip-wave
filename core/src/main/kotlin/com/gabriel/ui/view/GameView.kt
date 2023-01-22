@@ -21,7 +21,6 @@ class GameView(
     model: GameModel,
     skin: Skin,
 ) : Table(skin), KTable {
-
     private val playerInfo: PlayerInfo
     private val popupLabel: Label
 
@@ -32,13 +31,11 @@ class GameView(
         setFillParent(true)
         table {
             it.fill().top().row()
-            this@GameView.playerInfo = playerInfo(){cell ->
-                cell.fill().top().width(300f).height(25f).row()
-                setScale(0.1f)
+            this@GameView.playerInfo = playerInfo() { cell ->
+                setScale(0.5f)
+                cell.expand().minHeight(35f).left().padLeft(2f)
             }
-            it.fill().top().row()
-
-
+//            it.fill().top().row()
         }
 
         table {
@@ -48,41 +45,63 @@ class GameView(
             this@GameView.popupLabel = label(text = "", style = Labels.FRAME.skinKey) { lblCell ->
                 this.setAlignment(Align.topLeft)
                 this.wrap = true
-                lblCell.expand().fill().pad(14f)
+//                lblCell.expand().fill().pad(14f)
             }
-//
 //            this.alpha = 0f
         }
 
 
         // data binding
+
+        //Life
         model.onPropertyChange(GameModel::playerLife) { playerLife ->
             playerLife(playerLife)
-//            setPosition(100f, this@GameView.stage.height - 700f)
+        }
+        model.onPropertyChange(GameModel::playerLifeMax) { playerLifeMax ->
+            playerLifeMax(playerLifeMax)
+        }
+        model.onPropertyChange(GameModel::playerLifeBar) { playerLifeBar ->
+            playerLifeBar(playerLifeBar)
         }
 
-        model.onPropertyChange(GameModel::playerExperience) { playerExperience->
+        //Experience
+        model.onPropertyChange(GameModel::playerExperience) { playerExperience ->
             playerExperience(playerExperience)
-//            setPosition(100f, this@GameView.stage.height - 700f)
         }
 
+        model.onPropertyChange(GameModel::playerExperienceToNextLevel) { playerExperienceToNextLevel ->
+            playerExperienceToNextLevel(playerExperienceToNextLevel)
+        }
+
+        model.onPropertyChange(GameModel::playerExperienceBar) { playerExperienceBar ->
+            playerExperienceBar(playerExperienceBar)
+        }
+
+
+        //Level
+        model.onPropertyChange(GameModel::playerLevel) { playerLevel ->
+            playerLevel(playerLevel)
+        }
+
+
+        //Other
         model.onPropertyChange(GameModel::lootText) { lootInfo ->
             popup(lootInfo)
         }
-//
-//        model.onPropertyChange(GameModel::playerPosition) { playerPosition ->
-//            var scale = this@GameView.stage.width / this@GameView.stage.viewport.screenWidth
-//            setPosition(playerPosition.x * scale, this@GameView.stage.height - (playerPosition.y * scale))
-//        }
+
+
     }
 
-//    override fun setPosition(x: Float, y: Float) {
-//        super.setPosition(x, y)
-//    }
+    fun playerLife(newLife: Float) = playerInfo.playerLife(newLife)
+    fun playerLifeMax(newLifeMax: Float) = playerInfo.playerLifeMax(newLifeMax)
+    fun playerLifeBar(percentage: Float) = playerInfo.playerLifeBar(percentage)
+    fun playerExperience(newExperience: Float) = playerInfo.playerExperience(newExperience)
+    fun playerExperienceToNextLevel(newExperienceToNextLevel: Float) =
+        playerInfo.playerExperienceToNextLevel(newExperienceToNextLevel)
 
-    fun playerLife(percentage: Float) = playerInfo.life(percentage)
+    fun playerExperienceBar(percentage: Float) = playerInfo.playerExperienceBar(percentage, 0.25f)
 
-    fun playerExperience(percentage: Float) = playerInfo.experience(percentage)
+    fun playerLevel(newLevel: Int) = playerInfo.playerLevel(newLevel)
 
     private fun Actor.resetFadeOutDelay() {
         this.actions
@@ -93,7 +112,6 @@ class GameView(
                 delay.time = 0f
             }
     }
-
 
     fun popup(infoText: String) {
         popupLabel.txt = infoText

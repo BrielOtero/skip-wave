@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Scaling
 import com.gabriel.Survivor.Companion.UNIT_SCALE
 import com.gabriel.component.*
 import com.gabriel.component.PhysicComponent.Companion.physicCmpFromImage
-import com.gabriel.event.MapChangeEvent
 import ktx.app.gdxError
 import ktx.box2d.box
 import ktx.math.vec2
@@ -20,9 +19,7 @@ import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.actors.FlipImage
 import com.gabriel.ai.DefaultGlobalState
-import com.gabriel.event.EnemyAddEvent
-import com.gabriel.event.EntityAddEvent
-import com.gabriel.event.fire
+import com.gabriel.event.*
 import com.github.quillraven.fleks.*
 import ktx.log.logger
 import kotlin.math.roundToInt
@@ -32,6 +29,7 @@ class EntitySpawnSystem(
     private val phWorld: World,
     private val atlas: TextureAtlas,
     private val spawnCmps: ComponentMapper<SpawnComponent>,
+    private val playerCmps: ComponentMapper<PlayerComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : EventListener, IteratingSystem() {

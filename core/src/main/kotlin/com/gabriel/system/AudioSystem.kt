@@ -5,10 +5,7 @@ import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
-import com.gabriel.event.EntityAttackEvent
-import com.gabriel.event.EntityDeathEvent
-import com.gabriel.event.EntityLootEvent
-import com.gabriel.event.MapChangeEvent
+import com.gabriel.event.*
 import com.github.quillraven.fleks.IntervalSystem
 import ktx.assets.disposeSafely
 import ktx.log.logger
@@ -37,6 +34,7 @@ class AudioSystem : EventListener, IntervalSystem() {
                     val music = musicCache.getOrPut(path) {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
                             isLooping = true
+                            volume=0.75f
                         }
                     }
                     music.play()
@@ -47,6 +45,7 @@ class AudioSystem : EventListener, IntervalSystem() {
             is EntityAttackEvent -> queueSound("audio/${event.model.atlasKey}_attack.wav")
             is EntityDeathEvent -> queueSound("audio/${event.model.atlasKey}_death.wav")
             is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.wav")
+            is EntityLevelEvent ->queueSound("audio/level_up.wav")
         }
 
         return false

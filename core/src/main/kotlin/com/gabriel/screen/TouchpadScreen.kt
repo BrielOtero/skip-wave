@@ -16,7 +16,7 @@ import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class GameHUDScreen(
+class TouchpadScreen(
     val viewport: ExtendViewport
 ) : KtxScreen {
     private val eWorld = world { }

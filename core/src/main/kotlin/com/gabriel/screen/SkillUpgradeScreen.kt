@@ -4,23 +4,22 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.gabriel.component.LifeComponent
-import com.gabriel.component.PlayerComponent
-import com.gabriel.ui.model.GameModel
-import com.gabriel.ui.view.GameView
-import com.gabriel.ui.view.gameView
+import com.gabriel.component.*
+import com.gabriel.ui.model.SkillUpgradeModel
+import com.gabriel.ui.view.SkillUpgradeView
+import com.gabriel.ui.view.skillUpgradeView
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class GameUiScreen : KtxScreen {
+class SkillUpgradeScreen:KtxScreen {
     private val stage: Stage = Stage(ExtendViewport(320f, 180f))
     private val eWorld = world { }
+    private val model = SkillUpgradeModel(eWorld, stage)
+    private lateinit var skillUpgradeView: SkillUpgradeView
     private val playerEntity: Entity
-    private val model = GameModel(eWorld, stage)
-    private lateinit var gameView: GameView
 
     init {
         playerEntity = eWorld.entity {
@@ -29,6 +28,10 @@ class GameUiScreen : KtxScreen {
                 max = 5f
                 life = 3f
             }
+            add<ExperienceComponent>()
+            add<LevelComponent>()
+            add<AttackComponent>()
+            add<MoveComponent>()
         }
     }
 
@@ -40,10 +43,9 @@ class GameUiScreen : KtxScreen {
         stage.clear()
         stage.addListener(model)
         stage.actors {
-            gameView = gameView(model)
+            skillUpgradeView= skillUpgradeView(model)
         }
         stage.isDebugAll = true
-
     }
 
     override fun render(delta: Float) {
@@ -51,15 +53,10 @@ class GameUiScreen : KtxScreen {
             hide()
             show()
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            gameView.playerLifeBar(0.5f)
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-            gameView.playerLifeBar(1f)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
-            gameView.playerExperience(0f)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
-            gameView.playerExperience(1f)
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            gameView.popup("You found something [#ff0000]cool[]!")
         }
 
 
@@ -71,4 +68,5 @@ class GameUiScreen : KtxScreen {
     override fun dispose() {
         stage.disposeSafely()
     }
+
 }

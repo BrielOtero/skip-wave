@@ -2,19 +2,20 @@ package com.gabriel.system
 
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.ExperienceComponent
 import com.gabriel.component.LevelComponent
 import com.gabriel.component.PlayerComponent
 import com.gabriel.event.EnemyDeathEvent
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.IteratingSystem
+import com.gabriel.event.EntityExperienceEvent
+import com.gabriel.event.fire
+import com.github.quillraven.fleks.*
 import ktx.log.logger
 
 @AllOf([ExperienceComponent::class])
 class ExperienceSystem(
     private val experienceCmps: ComponentMapper<ExperienceComponent>,
+    @Qualifier("gameStage") private val gameStage: Stage,
 ) : EventListener, IteratingSystem() {
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
@@ -30,6 +31,7 @@ class ExperienceSystem(
                 experienceCmps[playerEntities.first()].experience += event.experienceCmp.dropExperience
 
                 log.debug { "Experience after ${experienceCmps[playerEntities.first()].experience}" }
+                gameStage.fire(EntityExperienceEvent(playerEntities.first()))
             }
 
             else -> return false

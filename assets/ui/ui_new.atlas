@@ -1,55 +1,78 @@
 
 ui_new.png
-size: 1024, 512
+size: 2048, 512
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-font
+experience_progress
+  rotate: false
+  xy: 1024, 97
+  size: 80, 15
+  orig: 80, 15
+  offset: 0, 0
+  index: -1
+experience_under
+  rotate: false
+  xy: 1124, 197
+  size: 80, 15
+  orig: 80, 15
+  offset: 0, 0
+  index: -1
+font_black
+  rotate: false
+  xy: 512, 0
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+font_white
   rotate: false
   xy: 0, 0
-  size: 256, 256
-  orig: 256, 256
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
 frame_bgd
   rotate: false
-  xy: 256, 140
+  xy: 1024, 81
   size: 16, 16
+  split: 5, 5, 5, 5
+  pad: 0, 0, 0, 0
   orig: 16, 16
   offset: 0, 0
   index: -1
 frame_fgd
   rotate: false
-  xy: 949, 479
+  xy: 1404, 493
   size: 19, 19
   orig: 19, 19
   offset: 0, 0
   index: -1
 joy_ext
   rotate: false
-  xy: 649, 198
+  xy: 1024, 212
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 joy_int
   rotate: false
-  xy: 256, 156
+  xy: 1024, 112
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 life_progress
   rotate: false
-  xy: 0, 256
-  size: 649, 121
-  orig: 649, 121
+  xy: 1324, 482
+  size: 80, 15
+  orig: 80, 15
   offset: 0, 0
   index: -1
 life_under
   rotate: false
-  xy: 0, 377
-  size: 649, 121
-  orig: 649, 121
+  xy: 1324, 497
+  size: 80, 15
+  orig: 80, 15
   offset: 0, 0
   index: -1

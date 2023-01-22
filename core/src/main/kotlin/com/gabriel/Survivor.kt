@@ -3,9 +3,10 @@ package com.gabriel
 import com.badlogic.gdx.Application.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.gabriel.screen.GameHUDScreen
+import com.gabriel.screen.TouchpadScreen
 import com.gabriel.screen.GameScreen
 import com.gabriel.screen.GameUiScreen
+import com.gabriel.screen.SkillUpgradeScreen
 //import com.gabriel.screen.GameUiScreen
 //import com.gabriel.screen.InventoryUiScreen
 import com.gabriel.ui.disposeSkin
@@ -28,6 +29,7 @@ class Survivor : KtxGame<KtxScreen>() {
 
             else -> {
                 gameViewport = ExtendViewport(8f, 16f)
+//                uiViewport = ExtendViewport(320f, 569f)
                 uiViewport = ExtendViewport(180f, 320f)
             }
         }
@@ -36,12 +38,12 @@ class Survivor : KtxGame<KtxScreen>() {
 
         addScreen(GameScreen(gameViewport, uiViewport))
         addScreen(GameUiScreen())
-        addScreen(GameHUDScreen(uiViewport))
-//        addScreen(InventoryUiScreen())
+        addScreen(TouchpadScreen(uiViewport))
+        addScreen(SkillUpgradeScreen())
         setScreen<GameScreen>()
-//        setScreen<InventoryUiScreen>()
 //        setScreen<GameUiScreen>()
-//        setScreen<GameHUDScreen>()
+//        setScreen<TouchpadScreen>()
+        setScreen<SkillUpgradeScreen>()
     }
 
     override fun dispose() {

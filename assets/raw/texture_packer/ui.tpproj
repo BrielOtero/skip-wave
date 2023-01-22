@@ -34,7 +34,7 @@ prettyPrint=false
 legacyOutput=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../ui/frame_bgd.png,type:Input,regionName:null},{path:../ui/frame_fgd.png,type:Input,regionName:null},{path:../ui/life_progress.png,type:Input,regionName:null},{path:../ui/life_under.png,type:Input,regionName:null},{path:../ui/font.png,type:Input,regionName:null},{path:../ui/joy_int.png,type:Input,regionName:null},{path:../ui/joy_ext.png,type:Input,regionName:null}]
+inputFiles=[{path:../ui,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:false}]
 keepInputFileExtensions=false
 
 

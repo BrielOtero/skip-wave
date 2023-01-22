@@ -32,6 +32,7 @@ class LifeSystem(
     override fun onTickEntity(entity: Entity) {
         val lifeCmp = lifeCmps[entity]
         lifeCmp.life = (lifeCmp.life + lifeCmp.regeneration * deltaTime).coerceAtMost(lifeCmp.max)
+        gameStage.fire(EntityDamageEvent(entity))
 
         if (lifeCmp.takeDamage > 0f) {
             val physicCmp = physicCmps[entity]

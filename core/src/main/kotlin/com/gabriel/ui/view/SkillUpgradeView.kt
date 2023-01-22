@@ -5,9 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
 import com.gabriel.ui.get
+import com.gabriel.ui.model.SkillModel
 import com.gabriel.ui.model.SkillUpgradeModel
 import com.gabriel.ui.widget.SkillSlot
 import com.gabriel.ui.widget.skillSlot
+import ktx.actors.onClick
 import ktx.scene2d.*
 
 class SkillUpgradeView(
@@ -24,19 +26,23 @@ class SkillUpgradeView(
         table { tableCell ->
             background = skin[Drawables.FRAME_BGD]
             label(text = "Level UP!", style = Labels.FRAME.skinKey) { lblCell ->
-                lblCell.fill().row()
-                lblCell.padBottom(5f)
+                lblCell.row()
+                lblCell.padBottom(20f)
             }
-            for (i in 1..4) {
+            for (i in 1..3) {
                 this@SkillUpgradeView.skillSlots += skillSlot(skin = skin) { skillCell ->
-                    skillCell.padBottom(2f)
-                    skillCell.left()
-                    skillCell.row()
+                    skillCell.fill().row()
+                    skillCell.padBottom(15f)
+                    onClick { skillModel }
                 }
             }
-            tableCell.expand().width(90f).height(120f).center()
+            tableCell.expand().width(120f).height(140f).center()
         }
         // data binding
+    }
+
+    fun skill(skillModel: SkillModel){
+        skillSlots[skillModel.slotIdx].skill(skillModel)
     }
 }
 

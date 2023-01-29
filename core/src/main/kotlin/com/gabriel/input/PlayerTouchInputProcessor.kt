@@ -29,7 +29,7 @@ class PlayerTouchInputProcessor(
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         uiStage.fire(StartMovementEvent(screenX.toFloat(), screenY.toFloat()))
-        log.debug { "TOUCHUP1" }
+//        log.debug { "TOUCHUP" }
         uiStage.touchDown(screenX, screenY, pointer, button)
         return true
     }

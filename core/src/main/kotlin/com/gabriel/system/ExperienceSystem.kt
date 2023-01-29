@@ -26,11 +26,11 @@ class ExperienceSystem(
         when (event) {
             is EnemyDeathEvent -> {
                 //Adds experience to player when an enemy has died
-                log.debug { "Experience before ${experienceCmps[playerEntities.first()].experience}" }
+//                log.debug { "Experience before ${experienceCmps[playerEntities.first()].experience}" }
 
                 experienceCmps[playerEntities.first()].experience += event.experienceCmp.dropExperience
 
-                log.debug { "Experience after ${experienceCmps[playerEntities.first()].experience}" }
+//                log.debug { "Experience after ${experienceCmps[playerEntities.first()].experience}" }
                 gameStage.fire(EntityExperienceEvent(playerEntities.first()))
             }
 

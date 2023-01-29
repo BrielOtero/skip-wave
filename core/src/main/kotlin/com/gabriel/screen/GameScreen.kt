@@ -6,18 +6,25 @@ import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.gabriel.Survivor
 import com.gabriel.component.*
+import com.gabriel.event.GamePauseEvent
+import com.gabriel.event.GameResumeEvent
 import com.gabriel.event.MapChangeEvent
 import com.gabriel.event.fire
 import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.input.PlayerTouchInputProcessor
 import com.gabriel.system.*
 import com.gabriel.ui.model.GameModel
+import com.gabriel.ui.model.SkillUpgradeModel
 import com.gabriel.ui.model.TouchpadModel
+import com.gabriel.ui.view.SkillUpgradeView
 import com.gabriel.ui.view.gameView
+import com.gabriel.ui.view.skillUpgradeView
 import com.gabriel.ui.view.touchpadView
 import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
@@ -27,12 +34,9 @@ import ktx.log.logger
 import ktx.math.vec2
 import ktx.scene2d.actors
 
-class GameScreen(
-    gameViewport: ExtendViewport,
-    uiViewport: ExtendViewport,
-) : KtxScreen {
-    private val gameStage: Stage = Stage(gameViewport)
-    private val uiStage: Stage = Stage(uiViewport)
+class GameScreen(game: Survivor) : KtxScreen,EventListener {
+    private val gameStage = game.gameStage
+    private val uiStage = game.uiStage
     private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game_assets.atlas"))
     private var currentMap: TiledMap? = null
 
@@ -67,6 +71,7 @@ class GameScreen(
             add<DeadSystem>()
             add<LifeSystem>()
             add<LevelSystem>()
+            add<SkillUpgradeSystem>()
             add<EnemySystem>()
             add<PhysicSystem>()
             add<AnimationSystem>()
@@ -81,8 +86,10 @@ class GameScreen(
     }
 
     init {
+        gameStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, gameStage))
+            skillUpgradeView(SkillUpgradeModel(eWorld, gameStage), gameStage, uiStage)
             touchpadView(TouchpadModel(eWorld, uiStage))
         }
 
@@ -108,11 +115,6 @@ class GameScreen(
 
     }
 
-    override fun resize(width: Int, height: Int) {
-        gameStage.viewport.update(width, height, true)
-        uiStage.viewport.update(width, height, true)
-    }
-
     private fun pauseWorld(pause: Boolean) {
         val mandatorySystems = setOf(
             AnimationSystem::class,
@@ -126,6 +128,27 @@ class GameScreen(
             .forEach { it.enabled = !pause }
     }
 
+    override fun handle(event: Event): Boolean {
+        when(event){
+            is GamePauseEvent -> {
+                pauseWorld(true)
+                log.debug { "pause" }
+            }
+
+            is GameResumeEvent -> {
+                pauseWorld(false)
+                log.debug { "resume" }
+            }
+
+            else -> return false
+        }
+        return true
+    }
+
+    override fun pause() = pauseWorld(true)
+
+    override fun resume() = pauseWorld(false)
+
     override fun render(delta: Float) {
         val dt = delta.coerceAtMost(0.25f)
         GdxAI.getTimepiece().update(dt)
@@ -133,8 +156,6 @@ class GameScreen(
     }
 
     override fun dispose() {
-        gameStage.disposeSafely()
-        uiStage.disposeSafely()
         textureAtlas.disposeSafely()
         eWorld.dispose()
         currentMap?.disposeSafely()

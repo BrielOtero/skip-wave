@@ -32,8 +32,8 @@ class GameView(
         table {
             it.fill().top().row()
             this@GameView.playerInfo = playerInfo() { cell ->
-                setScale(0.5f)
-                cell.expand().minHeight(35f).left().padLeft(2f)
+                setScale(0.8f)
+                cell.expand().minHeight(35f).left().padTop(10f).padLeft(2f)
             }
 //            it.fill().top().row()
         }

@@ -25,6 +25,11 @@ enum class Drawables(
     FRAME_FGD("frame_fgd"),
     JOY_EXT("joy_ext"),
     JOY_INT("joy_int"),
+    PLAYER_LIFE("player_life"),
+    PLAYER_REGENERATION("player_regeneration"),
+    PLAYER_SPEED("player_speed"),
+    PLAYER_COOLDOWN("player_cooldown"),
+    PLAYER_DAMAGE("player_damage"),
 }
 
 operator fun Skin.get(drawable: Drawables): Drawable = this.getDrawable(drawable.atlasKey)

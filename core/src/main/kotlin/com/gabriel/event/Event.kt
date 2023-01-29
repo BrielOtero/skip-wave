@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.AnimationModel
 import com.gabriel.component.ExperienceComponent
-import com.gabriel.component.SpawnCfg
+import com.gabriel.component.Skill
 import com.github.quillraven.fleks.Entity
 
 fun Stage.fire(event: Event) {
@@ -26,5 +26,9 @@ class EnemyAddEvent(val name: String) : Event()
 class MovementEvent() : Event()
 class StartMovementEvent(val x: Float, val y: Float) : Event()
 class EnemyDeathEvent(val experienceCmp: ExperienceComponent) : Event()
-class EntityExperienceEvent(val entity: Entity):Event()
-class EntityLevelEvent(val entity: Entity):Event()
+class EntityExperienceEvent(val entity: Entity) : Event()
+class EntityLevelEvent(val entity: Entity) : Event()
+class SkillEvent(val skill0: Skill, val skill1: Skill, val skill2: Skill) : Event()
+class TestEvent():Event()
+class GamePauseEvent ():Event()
+class GameResumeEvent ():Event()

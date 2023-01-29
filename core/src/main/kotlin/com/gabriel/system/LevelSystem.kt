@@ -21,17 +21,17 @@ class LevelSystem(
 
     override fun onTickEntity(entity: Entity) {
         with(experienceCmps[entity]) {
-            log.debug { "Level ${levelCmps[entity].level} Experience ${experience} Experience To Next Level ${experienceToNextLevel}" }
+//            log.debug { "Level ${levelCmps[entity].level} Experience ${experience} Experience To Next Level ${experienceToNextLevel}" }
             if (experience >= experienceToNextLevel) {
                 with(levelCmps[entity]) {
                     level += 1
 
-                    log.debug { "ExperienceToNextLevel before ${experienceToNextLevel}" }
+//                    log.debug { "ExperienceToNextLevel before ${experienceToNextLevel}" }
 
                     experienceToNextLevel =
                         ((50f * (Math.pow(((level + 1).toDouble()), 2.0) - (5 * (level + 1)) + 8)).toFloat())
 
-                    log.debug { "ExperienceToNextLevel after ${experienceToNextLevel}" }
+//                    log.debug { "ExperienceToNextLevel after ${experienceToNextLevel}" }
                     gameStage.fire(EntityExperienceEvent(entity))
                     gameStage.fire(EntityLevelEvent(entity))
                 }

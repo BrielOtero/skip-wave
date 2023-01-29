@@ -3,6 +3,7 @@ package com.gabriel.input
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Input.Keys.*
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad
 import com.gabriel.Survivor
@@ -32,7 +33,11 @@ class PlayerKeyboardInputProcessor(
 
 
     init {
-        Gdx.input.inputProcessor = this
+        val multiplexer = InputMultiplexer()
+        multiplexer.addProcessor(uiStage) // set your game input precessor as second
+        multiplexer.addProcessor(this) // set stage as first input processor
+
+        Gdx.input.inputProcessor = multiplexer
     }
 
     private fun Int.isMovementKey(): Boolean {

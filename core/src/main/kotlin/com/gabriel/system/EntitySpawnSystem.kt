@@ -106,7 +106,9 @@ class EntitySpawnSystem(
                 when (cfg.entityType) {
                     EntityType.PLAYER -> {
                         add<PlayerComponent>()
-                        add<ExperienceComponent>()
+                        add<ExperienceComponent>() {
+                            experienceToNextLevel = 100f
+                        }
                         add<LevelComponent>()
                         add<StateComponent>() {
                             stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
@@ -122,7 +124,7 @@ class EntitySpawnSystem(
 
                     EntityType.WEAPON -> {
                         add<WeaponComponent>()
-                        log.debug { "$location" }
+//                        log.debug { "$location" }
                     }
 
                     EntityType.SPAWN -> {
@@ -287,7 +289,7 @@ class EntitySpawnSystem(
                     add<SpawnComponent> {
                         this.type = event.name
                         this.location.set(
-                            MathUtils.random(2f, MAP_SIZE.x - 2f) ,
+                            MathUtils.random(2f, MAP_SIZE.x - 2f),
                             MathUtils.random(2f, MAP_SIZE.y - 2f)
                         )
                     }

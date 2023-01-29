@@ -10,7 +10,8 @@ import com.gabriel.Survivor
 fun main() {
     Lwjgl3Application(Survivor(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("Survivor")
-        setWindowedMode(640, 480)
+//        setWindowedMode(640, 480)
+        setWindowedMode(415,900)
         setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
     })
 }

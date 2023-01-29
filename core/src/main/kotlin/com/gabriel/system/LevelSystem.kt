@@ -10,6 +10,7 @@ import com.gabriel.component.PlayerComponent
 import com.gabriel.event.*
 import com.github.quillraven.fleks.*
 import ktx.log.logger
+import kotlin.math.pow
 
 @AllOf([LevelComponent::class])
 class LevelSystem(
@@ -28,11 +29,11 @@ class LevelSystem(
 
 //                    log.debug { "ExperienceToNextLevel before ${experienceToNextLevel}" }
 
-                    experienceToNextLevel =
-                        ((50f * (Math.pow(((level + 1).toDouble()), 2.0) - (5 * (level + 1)) + 8)).toFloat())
+                    experienceToNextLevel = (level / 0.07).pow(2.0).toFloat()
+
+                    log.debug { "ExperienceToNextLevel ${experienceToNextLevel}" }
 
 //                    log.debug { "ExperienceToNextLevel after ${experienceToNextLevel}" }
-                    gameStage.fire(EntityExperienceEvent(entity))
                     gameStage.fire(EntityLevelEvent(entity))
                 }
             }

@@ -3,10 +3,12 @@ package com.gabriel.ui.model
 import com.gabriel.component.Skill
 
 data class SkillModel (
+    var slotIdx:Int,
     val skillEntityId:Int,
     val atlasKey:String,
     val name:String,
-    var slotIdx:Int,
+    var level:Int,
+    var onLevelUP:Int,
 )
 
 data class Skills(

@@ -23,7 +23,7 @@ class PlayerInfo(
     private val lifeText: Label = label("", style = Labels.FRAME.skinKey)
     private val experienceUnder: Image = Image(skin[Drawables.EXPERIENCE_UNDER])
     private val experienceBar: Image = Image(skin[Drawables.EXPERIENCE_BAR])
-    private val experienceText: Label = label("", style = Labels.FRAME.skinKey)
+    private val experienceText: Label = label("0/100", style = Labels.FRAME.skinKey)
     private val levelText: Label = label("Level 0", style = Labels.FRAME.skinKey)
 
     private var life = 0

@@ -4,13 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.*
-import com.gabriel.event.EntityDamageEvent
-import com.gabriel.event.EntityExperienceEvent
-import com.gabriel.event.EntityLevelEvent
-import com.gabriel.event.EntityLootEvent
+import com.gabriel.event.*
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
+import ktx.log.logger
 
 class GameModel(
     world: World,
@@ -82,5 +80,8 @@ class GameModel(
             else -> return false
         }
         return true
+    }
+    companion object{
+        private val log = logger<GameModel>()
     }
 }

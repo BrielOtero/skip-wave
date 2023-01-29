@@ -38,7 +38,7 @@ class EntitySpawnSystem(
 
     override fun onTickEntity(entity: Entity) {
         with(spawnCmps[entity]) {
-            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
+//            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
             val cfg = spawnCfg(type)
             var relativeSize = size(cfg.model)
 
@@ -178,7 +178,7 @@ class EntitySpawnSystem(
 
 
     private fun spawnCfg(type: String): SpawnCfg = cachedCfgs.getOrPut(type) {
-        log.debug { "Type $type" }
+//        log.debug { "Type $type" }
         when (type) {
             "PLAYER" -> SpawnCfg(
                 AnimationModel.PLAYER,
@@ -197,7 +197,7 @@ class EntitySpawnSystem(
                 lifeScaling = 0.75f,
                 speedScaling = 0.2f,
                 attackScaling = 5f,
-                dropExperience = 5f,
+                dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),
 //                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
@@ -212,7 +212,7 @@ class EntitySpawnSystem(
                 lootable = true,
             )
 
-            //Weapons
+//            Weapons
             "SLASH_LEFT" -> SpawnCfg(
                 AnimationModel.SLASH_LEFT,
                 EntityType.WEAPON,
@@ -221,11 +221,11 @@ class EntitySpawnSystem(
                 isFlip = true,
                 attackExtraRange = 0f,
                 attackScaling = 5f,
+                attackDelay = 1f,
                 lifeScaling = 0f,
                 physicScaling = vec2(1f, 1f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/slash.tree",
-
 
                 )
 
@@ -236,6 +236,7 @@ class EntitySpawnSystem(
                 speedScaling = 0f,
                 attackExtraRange = 0f,
                 attackScaling = 5f,
+                attackDelay = 1f,
                 lifeScaling = 0f,
                 physicScaling = vec2(1f, 1f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),

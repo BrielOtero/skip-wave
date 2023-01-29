@@ -8,8 +8,8 @@ import com.badlogic.gdx.ai.utils.random.FloatDistribution
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.MathUtils
 import com.gabriel.component.AnimationType
+import com.gabriel.component.AttackState
 import com.gabriel.event.EntityAggroEvent
-import com.github.quillraven.fleks.Entity
 import ktx.math.vec2
 
 abstract class Action : LeafTask<AiEntity>() {
@@ -42,21 +42,35 @@ class AttackTask : Action() {
 
 class AttackWeaponTask : Action() {
     override fun execute(): Status {
-//            println("AttackWeapon")
         if (status != Status.RUNNING) {
             entity.doAndStartAttack()
-            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
-//            entity.fireEvent(EntityAggroEvent(entity.entity))
+            println("doAndStartAttack")
             return Status.RUNNING
         }
 
-        if (entity.isAnimationDone) {
-            entity.animation(AnimationType.IDLE)
-//            entity.stopMovement()
-            return Status.SUCCEEDED
-        }
 
-        return Status.RUNNING
+
+
+        when (entity.attackState) {
+            AttackState.READY -> {
+                entity.animation(AnimationType.IDLE)
+//                println("READY")
+                return Status.SUCCEEDED
+            }
+
+            AttackState.ATTACKING -> {
+//                println("ATTACKING")
+                entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, false)
+                return Status.RUNNING
+            }
+
+            AttackState.DEAL_DAMAGE -> {
+//                println("DAMAGE")
+                return Status.RUNNING
+            }
+
+            else -> return Status.SUCCEEDED
+        }
     }
 }
 

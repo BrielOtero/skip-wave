@@ -77,12 +77,10 @@ class GameView(
             playerExperienceBar(playerExperienceBar)
         }
 
-
         //Level
         model.onPropertyChange(GameModel::playerLevel) { playerLevel ->
             playerLevel(playerLevel)
         }
-
 
         //Other
         model.onPropertyChange(GameModel::lootText) { lootInfo ->

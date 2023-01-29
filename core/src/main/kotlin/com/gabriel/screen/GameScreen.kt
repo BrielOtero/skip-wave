@@ -89,7 +89,7 @@ class GameScreen(game: Survivor) : KtxScreen,EventListener {
         gameStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, gameStage))
-            skillUpgradeView(SkillUpgradeModel(eWorld, gameStage), gameStage, uiStage)
+            skillUpgradeView(SkillUpgradeModel(eWorld, gameStage,uiStage), gameStage, uiStage)
             touchpadView(TouchpadModel(eWorld, uiStage))
         }
 
@@ -145,9 +145,9 @@ class GameScreen(game: Survivor) : KtxScreen,EventListener {
         return true
     }
 
-    override fun pause() = pauseWorld(true)
-
-    override fun resume() = pauseWorld(false)
+//    override fun pause() = pauseWorld(true)
+//
+//    override fun resume() = pauseWorld(false)
 
     override fun render(delta: Float) {
         val dt = delta.coerceAtMost(0.25f)

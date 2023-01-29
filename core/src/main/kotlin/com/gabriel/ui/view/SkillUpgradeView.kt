@@ -10,16 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.gabriel.event.GamePauseEvent
-import com.gabriel.event.GameResumeEvent
-import com.gabriel.event.TestEvent
-import com.gabriel.event.fire
+import com.gabriel.event.*
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
 import com.gabriel.ui.get
 import com.gabriel.ui.model.SkillModel
 import com.gabriel.ui.model.Skills
 import com.gabriel.ui.model.SkillUpgradeModel
+import com.gabriel.ui.model.TouchpadModel
 import com.gabriel.ui.widget.SkillSlot
 import com.gabriel.ui.widget.skillSlot
 import ktx.actors.alpha
@@ -31,7 +29,7 @@ import ktx.scene2d.*
 
 class SkillUpgradeView(
     model: SkillUpgradeModel,
-    gameStage:Stage,
+    gameStage: Stage,
     uiStage: Stage,
     skin: Skin
 ) : KTable, Table(skin) {
@@ -45,31 +43,38 @@ class SkillUpgradeView(
         setFillParent(true)
 
         table { tableCell ->
-
             background = skin[Drawables.FRAME_BGD]
             label(text = "Level UP!", style = Labels.FRAME.skinKey) { lblCell ->
                 lblCell.row()
-                lblCell.padTop(20f)
-                lblCell.padBottom(5f)
+                lblCell.padTop(10f)
+                this.setFontScale(0.4f)
             }
+
             for (i in 1..3) {
                 this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = uiStage) { skillCell ->
-                    skillCell.expand().fill().row()
-//                    skillCell.padBottom(5f)
-                    skillCell.pad(10f, 10f, 10f, 10f)
-                    setScale(0.8f)
+                    skillCell.expand().width(uiStage.width * 0.8f).height(uiStage.height * 0.25f).center().row()
+                    skillCell.pad(0f,10f,4f,10f)
 
                     onTouchDown {
-                       gameStage.fire(TestEvent())
-                        log.debug { "TOUCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ${skillName} " }
-                        this@SkillUpgradeView.alpha = 0f
+                        gameStage.fire(TestEvent())
+                        this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
                         this.setPosition(-500f, 0f)
+
                         gameStage.fire(GameResumeEvent())
+                        gameStage.fire(SkillApplyEvent(skillModel))
+
+                        uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
+
+                        with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
+                            this.model.disableTouchpad = false
+                            isVisible = true
+                        }
                     }
 
                 }
             }
-            tableCell.expand().fill().maxWidth(uiStage.width * 0.9f).maxHeight(uiStage.height * 0.7f).center()
+            padBottom(10f)
+            tableCell.expand().maxWidth(uiStage.width * 0.9f).maxHeight(uiStage.height * 0.98f).center()
         }
 
 
@@ -84,23 +89,19 @@ class SkillUpgradeView(
     fun popup(skills: Skills) {
 
         with(skills.skill1) {
-            skill(SkillModel(skill.skillEntityId, atlasKey, skill.name, 0))
+            skill(SkillModel(0, skill.skillEntityId, atlasKey, skill.name, skill.level, skill.onLevelUP))
         }
         with(skills.skill2) {
-            skill(SkillModel(skill.skillEntityId, atlasKey, skill.name, 1))
+            skill(SkillModel(1, skill.skillEntityId, atlasKey, skill.name, skill.level, skill.onLevelUP))
         }
         with(skills.skill3) {
-            skill(SkillModel(skill.skillEntityId, atlasKey, skill.name, 2))
+            skill(SkillModel(2, skill.skillEntityId, atlasKey, skill.name, skill.level, skill.onLevelUP))
         }
 
         if (this.alpha == 0f) {
-            log.debug { "Alpha ${alpha}" }
             this.clearActions()
             this.setPosition(0f, 0f)
             this += Actions.sequence(Actions.fadeIn(0.2f))
-        } else {
-//            this.setPosition(-500f, 0f)
-//            this.resetFadeOutDelay()
         }
     }
 
@@ -132,4 +133,4 @@ fun <S> KWidget<S>.skillUpgradeView(
     uiStage: Stage,
     skin: Skin = Scene2DSkin.defaultSkin,
     init: SkillUpgradeView.(S) -> Unit = {}
-): SkillUpgradeView = actor(SkillUpgradeView(model, gameStage,uiStage, skin), init)
+): SkillUpgradeView = actor(SkillUpgradeView(model, gameStage, uiStage, skin), init)

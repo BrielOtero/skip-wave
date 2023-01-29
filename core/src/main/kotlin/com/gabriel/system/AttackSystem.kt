@@ -42,7 +42,6 @@ class AttackSystem(
             attackCmp.doAttack = false
             attackCmp.state = AttackState.ATTACKING
             attackCmp.cooldown = attackCmp.maxCooldown
-            gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
 
             return
         }
@@ -50,6 +49,7 @@ class AttackSystem(
         attackCmp.cooldown -= deltaTime
         if (attackCmp.cooldown <= 0f && attackCmp.isAttacking) {
             // deal damage to nearby enemies
+            gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
             attackCmp.state = AttackState.DEAL_DAMAGE
 
             val image = imgCmps[entity].image

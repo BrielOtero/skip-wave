@@ -35,6 +35,7 @@ class AudioSystem : EventListener, IntervalSystem() {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
                             isLooping = true
                             volume=0.75f
+//                            volume=0f
                         }
                     }
                     music.play()

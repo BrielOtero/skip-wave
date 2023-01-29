@@ -21,6 +21,9 @@ class AttackComponent(
     val isAttacking: Boolean
         get() = state == AttackState.ATTACKING
 
+    val isDealingDamage: Boolean
+        get() = state == AttackState.DEAL_DAMAGE
+
     fun startAttack() {
         state = AttackState.PREPARE
     }

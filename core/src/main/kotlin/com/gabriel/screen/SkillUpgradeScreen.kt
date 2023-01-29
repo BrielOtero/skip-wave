@@ -17,9 +17,10 @@ import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
 class SkillUpgradeScreen : KtxScreen {
-    private val stage: Stage = Stage(ExtendViewport(180f, 320f))
+    private val uiStage: Stage = Stage(ExtendViewport(180f, 320f))
+    private val gameStage: Stage = Stage(ExtendViewport(8f, 16f))
     private val eWorld = world { }
-    private val model = SkillUpgradeModel(eWorld, stage)
+    private val model = SkillUpgradeModel(eWorld,gameStage, uiStage)
     private lateinit var skillUpgradeView: SkillUpgradeView
     private val playerEntity: Entity
 
@@ -38,16 +39,16 @@ class SkillUpgradeScreen : KtxScreen {
     }
 
     override fun resize(width: Int, height: Int) {
-        stage.viewport.update(width, height, true)
+        uiStage.viewport.update(width, height, true)
     }
 
     override fun show() {
-        stage.clear()
-        stage.addListener(model)
-        stage.actors {
-            skillUpgradeView = skillUpgradeView(model, stage)
+        uiStage.clear()
+        uiStage.addListener(model)
+        uiStage.actors {
+            skillUpgradeView = skillUpgradeView(model, gameStage,uiStage)
         }
-        stage.isDebugAll = true
+        uiStage.isDebugAll = true
     }
 
     override fun render(delta: Float) {
@@ -55,9 +56,9 @@ class SkillUpgradeScreen : KtxScreen {
             hide()
             show()
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            skillUpgradeView.skill(SkillModel(-1, "frame_fgd", 0))
+            skillUpgradeView.skill(SkillModel(-1,0, "frame_fgd","nothing",0, 0))
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            skillUpgradeView.skill(SkillModel(-1, "frame_bgd", 0))
+            skillUpgradeView.skill(SkillModel(-1,0, "frame_fgd","nothing",0, 0))
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
             skillUpgradeView.popup(Skills(Skill.PLAYER_COOLDOWN, Skill.PLAYER_LIFE, Skill.PLAYER_DAMAGE))
@@ -65,12 +66,12 @@ class SkillUpgradeScreen : KtxScreen {
 
 
 
-        stage.act()
-        stage.draw()
+        uiStage.act()
+        uiStage.draw()
     }
 
     override fun dispose() {
-        stage.disposeSafely()
+        uiStage.disposeSafely()
     }
 
 }

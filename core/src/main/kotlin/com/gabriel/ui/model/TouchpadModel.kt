@@ -28,6 +28,7 @@ class TouchpadModel(
     var touchpadLocation by propertyNotify(vec2(0f, -50f))
     var opacity by propertyNotify(0f)
     var isTouch: Boolean = false
+    var disableTouchpad: Boolean = false
 
 
     init {
@@ -35,10 +36,10 @@ class TouchpadModel(
     }
 
     override fun handle(event: Event): Boolean {
-        log.debug { "Event ${event}" }
+//        log.debug { "Event ${event}" }
         when (event) {
             is StartMovementEvent -> {
-                if (!isTouch) {
+                if (!isTouch && !disableTouchpad) {
                     touchpadLocation = vec2(event.x, event.y)
                     opacity = 0.4f
                 }

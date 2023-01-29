@@ -6,14 +6,14 @@ filter: Nearest, Nearest
 repeat: none
 experience_progress
   rotate: false
-  xy: 1024, 97
+  xy: 1124, 197
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
   index: -1
 experience_under
   rotate: false
-  xy: 1124, 197
+  xy: 1388, 497
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
@@ -34,16 +34,16 @@ font_white
   index: -1
 frame_bgd
   rotate: false
-  xy: 1124, 149
-  size: 16, 16
-  split: 5, 5, 5, 5
+  xy: 1324, 448
+  size: 64, 64
+  split: 7, 8, 8, 7
   pad: 0, 0, 0, 0
-  orig: 16, 16
+  orig: 64, 64
   offset: 0, 0
   index: -1
 frame_fgd
   rotate: false
-  xy: 1404, 493
+  xy: 1104, 93
   size: 19, 19
   orig: 19, 19
   offset: 0, 0
@@ -64,14 +64,14 @@ joy_int
   index: -1
 life_progress
   rotate: false
-  xy: 1324, 482
+  xy: 1024, 82
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
   index: -1
 life_under
   rotate: false
-  xy: 1324, 497
+  xy: 1024, 97
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
@@ -85,28 +85,28 @@ player_cooldown
   index: -1
 player_damage
   rotate: false
-  xy: 1024, 33
+  xy: 1024, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_life
   rotate: false
-  xy: 1056, 65
+  xy: 1324, 384
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_regeneration
   rotate: false
-  xy: 1024, 65
+  xy: 1324, 416
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_speed
   rotate: false
-  xy: 1324, 450
+  xy: 1388, 465
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

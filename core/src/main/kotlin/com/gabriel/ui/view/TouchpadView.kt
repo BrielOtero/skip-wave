@@ -11,7 +11,7 @@ import ktx.scene2d.*
 
 
 class TouchpadView(
-    private val model: TouchpadModel,
+     val model: TouchpadModel,
     skin: Skin,
 ) : Table(skin), KTable {
     private var positionX: Float = 0f

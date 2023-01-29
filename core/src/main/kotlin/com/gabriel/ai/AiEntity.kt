@@ -58,6 +58,10 @@ data class AiEntity(
     val isAnimationDone: Boolean
         get() = animationCmps[entity].isAnimationDone
 
+    val attackState: AttackState
+        get() = attackCmps[entity].state
+
+
     val isDead: Boolean
         get() = lifeCmps[entity].isDead
 

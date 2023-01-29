@@ -1,12 +1,12 @@
 # Actions
 import attackWeapon:"com.gabriel.ai.AttackWeaponTask"
 
+
 # Conditions
 
 subtree name:"attack"
     sequence
         attackWeapon
-        wait seconds:"uniform,0.25"
 
 root
   selector
@@ -14,3 +14,4 @@ root
 
 
 
+#wait seconds:"uniform,0.25"

@@ -38,10 +38,6 @@ class SkillUpgradeModel(
                 }
             }
 
-            is TestEvent -> {
-                log.debug { "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }
-            }
-
             else -> return false
         }
         return true

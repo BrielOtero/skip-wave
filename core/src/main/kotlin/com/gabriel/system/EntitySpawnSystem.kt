@@ -107,7 +107,7 @@ class EntitySpawnSystem(
                     EntityType.PLAYER -> {
                         add<PlayerComponent>()
                         add<ExperienceComponent>() {
-                            experienceToNextLevel = 100f
+                            experienceToNextLevel = 50f
                         }
                         add<LevelComponent>()
                         add<StateComponent>() {
@@ -185,23 +185,12 @@ class EntitySpawnSystem(
                 entityType = EntityType.PLAYER,
                 attackExtraRange = 0.6f,
                 attackScaling = 0f,
-                speedScaling = 2.25f,
+                speedScaling = 1.2f,
                 lifeScaling = 100f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
 
-            "SKULL" -> SpawnCfg(
-                AnimationModel.SKULL,
-                EntityType.ENEMY,
-                lifeScaling = 0.75f,
-                speedScaling = 0.2f,
-                attackScaling = 5f,
-                dropExperience = 10f,
-                physicScaling = vec2(0.9f, 0.9f),
-//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
-                aiTreePath = "ai/enemy.tree"
-            )
 
             "CHEST" -> SpawnCfg(
                 AnimationModel.CHEST,
@@ -243,6 +232,68 @@ class EntitySpawnSystem(
                 aiTreePath = "ai/slash.tree"
 
             )
+
+            //ENEMIES
+            "AXOLOT" -> SpawnCfg(
+                AnimationModel.AXOLOT,
+                EntityType.ENEMY,
+                lifeScaling = 0.75f,
+                speedScaling = 0.4f,
+                attackScaling = 5f,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            "AXOLOT_SHINY" -> SpawnCfg(
+                AnimationModel.AXOLOT_SHINY,
+                EntityType.ENEMY,
+                lifeScaling = 0.75f,
+                speedScaling = 0.4f,
+                attackScaling = 5f,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            "CYCLOPE" -> SpawnCfg(
+                AnimationModel.CYCLOPE,
+                EntityType.ENEMY,
+                lifeScaling = 0.75f,
+                speedScaling = 0.4f,
+                attackScaling = 5f,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            "CYCLOPE_SHINY" -> SpawnCfg(
+                AnimationModel.CYCLOPE_SHINY,
+                EntityType.ENEMY,
+                lifeScaling = 0.75f,
+                speedScaling = 0.4f,
+                attackScaling = 5f,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            "SKULL" -> SpawnCfg(
+                AnimationModel.SKULL,
+                EntityType.ENEMY,
+                lifeScaling = 0.75f,
+                speedScaling = 0.4f,
+                attackScaling = 5f,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                aiTreePath = "ai/enemy.tree"
+            )
+
 
             "SPAWN" -> SpawnCfg(AnimationModel.UNDEFINED, EntityType.SPAWN)
             else -> gdxError("Type $type has no SpawnCfg setup.")

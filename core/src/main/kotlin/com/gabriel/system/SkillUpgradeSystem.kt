@@ -1,18 +1,14 @@
 package com.gabriel.system
 
-import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.*
 import com.gabriel.event.*
-import com.gabriel.ui.model.SkillModel
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.Qualifier
-import ktx.collections.GdxArray
 import ktx.log.logger
-import kotlin.math.log
 
 class SkillUpgradeSystem(
     @Qualifier("gameStage") private val gameStage: Stage,
@@ -23,7 +19,16 @@ class SkillUpgradeSystem(
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
     private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
     private val skillsModel = Skill.values()
+    private lateinit var skillTest: HashMap<String, Skill>
+
     val numSkill: Int = 3
+
+    init {
+        skillsModel.forEach { skill ->
+            skillTest = HashMap()
+            skillTest.put(skill.skillName, skill)
+        }
+    }
 
 
     override fun onTick() {
@@ -47,7 +52,7 @@ class SkillUpgradeSystem(
             }
 
             is SkillApplyEvent -> {
-                when (event.skill.name) {
+                when (event.skill.skillName) {
                     "Life" -> {
                         log.debug { "Life before ${lifeCmps[playerEntities.first()].max}" }
                         lifeCmps[playerEntities.first()].max += event.skill.onLevelUP
@@ -62,14 +67,14 @@ class SkillUpgradeSystem(
 
                     "Speed" -> {
                         log.debug { "Speed before ${moveCmps[playerEntities.first()].speed}" }
-                        moveCmps[playerEntities.first()].speed += event.skill.onLevelUP
+                        moveCmps[playerEntities.first()].speed += (event.skill.onLevelUP/100)
                         log.debug { "Speed after ${moveCmps[playerEntities.first()].speed}" }
                     }
 
                     "Cooldown" -> {
                         weaponEntities.forEach { weapon ->
                             log.debug { "Cooldown before ${attackCmps[weapon].maxCooldown}" }
-                            attackCmps[weapon].maxCooldown+= (event.skill.onLevelUP/100)
+                            attackCmps[weapon].maxCooldown += (event.skill.onLevelUP / 100)
                             log.debug { "Cooldown after ${attackCmps[weapon].maxCooldown}" }
                         }
                     }
@@ -85,9 +90,13 @@ class SkillUpgradeSystem(
                     }
 
                 }
-                skillsModel[event.skill.skillEntityId].skill.level += 1
-            }
 
+                skillsModel.forEach { skillModel ->
+                    if (skillModel.skillEntityId == event.skill.skillEntityId) {
+                        skillModel.skillLevel += 1
+                    }
+                }
+            }
 
             else -> return false
         }

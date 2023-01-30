@@ -25,7 +25,7 @@ class GameModel(
     var playerLifeBar by propertyNotify(0f)
 
     var playerExperience by propertyNotify(0f)
-    var playerExperienceToNextLevel by propertyNotify(0f)
+    var playerExperienceToNextLevel by propertyNotify(50f)
     var playerExperienceBar by propertyNotify(0f)
     private var playerExperienceTempValue = 0f
 
@@ -69,6 +69,7 @@ class GameModel(
                     playerExperienceTempValue = experienceCmp.experience
                     playerExperience = 0f
                     playerLevel = levelCmp.level
+                    playerExperienceBar = playerExperience / playerExperienceToNextLevel
                 }
 
             }

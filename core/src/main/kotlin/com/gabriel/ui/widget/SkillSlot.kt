@@ -1,7 +1,6 @@
 package com.gabriel.ui.widget
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -13,7 +12,6 @@ import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
 import com.gabriel.ui.get
 import com.gabriel.ui.model.SkillModel
-import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.app.KtxInputAdapter
 import ktx.log.logger
@@ -78,13 +76,13 @@ class SkillSlot(
     fun skill(model: SkillModel) {
         skillModel = model
         skillImage.drawable = skin.getDrawable(model.atlasKey)
-        skillName.setText(model.name)
+        skillName.setText(model.skillName)
         if (model.onLevelUP > 0) {
             skillValueAfter.setText("+${model.onLevelUP}")
         } else {
             skillValueAfter.setText(model.onLevelUP)
         }
-        skillLevel.setText("Level ${model.level}")
+        skillLevel.setText("Level ${model.skillLevel}")
     }
 
     companion object {

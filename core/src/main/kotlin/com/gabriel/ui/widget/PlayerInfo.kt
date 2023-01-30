@@ -23,13 +23,13 @@ class PlayerInfo(
     private val lifeText: Label = label("", style = Labels.FRAME.skinKey)
     private val experienceUnder: Image = Image(skin[Drawables.EXPERIENCE_UNDER])
     private val experienceBar: Image = Image(skin[Drawables.EXPERIENCE_BAR])
-    private val experienceText: Label = label("0/100", style = Labels.FRAME.skinKey)
+    private val experienceText: Label = label("0/50", style = Labels.FRAME.skinKey)
     private val levelText: Label = label("Level 0", style = Labels.FRAME.skinKey)
 
     private var life = 0
     private var lifeMax = 0
     private var experience = 0
-    private var experienceToNextLevel = 100
+    private var experienceToNextLevel = 50
 
     init {
 
@@ -45,7 +45,6 @@ class PlayerInfo(
             setAlignment(Align.center)
             toFront()
         }
-
 
         this += experienceUnder.apply {
             setPosition(0f, 18f)
@@ -64,6 +63,7 @@ class PlayerInfo(
             setPosition(0f, 0f)
         }
 
+        playerExperienceBar(0f, 0f)
     }
 
     override fun getPrefWidth() = lifeUnder.drawable.minWidth

@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
+import com.gabriel.component.AnimationModel
 import com.gabriel.event.*
 import com.github.quillraven.fleks.IntervalSystem
 import ktx.assets.disposeSafely
@@ -34,7 +35,7 @@ class AudioSystem : EventListener, IntervalSystem() {
                     val music = musicCache.getOrPut(path) {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
                             isLooping = true
-                            volume=0.75f
+                            volume = 0.75f
 //                            volume=0f
                         }
                     }
@@ -43,10 +44,26 @@ class AudioSystem : EventListener, IntervalSystem() {
                 return true
             }
 
-            is EntityAttackEvent -> queueSound("audio/${event.model.atlasKey}_attack.wav")
-            is EntityDeathEvent -> queueSound("audio/${event.model.atlasKey}_death.wav")
+            is EntityAttackEvent -> {
+                if (event.model != AnimationModel.PLAYER && event.model != AnimationModel.SLASH_LEFT && event.model != AnimationModel.SLASH_RIGHT) {
+                    queueSound("audio/enemy_attack.wav")
+                } else {
+                    queueSound("audio/${event.model.atlasKey}_attack.wav")
+                }
+
+            }
+
+            is EntityDeathEvent -> {
+                if (event.model != AnimationModel.PLAYER && event.model != AnimationModel.SLASH_LEFT && event.model != AnimationModel.SLASH_RIGHT) {
+                    queueSound("audio/enemy_death.wav")
+                } else {
+                    queueSound("audio/${event.model.atlasKey}_death.wav")
+
+                }
+            }
+
             is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.wav")
-            is EntityLevelEvent ->queueSound("audio/level_up.wav")
+            is EntityLevelEvent -> queueSound("audio/level_up.wav")
         }
 
         return false

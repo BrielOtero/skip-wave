@@ -53,14 +53,14 @@ class SkillUpgradeView(
             for (i in 1..3) {
                 this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = uiStage) { skillCell ->
                     skillCell.expand().width(uiStage.width * 0.8f).height(uiStage.height * 0.25f).center().row()
-                    skillCell.pad(0f,10f,4f,10f)
+                    skillCell.pad(0f, 10f, 4f, 10f)
 
                     onTouchDown {
-                        gameStage.fire(TestEvent())
                         this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
                         this.setPosition(-500f, 0f)
 
                         gameStage.fire(GameResumeEvent())
+                        log.debug { "RESSSSSSSSSSSSSUUUUUUUUUMMMMEEEEEEEE" }
                         gameStage.fire(SkillApplyEvent(skillModel))
 
                         uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
@@ -89,13 +89,13 @@ class SkillUpgradeView(
     fun popup(skills: Skills) {
 
         with(skills.skill1) {
-            skill(SkillModel(0, skill.skillEntityId, atlasKey, skill.name, skill.level, skill.onLevelUP))
+            skill(SkillModel(0, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
         }
         with(skills.skill2) {
-            skill(SkillModel(1, skill.skillEntityId, atlasKey, skill.name, skill.level, skill.onLevelUP))
+            skill(SkillModel(1, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
         }
         with(skills.skill3) {
-            skill(SkillModel(2, skill.skillEntityId, atlasKey, skill.name, skill.level, skill.onLevelUP))
+            skill(SkillModel(2, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
         }
 
         if (this.alpha == 0f) {

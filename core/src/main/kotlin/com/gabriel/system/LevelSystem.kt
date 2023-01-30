@@ -25,11 +25,11 @@ class LevelSystem(
 //            log.debug { "Level ${levelCmps[entity].level} Experience ${experience} Experience To Next Level ${experienceToNextLevel}" }
             if (experience >= experienceToNextLevel) {
                 with(levelCmps[entity]) {
-                    level += 1
 
 //                    log.debug { "ExperienceToNextLevel before ${experienceToNextLevel}" }
 
-                    experienceToNextLevel = (level / 0.07).pow(2.0).toFloat()
+                    level += 1
+                    experienceToNextLevel = experience+150f
 
                     log.debug { "ExperienceToNextLevel ${experienceToNextLevel}" }
 

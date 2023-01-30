@@ -6,8 +6,8 @@ data class SkillModel (
     var slotIdx:Int,
     val skillEntityId:Int,
     val atlasKey:String,
-    val name:String,
-    var level:Int,
+    val skillName:String,
+    var skillLevel:Int,
     var onLevelUP:Int,
 )
 

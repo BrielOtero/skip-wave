@@ -7,12 +7,12 @@ import org.robovm.apple.uikit.UIApplication
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration
-import com.gabriel.Survivor
+import com.gabriel.SkipWave
 
 /** Launches the iOS (RoboVM) application. */
 class IOSLauncher : IOSApplication.Delegate() {
 	override fun createApplication(): IOSApplication {
-		return IOSApplication(Survivor(), IOSApplicationConfiguration().apply {
+		return IOSApplication(SkipWave(), IOSApplicationConfiguration().apply {
             // Configure your application here.
         })
 	}

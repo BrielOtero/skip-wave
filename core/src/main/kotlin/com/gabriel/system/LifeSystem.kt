@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.gabriel.component.*
 import com.gabriel.event.EntityDamageEvent
 import com.gabriel.event.EntityDeathEvent
+import com.gabriel.event.PlayerDeathEvent
 import com.gabriel.event.fire
 import com.github.quillraven.fleks.*
 import ktx.assets.disposeSafely
@@ -53,7 +54,8 @@ class LifeSystem(
                 deadCmps.add(it) {
                     if (it in playerCmps) {
                         // revive player after 7 seconds
-                        reviveTime = 7f
+                        reviveTime = 700f
+                        gameStage.fire(PlayerDeathEvent())
                     }
                 }
             }

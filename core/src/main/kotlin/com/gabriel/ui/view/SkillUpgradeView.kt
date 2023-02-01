@@ -29,8 +29,6 @@ import ktx.scene2d.*
 
 class SkillUpgradeView(
     model: SkillUpgradeModel,
-    gameStage: Stage,
-    uiStage: Stage,
     skin: Skin
 ) : KTable, Table(skin) {
 
@@ -51,21 +49,21 @@ class SkillUpgradeView(
             }
 
             for (i in 1..3) {
-                this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = uiStage) { skillCell ->
-                    skillCell.expand().width(uiStage.width * 0.8f).height(uiStage.height * 0.25f).center().row()
+                this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = model.uiStage) { skillCell ->
+                    skillCell.expand().width(model.uiStage.width * 0.8f).height(model.uiStage.height * 0.25f).center().row()
                     skillCell.pad(0f, 10f, 4f, 10f)
 
                     onTouchDown {
-                        this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
                         this.setPosition(-500f, 0f)
+                        this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
 
-                        gameStage.fire(GameResumeEvent())
+                        model.gameStage.fire(GameResumeEvent())
                         log.debug { "RESSSSSSSSSSSSSUUUUUUUUUMMMMEEEEEEEE" }
-                        gameStage.fire(SkillApplyEvent(skillModel))
+                        model.gameStage.fire(SkillApplyEvent(skillModel))
 
-                        uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
+                        model.uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
 
-                        with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
+                        with(model.uiStage.actors.filterIsInstance<TouchpadView>().first()) {
                             this.model.disableTouchpad = false
                             isVisible = true
                         }
@@ -74,7 +72,7 @@ class SkillUpgradeView(
                 }
             }
             padBottom(10f)
-            tableCell.expand().maxWidth(uiStage.width * 0.9f).maxHeight(uiStage.height * 0.98f).center()
+            tableCell.expand().maxWidth(model.uiStage.width * 0.9f).maxHeight(model.uiStage.height * 0.98f).center()
         }
 
 
@@ -129,8 +127,6 @@ class SkillUpgradeView(
 @Scene2dDsl
 fun <S> KWidget<S>.skillUpgradeView(
     model: SkillUpgradeModel,
-    gameStage: Stage,
-    uiStage: Stage,
     skin: Skin = Scene2DSkin.defaultSkin,
     init: SkillUpgradeView.(S) -> Unit = {}
-): SkillUpgradeView = actor(SkillUpgradeView(model, gameStage, uiStage, skin), init)
+): SkillUpgradeView = actor(SkillUpgradeView(model, skin), init)

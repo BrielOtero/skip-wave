@@ -8,22 +8,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.gabriel.Survivor
+import com.gabriel.SkipWave
 import com.gabriel.component.*
-import com.gabriel.event.GamePauseEvent
-import com.gabriel.event.GameResumeEvent
-import com.gabriel.event.MapChangeEvent
-import com.gabriel.event.fire
+import com.gabriel.event.*
 import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.input.PlayerTouchInputProcessor
 import com.gabriel.system.*
 import com.gabriel.ui.model.GameModel
+import com.gabriel.ui.model.RecordsModel
 import com.gabriel.ui.model.SkillUpgradeModel
 import com.gabriel.ui.model.TouchpadModel
-import com.gabriel.ui.view.SkillUpgradeView
 import com.gabriel.ui.view.gameView
+import com.gabriel.ui.view.recordsView
 import com.gabriel.ui.view.skillUpgradeView
 import com.gabriel.ui.view.touchpadView
 import com.github.quillraven.fleks.world
@@ -34,7 +30,7 @@ import ktx.log.logger
 import ktx.math.vec2
 import ktx.scene2d.actors
 
-class GameScreen(game: Survivor) : KtxScreen,EventListener {
+class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
     private val gameStage = game.gameStage
     private val uiStage = game.uiStage
     private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game_assets.atlas"))
@@ -89,8 +85,9 @@ class GameScreen(game: Survivor) : KtxScreen,EventListener {
         gameStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, gameStage))
-            skillUpgradeView(SkillUpgradeModel(eWorld, gameStage,uiStage), gameStage, uiStage)
+            skillUpgradeView(SkillUpgradeModel(eWorld, gameStage,uiStage))
             touchpadView(TouchpadModel(eWorld, uiStage))
+            recordsView(RecordsModel(eWorld,gameStage,uiStage))
         }
 
     }
@@ -131,13 +128,24 @@ class GameScreen(game: Survivor) : KtxScreen,EventListener {
     override fun handle(event: Event): Boolean {
         when(event){
             is GamePauseEvent -> {
+                log.debug { "PAUSE game" }
                 pauseWorld(true)
-                log.debug { "pause" }
             }
 
             is GameResumeEvent -> {
+                log.debug { "RESUME game" }
                 pauseWorld(false)
-                log.debug { "resume" }
+            }
+
+            is MainMenuScreenEvent ->{
+                log.debug { "SET SCREEN: MainMenu" }
+                gameStage.clear()
+                uiStage.clear()
+                game.addScreen(MainMenuScreen(game))
+                game.setScreen<MainMenuScreen>()
+                game.removeScreen<GameScreen>()
+                super.hide()
+                dispose()
             }
 
             else -> return false

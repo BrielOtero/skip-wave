@@ -4,17 +4,9 @@ import com.badlogic.gdx.Application.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.scenes.scene2d.Event
-import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.gabriel.event.GamePauseEvent
-import com.gabriel.event.GameResumeEvent
-import com.gabriel.event.TestEvent
-import com.gabriel.screen.TouchpadScreen
-import com.gabriel.screen.GameScreen
-import com.gabriel.screen.GameUiScreen
-import com.gabriel.screen.SkillUpgradeScreen
+import com.gabriel.screen.*
 //import com.gabriel.screen.GameUiScreen
 //import com.gabriel.screen.InventoryUiScreen
 import com.gabriel.ui.disposeSkin
@@ -25,7 +17,7 @@ import ktx.assets.disposeSafely
 import ktx.log.logger
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms. */
-class Survivor : KtxGame<KtxScreen>() {
+class SkipWave : KtxGame<KtxScreen>() {
     private val batch: Batch by lazy { SpriteBatch() }
     private lateinit var gameViewport: ExtendViewport
     private lateinit var uiViewport: ExtendViewport
@@ -53,11 +45,13 @@ class Survivor : KtxGame<KtxScreen>() {
 
 //        gameStage.addListener(this)
 
-        addScreen(GameScreen(this))
+        addScreen(MainMenuScreen(this))
+//        addScreen(GameScreen(this))
 //        addScreen(GameUiScreen())
 //        addScreen(TouchpadScreen(uiViewport))
-        addScreen(SkillUpgradeScreen())
-        setScreen<GameScreen>()
+//        addScreen(SkillUpgradeScreen())
+//        setScreen<GameScreen>()
+        setScreen<MainMenuScreen>()
 //        setScreen<GameUiScreen>()
 //        setScreen<TouchpadScreen>()
 //        setScreen<SkillUpgradeScreen>()
@@ -97,6 +91,6 @@ class Survivor : KtxGame<KtxScreen>() {
 
     companion object {
         const val UNIT_SCALE = 1 / 16f
-        private var log = logger<Survivor>()
+        private var log = logger<SkipWave>()
     }
 }

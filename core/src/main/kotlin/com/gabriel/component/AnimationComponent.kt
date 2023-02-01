@@ -9,7 +9,8 @@ enum class AnimationModel {
     CHEST,
     SLASH_RIGHT,
     SLASH_LEFT,
-     //ENEMIES
+
+    //ENEMIES
     AXOLOT,
     AXOLOT_SHINY,
     BAMBOO,

@@ -67,14 +67,14 @@ class SkillUpgradeSystem(
 
                     "Speed" -> {
                         log.debug { "Speed before ${moveCmps[playerEntities.first()].speed}" }
-                        moveCmps[playerEntities.first()].speed += (event.skill.onLevelUP/100)
+                        moveCmps[playerEntities.first()].speed += (event.skill.onLevelUP/10)
                         log.debug { "Speed after ${moveCmps[playerEntities.first()].speed}" }
                     }
 
                     "Cooldown" -> {
                         weaponEntities.forEach { weapon ->
                             log.debug { "Cooldown before ${attackCmps[weapon].maxCooldown}" }
-                            attackCmps[weapon].maxCooldown += (event.skill.onLevelUP / 100)
+                            attackCmps[weapon].maxCooldown += (event.skill.onLevelUP / 10)
                             log.debug { "Cooldown after ${attackCmps[weapon].maxCooldown}" }
                         }
                     }
@@ -94,6 +94,7 @@ class SkillUpgradeSystem(
                 skillsModel.forEach { skillModel ->
                     if (skillModel.skillEntityId == event.skill.skillEntityId) {
                         skillModel.skillLevel += 1
+                        log.debug { "Level up on ${skillModel.name}" }
                     }
                 }
             }

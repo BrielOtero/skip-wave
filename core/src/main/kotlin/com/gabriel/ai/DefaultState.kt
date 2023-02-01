@@ -62,6 +62,8 @@ enum class DefaultState : EntityState {
         override fun update(entity: AiEntity) {
             if (!entity.isDead) {
                 entity.state(RESURRECT)
+            }else{
+//                entity.animation(AnimationType.DEATH, Animation.PlayMode.NORMAL, true)
             }
         }
     },

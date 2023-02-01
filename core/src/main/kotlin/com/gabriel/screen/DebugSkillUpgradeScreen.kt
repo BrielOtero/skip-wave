@@ -16,7 +16,7 @@ import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class SkillUpgradeScreen : KtxScreen {
+class DebugSkillUpgradeScreen : KtxScreen {
     private val uiStage: Stage = Stage(ExtendViewport(180f, 320f))
     private val gameStage: Stage = Stage(ExtendViewport(8f, 16f))
     private val eWorld = world { }
@@ -46,7 +46,7 @@ class SkillUpgradeScreen : KtxScreen {
         uiStage.clear()
         uiStage.addListener(model)
         uiStage.actors {
-            skillUpgradeView = skillUpgradeView(model, gameStage,uiStage)
+            skillUpgradeView = skillUpgradeView(model)
         }
         uiStage.isDebugAll = true
     }

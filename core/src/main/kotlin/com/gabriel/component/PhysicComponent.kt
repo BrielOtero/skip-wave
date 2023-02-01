@@ -1,14 +1,12 @@
 package com.gabriel.component
 
-import com.badlogic.gdx.math.Polygon
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Shape2D
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.gabriel.Survivor.Companion.UNIT_SCALE
-import com.gabriel.system.CollisionSpawnSystem
+import com.gabriel.SkipWave.Companion.UNIT_SCALE
 import com.gabriel.system.CollisionSpawnSystem.Companion.SPAWN_AREA_SIZE
 import com.github.quillraven.fleks.ComponentListener
 import com.github.quillraven.fleks.Entity

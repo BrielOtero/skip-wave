@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.gabriel.Survivor.Companion.UNIT_SCALE
+import com.gabriel.SkipWave.Companion.UNIT_SCALE
 import com.gabriel.component.ImageComponent
 import com.gabriel.event.MapChangeEvent
 import com.github.quillraven.fleks.*

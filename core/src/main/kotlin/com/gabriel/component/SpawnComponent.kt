@@ -31,11 +31,12 @@ data class SpawnCfg(
     val attackDelay: Float = 0.2f,
     val attackExtraRange: Float = 0f,
     val lifeScaling: Float = 1f,
-    val dropExperience:Float = 0f,
+    val dropExperience: Float = 0f,
 )
 
 data class SpawnComponent(
     var type: String = "",
+    var model: AnimationModel = AnimationModel.UNDEFINED,
     var location: Vector2 = vec2()
 ) {
 }

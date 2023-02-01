@@ -4,31 +4,31 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.gabriel.component.MoveComponent
+import com.gabriel.component.LifeComponent
 import com.gabriel.component.PlayerComponent
-import com.gabriel.input.PlayerTouchInputProcessor
-import com.gabriel.ui.model.TouchpadModel
-import com.gabriel.ui.view.TouchpadView
-import com.gabriel.ui.view.touchpadView
+import com.gabriel.ui.model.GameModel
+import com.gabriel.ui.view.GameView
+import com.gabriel.ui.view.gameView
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class TouchpadScreen(
-    val viewport: ExtendViewport
-) : KtxScreen {
+class DebugGameUiScreen : KtxScreen {
+    private val stage: Stage = Stage(ExtendViewport(320f, 180f))
     private val eWorld = world { }
     private val playerEntity: Entity
-    val stage: Stage = Stage(viewport)
-    private val model = TouchpadModel(eWorld, stage)
-    private lateinit var hudView: TouchpadView
+    private val model = GameModel(eWorld, stage)
+    private lateinit var gameView: GameView
 
     init {
         playerEntity = eWorld.entity {
             add<PlayerComponent>()
-            add<MoveComponent>()
+            add<LifeComponent> {
+                max = 5f
+                life = 3f
+            }
         }
     }
 
@@ -40,11 +40,9 @@ class TouchpadScreen(
         stage.clear()
         stage.addListener(model)
         stage.actors {
-            touchpadView(TouchpadModel(eWorld, stage))
+            gameView = gameView(model)
         }
-        PlayerTouchInputProcessor(eWorld, stage)
         stage.isDebugAll = true
-        Gdx.input.inputProcessor = stage
 
     }
 
@@ -52,9 +50,19 @@ class TouchpadScreen(
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             hide()
             show()
-        } else if (Gdx.input.isTouched) {
-
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            gameView.playerLifeBar(0.5f)
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            gameView.playerLifeBar(1f)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            gameView.playerExperience(0f)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            gameView.playerExperience(1f)
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            gameView.popup("You found something [#ff0000]cool[]!")
         }
+
+
 
         stage.act()
         stage.draw()

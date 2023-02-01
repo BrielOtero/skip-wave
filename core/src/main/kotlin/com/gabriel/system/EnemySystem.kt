@@ -1,21 +1,13 @@
 package com.gabriel.system
 
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.gabriel.Survivor
-import com.gabriel.Survivor.Companion.UNIT_SCALE
-import com.gabriel.component.EnemyComponent
-import com.gabriel.component.ExperienceComponent
-import com.gabriel.component.LevelComponent
-import com.gabriel.component.PlayerComponent
+import com.gabriel.component.*
 import com.gabriel.event.EnemyAddEvent
-import com.gabriel.event.EntityAddEvent
 import com.gabriel.event.fire
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.Qualifier
 import ktx.log.logger
-import ktx.math.vec2
 
 class EnemySystem(
     @Qualifier("gameStage") private var gameStage: Stage,
@@ -24,21 +16,57 @@ class EnemySystem(
     ) : IntervalSystem() {
     private val enemyEntities = world.family(allOf = arrayOf(EnemyComponent::class))
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
-
-    override fun onTick() {
-
-        if (levelCmps[playerEntities.first()].level > 5) {
-            ENEMY_AMOUNT = 100
-        }else if(levelCmps[playerEntities.first()].level > 10){
-            ENEMY_AMOUNT = 200
+    private var lastLevel = 0
+    private var lastLevelChangeEnemy = -1
+    private lateinit var actualEnemy: AnimationModel
+    private var enemies =
+        AnimationModel.values().filter {
+            it != AnimationModel.UNDEFINED && it != AnimationModel.PLAYER && it != AnimationModel.CHEST && it != AnimationModel.SLASH_LEFT && it != AnimationModel.SLASH_RIGHT
         }
 
+
+    override fun onTick() {
+        val actualLevel = levelCmps[playerEntities.first()].level
+
+        //AMOUNT ENEMIES
+        if (actualLevel > 5 && actualLevel != lastLevel) {
+            if (ENEMY_AMOUNT <= 250) {
+                ENEMY_AMOUNT += 2
+                lastLevel = actualLevel
+            }
+        }
+
+
+        //ACTUAL ENEMIES
+        if (actualLevel <= enemies.size && actualLevel % 2 == 0 && actualLevel != lastLevelChangeEnemy) {
+            if (actualLevel == 0) {
+                actualEnemy = enemies[actualLevel]
+                log.debug { "ENEMY ADDED ${enemies[actualLevel].name}" }
+            } else {
+                actualEnemy = enemies[actualLevel - 1]
+                log.debug { "ENEMY ADDED ${enemies[actualLevel-1].name}" }
+            }
+            lastLevelChangeEnemy = actualLevel
+        }
+
+
+
+        //NOTIFY ENEMY SPAWN
         if (enemyEntities.numEntities < ENEMY_AMOUNT) {
-            gameStage.fire(
-                EnemyAddEvent(
-                    "CYCLOPE_SHINY"
+
+            if (actualLevel <= enemies.size) {
+                gameStage.fire(
+                    EnemyAddEvent(
+                        actualEnemy
+                    )
                 )
-            )
+            } else {
+                gameStage.fire(
+                    EnemyAddEvent(
+                        enemies.shuffled()[0]
+                    )
+                )
+            }
         }
 
     }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.utils.Scaling
-import com.gabriel.Survivor.Companion.UNIT_SCALE
+import com.gabriel.SkipWave.Companion.UNIT_SCALE
 import com.gabriel.component.*
 import com.gabriel.component.PhysicComponent.Companion.physicCmpFromImage
 import ktx.app.gdxError
@@ -30,16 +30,18 @@ class EntitySpawnSystem(
     private val atlas: TextureAtlas,
     private val spawnCmps: ComponentMapper<SpawnComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
+    private val levelCmps: ComponentMapper<LevelComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : EventListener, IteratingSystem() {
     private val cachedCfgs = mutableMapOf<String, SpawnCfg>()
     private val cachedSizes = mutableMapOf<AnimationModel, Vector2>()
+    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
     override fun onTickEntity(entity: Entity) {
         with(spawnCmps[entity]) {
 //            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
-            val cfg = spawnCfg(type)
+            val cfg = spawnCfg(model)
             var relativeSize = size(cfg.model)
 
 
@@ -160,14 +162,14 @@ class EntitySpawnSystem(
                 gameStage.fire(
                     EntityAddEvent(
                         vec2((location.x / UNIT_SCALE) + 25, (location.y / UNIT_SCALE) - 5),
-                        "SLASH_RIGHT"
+                        AnimationModel.SLASH_RIGHT
                     )
                 )
 
                 gameStage.fire(
                     EntityAddEvent(
                         vec2((location.x / UNIT_SCALE) - 25, (location.y / UNIT_SCALE) - 5),
-                        "SLASH_LEFT"
+                        AnimationModel.SLASH_LEFT
                     )
                 )
             }
@@ -177,23 +179,40 @@ class EntitySpawnSystem(
     }
 
 
-    private fun spawnCfg(type: String): SpawnCfg = cachedCfgs.getOrPut(type) {
-//        log.debug { "Type $type" }
-        when (type) {
-            "PLAYER" -> SpawnCfg(
-                AnimationModel.PLAYER,
+    private fun spawnCfg(model: AnimationModel): SpawnCfg = cachedCfgs.getOrPut(model.name) {
+        log.debug { "Type ${model.name}" }
+
+        //ENEMY LEVEL SCALE
+        val attack: Float
+        val life: Float
+        if (playerEntities.isEmpty) {
+            attack = 5f
+            life = 0.75f
+        } else {
+            attack = 5f + levelCmps[playerEntities.first()].level
+            life = 0.75f + (levelCmps[playerEntities.first()].level / 10)
+        }
+
+
+//        levelCmps[playerEntities.first()].level
+
+
+        //SPAWN CONFIG
+        when (model) {
+            AnimationModel.PLAYER -> SpawnCfg(
+                model,
                 entityType = EntityType.PLAYER,
                 attackExtraRange = 0.6f,
                 attackScaling = 0f,
                 speedScaling = 1.2f,
-                lifeScaling = 100f,
+                lifeScaling = 1f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
 
 
-            "CHEST" -> SpawnCfg(
-                AnimationModel.CHEST,
+            AnimationModel.CHEST -> SpawnCfg(
+                model,
                 speedScaling = 0f,
                 bodyType = BodyDef.BodyType.StaticBody,
                 canAttack = false,
@@ -201,9 +220,9 @@ class EntitySpawnSystem(
                 lootable = true,
             )
 
-//            Weapons
-            "SLASH_LEFT" -> SpawnCfg(
-                AnimationModel.SLASH_LEFT,
+            //WEAPONS
+            AnimationModel.SLASH_LEFT -> SpawnCfg(
+                model,
                 EntityType.WEAPON,
                 bodyType = KinematicBody,
                 speedScaling = 0f,
@@ -218,8 +237,8 @@ class EntitySpawnSystem(
 
                 )
 
-            "SLASH_RIGHT" -> SpawnCfg(
-                AnimationModel.SLASH_RIGHT,
+            AnimationModel.SLASH_RIGHT -> SpawnCfg(
+                model,
                 EntityType.WEAPON,
                 bodyType = KinematicBody,
                 speedScaling = 0f,
@@ -234,69 +253,273 @@ class EntitySpawnSystem(
             )
 
             //ENEMIES
-            "AXOLOT" -> SpawnCfg(
-                AnimationModel.AXOLOT,
+            AnimationModel.AXOLOT -> SpawnCfg(
+                model,
                 EntityType.ENEMY,
-                lifeScaling = 0.75f,
+                lifeScaling = life,
                 speedScaling = 0.4f,
-                attackScaling = 5f,
+                attackScaling = attack,
                 dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),
 //                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
 
-            "AXOLOT_SHINY" -> SpawnCfg(
-                AnimationModel.AXOLOT_SHINY,
+            AnimationModel.AXOLOT_SHINY -> SpawnCfg(
+                model,
                 EntityType.ENEMY,
-                lifeScaling = 0.75f,
-                speedScaling = 0.4f,
-                attackScaling = 5f,
+                lifeScaling = life,
+                speedScaling = 1.2f,
+                attackScaling = attack,
                 dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),
-//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
 
-            "CYCLOPE" -> SpawnCfg(
-                AnimationModel.CYCLOPE,
+            AnimationModel.BAMBOO -> SpawnCfg(
+                model,
                 EntityType.ENEMY,
-                lifeScaling = 0.75f,
+                lifeScaling = life,
                 speedScaling = 0.4f,
-                attackScaling = 5f,
+                attackScaling = attack,
                 dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),
-//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
 
-            "CYCLOPE_SHINY" -> SpawnCfg(
-                AnimationModel.CYCLOPE_SHINY,
+            AnimationModel.BAMBOO_SHINY -> SpawnCfg(
+                model,
                 EntityType.ENEMY,
-                lifeScaling = 0.75f,
+                lifeScaling = life,
                 speedScaling = 0.4f,
-                attackScaling = 5f,
+                attackScaling = attack,
                 dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),
-//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
 
-            "SKULL" -> SpawnCfg(
-                AnimationModel.SKULL,
+            AnimationModel.BUTTERFLY -> SpawnCfg(
+                model,
                 EntityType.ENEMY,
-                lifeScaling = 0.75f,
+                lifeScaling = life,
                 speedScaling = 0.4f,
-                attackScaling = 5f,
+                attackScaling = attack,
                 dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),
-//                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"
             )
 
+            AnimationModel.BUTTERFLY_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
 
-            "SPAWN" -> SpawnCfg(AnimationModel.UNDEFINED, EntityType.SPAWN)
-            else -> gdxError("Type $type has no SpawnCfg setup.")
+            AnimationModel.CYCLOPE -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.CYCLOPE_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.DRAGON -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.DRAGON_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.FISH -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.FISH_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.FLAM -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.FLAM_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.MOUSE -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.MOUSE_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.OCTOPUS -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.OCTOPUS_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.RACOON -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.RACOON_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.SKULL -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.SKULL_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.SPIRIT -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.SPIRIT_SHINY -> SpawnCfg(
+                model,
+                EntityType.ENEMY,
+                lifeScaling = life,
+                speedScaling = 0.4f,
+                attackScaling = attack,
+                dropExperience = 10f,
+                physicScaling = vec2(0.9f, 0.9f),
+                aiTreePath = "ai/enemy.tree"
+            )
+
+            AnimationModel.UNDEFINED -> SpawnCfg(model, EntityType.SPAWN)
+            else -> gdxError("Type $model has no SpawnCfg setup.")
         }
     }
 
@@ -319,7 +542,7 @@ class EntitySpawnSystem(
                         ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME! MapChangeEvent")
                     world.entity {
                         add<SpawnComponent> {
-                            this.type = typeStr
+                            this.model = enumValueOf<AnimationModel>(typeStr)
                             this.location.set(mapObj.x * UNIT_SCALE, mapObj.y * UNIT_SCALE)
                         }
                     }
@@ -330,7 +553,7 @@ class EntitySpawnSystem(
             is EntityAddEvent -> {
                 world.entity {
                     add<SpawnComponent> {
-                        this.type = event.name
+                        this.model = event.model
                         this.location.set(event.location.x * UNIT_SCALE, event.location.y * UNIT_SCALE)
                     }
                 }
@@ -339,7 +562,7 @@ class EntitySpawnSystem(
             is EnemyAddEvent -> {
                 world.entity {
                     add<SpawnComponent> {
-                        this.type = event.name
+                        this.model = event.model
                         this.location.set(
                             MathUtils.random(2f, MAP_SIZE.x - 2f),
                             MathUtils.random(2f, MAP_SIZE.y - 2f)

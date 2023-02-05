@@ -192,13 +192,56 @@
  </tileset>
  <tileset firstgid="1242" name="TilesetFloor" tilewidth="16" tileheight="16" tilecount="572" columns="22">
   <image source="images/TilesetFloor.png" width="352" height="417"/>
+  <tile id="1">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="6.99757" width="16" height="9.00243"/>
+   </objectgroup>
+  </tile>
+  <tile id="22">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="6.98472" y="0" width="9.01526" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="24">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="8.99686" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="27">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="8.98362"/>
+    <object id="2" x="0" y="8.98232" width="8.99462" height="7.01771"/>
+   </objectgroup>
+  </tile>
+  <tile id="28">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="8.9844"/>
+    <object id="2" x="6.99341" y="8.9844" width="9.00657" height="7.01563"/>
+   </objectgroup>
+  </tile>
+  <tile id="45">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="16" height="8.98538"/>
+   </objectgroup>
+  </tile>
+  <tile id="49">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0" width="10.9936" height="4.98889"/>
+    <object id="2" x="0" y="4.99479" width="16" height="11.0052"/>
+   </objectgroup>
+  </tile>
+  <tile id="50">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="6.98785" y="0" width="9.01215" height="6.96667"/>
+    <object id="2" x="0" y="6.96875" width="16" height="9.03122"/>
+   </objectgroup>
+  </tile>
   <tile id="88" probability="0.5"/>
   <tile id="89" probability="0.5"/>
-  <tile id="110" probability="0.5"/>
-  <tile id="111" probability="0.5"/>
-  <tile id="112" probability="0.5"/>
-  <tile id="113" probability="0.5"/>
-  <tile id="114" probability="0.5"/>
+  <tile id="111" probability="0.2"/>
+  <tile id="112" probability="0.2"/>
+  <tile id="113" probability="0.2"/>
+  <tile id="114" probability="0.2"/>
   <tile id="121" probability="0.5"/>
   <tile id="122" probability="0.5"/>
   <tile id="123" probability="0.5"/>
@@ -207,15 +250,13 @@
  </tileset>
  <layer id="1" name="background" width="62" height="60">
   <data encoding="base64" compression="zlib">
-   eJztz0ENgEAQALELPggJuOABCvHM+ug8KqDnWuvGXOMYH2bvTelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbelt6W3pbZHfz9gw7/gB7ImZjA==
+   eJztz7EJhEAAAMELFANt3R6+xEfQ2MM2ZoNh472XMbbV8sznazqH5d83pW9L35a+LX1b+rb0benb0relb0vflr4tfVv6tvRt6dvSt6VvS9+Wvi19W/q29G3p29K3pW9L35a+LfL3vn79SY75/AKY/U/J
   </data>
  </layer>
  <layer id="5" name="randbackground" width="62" height="60">
   <data encoding="base64" compression="zlib">
-   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
+   eJzlmFuu2zAMRO+P9xY/9r+etmgFTM89Q7nfDWAkjmWKjyE51NfX//v5HF9fz8/rPn7/tuvZ3Od1/bny/hPyf92f8t4dz07oc8veN+TcRa8Hz9bnOr7rfUKW+eQW3c54n8/NhsnHy3/Nx2uv9fuNflfYnfucsfcj8lt8n7Jf2n++kLXzydKNdmY8m/wlO3He9n2KnLQzfU58XvIOcXoWWVxPHOSez/E9v4jDdZ84X++lPSe+mz9vvGMxe4ZnE9YN11eJDzHYctTibXa13NnF035fx3c7Uk7L5ZZzK9asaWfIffAs7c5YmJ1vLub125harTbfL8ywhi/dmff5f+rU4r325R5mj+WU5euE3xbvtMn25j4tv8+jxzv9fh9/1w3mDGPUbLT/0z773961Pj71tuaT9dvszjWGkWaz5S71ZSwNBw3LxnVYbz/x7iV7LZ2ynk89dbKXNrG2Z8xaP8w+smrUwuZUqxijXDP51fI739vlpj1nrCauYvGf8tMw3Lhp44qfjd1TvtHPy66ME2Um7hsXaphqnJf+ffve+vxr3yK/af4mbqZ9pjlmikXuY7E3fsF4T1xt6b+b21oOWI9tfiDmza8Tt0xeSh+m3c0O44OZv6wBXP9gTeqa9bn1/wsyyO12V6ulnMfW2uT66e+cMXM9626LX9pC+cybzEuLmeWP5bv15exjb3vU0rH1yHbZucWbnFk1cMdXGLcp9zK/yU8Y28zvJo/2G5exd9u5x7/0rZxPqFfWx+Rr2WPMXy1PbqznvjZjJOdovqLc7I88h2rnAOyvaTv7GGXkPpSd3xfk2qx9H3/bS45G/zBXr3incTLGnjG387UdX0m/r/XsnRbrpYf5tmFrson5ZmcebZa1/E6Z7WygcZDcJzFqcw0xZTza5q/sMWuPNzPcJXtbH5u4Au02H5kehucdx5x8k7jlHEcbzLaMd9aO1p+tp0+zS8bO8Jjrp/5D/JvPp9qw9Kfd6X/i13pny1XTlzWocY+0ibVj2TX17sad7L+Md+ZOO2NoXJG1znTYzV/X0f1v2Oc96xzn4XzGPtZmX7OfeTPl7DR3tpmVstuck+ummTvXWV1LPS1upqfJ3vE6m9Mb/plfrT9Rv3YewLq289MO71NOtbxpNdl8SBwwH3d8gDgnnt/E1OqO+Wjy5+68g3FkfX3THw0jZjf7ypSzb7GWayY+Zf60WGf8LA8T21anydeyVhiW6U/2as4/7NmWC/yfswj9av/ZHsRZ+pF2N/9P3KrNJ7Sx6ZE8OPnCbs7mWU7Dl/mafczWpLysQ9m7dnlqeGrxabhgbhjnm67ct9Vzk2e/qYv1acv1VnsYS/rJbGjnI1bbV8ySp9KWhpX0t/WRhjfjq232sbjzHCLXmL9zVs98YF2bOMR5fPefcUPjS4aFHQ8hRowHsc41HmCcIPmazRpWz1L+FBvzoZ3d0EZimP0o5+9HZJjvaEPGe+Jfbc7ezWCT/8gf06ZmS6sP6a82l5ndiT/ylYljGD5aH1vP7fwj8Wh4m84eKI/8yXqN8TXTyWK4YrLrJRd0yHOA1I+ch+t4zpPz7oQN+y/zu8WT/micbJrZjQO22rybj2zG4vmIxWf53ObQVtMM0+3e+E76izV9Oh+kr9Z9xmB35mN1aX2YJ1Mu0a9tjqCM5+i5eB+9nrDfJ6+dzmfYezM/bC5psaTvLP/T5rSr1XPqyN8Zj7R16iNTHSY/J15Mt2Zz4x65tp05pZ7tu2F/0q/NJta/81mLe2KvzZH2TvPJ1PO4zs4DUgb5o8Vu6W12k1e2nsw9iU9ieOJFhhnW7Kn2mf7TO1nXqCOxlDUvZ9GGiWnmJCatD9j9ZHvjPMRC2t1m6PTBudl3F0ur1+fheWBnHayVth+xxb3Wf2l38v31vPUIy0lyhwuyLA5N1on9iYGp5qVvsh6ljxLnnIXICxkP2kB/JU8yTBhPn3pP63U2J1J/5pTN31OdnnKr3aedU44afqde/SnP2GsMc+Spa63lRYvzDgdtNmbdszppZ5GtFrBnZF1Kbp52pwyrKYYlW2McjnmymzsM47mfYd2wan2z2d1ixNnHbDPcsra1OpOyWGN2ebebb2yONLtZG8wH7TzA4p4zeubeepd1LjHSzl2ew3OAmGxr/ufPD6E7JZs=
   </data>
  </layer>
- <objectgroup id="4" name="entities" offsetx="0" offsety="16">
-  <object id="37" name="PLAYER" gid="1240" x="467.667" y="456.583" width="16" height="16"/>
- </objectgroup>
+ <objectgroup id="4" name="entities" offsetx="0" offsety="16"/>
 </map>

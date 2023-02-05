@@ -1,28 +1,40 @@
 package com.gabriel
 
+//import com.gabriel.screen.GameUiScreen
+//import com.gabriel.screen.InventoryUiScreen
 import com.badlogic.gdx.Application.*
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.gabriel.preferences.GamePreferences
+import com.gabriel.preferences.loadGamePreferences
+import com.gabriel.preferences.saveGamePreferences
 import com.gabriel.screen.*
-//import com.gabriel.screen.GameUiScreen
-//import com.gabriel.screen.InventoryUiScreen
+import com.gabriel.screen.Debug.GameUiScreen
+import com.gabriel.screen.Debug.RecordsScreen
 import com.gabriel.ui.disposeSkin
 import com.gabriel.ui.loadSkin
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.log.logger
+import java.util.Locale
+
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms. */
 class SkipWave : KtxGame<KtxScreen>() {
     private val batch: Batch by lazy { SpriteBatch() }
     private lateinit var gameViewport: ExtendViewport
     private lateinit var uiViewport: ExtendViewport
+    lateinit var bundle: I18NBundle
     val gameStage: Stage by lazy { Stage(gameViewport) }
     val uiStage: Stage by lazy { Stage(uiViewport) }
+    private val preferences: Preferences by lazy { Gdx.app.getPreferences(PREF_NAME) }
+    lateinit var gamePreferences: GamePreferences
 
 
     override fun create() {
@@ -41,20 +53,22 @@ class SkipWave : KtxGame<KtxScreen>() {
             }
         }
 
-        loadSkin()
+        gameStage.root.color.a = 0f
+        uiStage.root.color.a = 0f
+        gamePreferences = preferences.loadGamePreferences()!!
 
-//        gameStage.addListener(this)
+        loadSkin()
+        val locale: Locale = Locale.getDefault()
+        log.debug { "LOCALE ${locale.displayName}" }
+        bundle = I18NBundle.createBundle(Gdx.files.internal("i18n/MyBundle"), locale)
+
 
         addScreen(MainMenuScreen(this))
-//        addScreen(GameScreen(this))
-//        addScreen(GameUiScreen())
-//        addScreen(TouchpadScreen(uiViewport))
-//        addScreen(SkillUpgradeScreen())
-//        setScreen<GameScreen>()
+//        addScreen(RecordsScreen(this))
+//        addScreen(GameUiScreen(this))
         setScreen<MainMenuScreen>()
+//        setScreen<RecordsScreen>()
 //        setScreen<GameUiScreen>()
-//        setScreen<TouchpadScreen>()
-//        setScreen<SkillUpgradeScreen>()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -64,33 +78,18 @@ class SkipWave : KtxGame<KtxScreen>() {
 
     override fun dispose() {
         super.dispose()
+        preferences.saveGamePreferences()
         gameStage.disposeSafely()
         uiStage.disposeSafely()
         batch.disposeSafely()
         disposeSkin()
     }
 
-//    override fun handle(event: Event): Boolean {
-//        when(event){
-//            is GamePauseEvent ->{
-//                currentScreen.pause()
-//                log.debug { "pause" }
-//
-//            }
-//            is GameResumeEvent ->{
-//                currentScreen.resume()
-//                log.debug { "resume" }
-//            }
-//            is TestEvent ->{
-//                log.debug { "TESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" }
-//            }
-//            else -> return false
-//        }
-//        return true
-//    }
-
     companion object {
-        const val UNIT_SCALE = 1 / 16f
+        const val UNIT_SCALE = 1 / 16f // 16 pixels is one in game world unit
+        const val PREF_NAME = "skip-wave"
+        const val PREF_KEY_SAVE_STATE = "save-state"
+        const val ANIMATION_DURATION = 0.3f
         private var log = logger<SkipWave>()
     }
 }

@@ -42,35 +42,24 @@ class AttackTask : Action() {
 
 class AttackWeaponTask : Action() {
     override fun execute(): Status {
+
         if (status != Status.RUNNING) {
             entity.doAndStartAttack()
-            println("doAndStartAttack")
+            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
             return Status.RUNNING
         }
 
-
-
-
-        when (entity.attackState) {
-            AttackState.READY -> {
-                entity.animation(AnimationType.IDLE)
-//                println("READY")
-                return Status.SUCCEEDED
-            }
-
-            AttackState.ATTACKING -> {
-//                println("ATTACKING")
-                entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, false)
-                return Status.RUNNING
-            }
-
-            AttackState.DEAL_DAMAGE -> {
-//                println("DAMAGE")
-                return Status.RUNNING
-            }
-
-            else -> return Status.SUCCEEDED
+        if(entity.attackState== AttackState.ATTACKING){
+            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, false)
+            return Status.RUNNING;
         }
+
+        if (entity.isAnimationDone) {
+            entity.animation(AnimationType.IDLE)
+            return Status.SUCCEEDED
+        }
+
+        return Status.RUNNING
     }
 }
 

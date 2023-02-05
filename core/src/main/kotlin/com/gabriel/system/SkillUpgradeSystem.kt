@@ -67,15 +67,17 @@ class SkillUpgradeSystem(
 
                     "Speed" -> {
                         log.debug { "Speed before ${moveCmps[playerEntities.first()].speed}" }
-                        moveCmps[playerEntities.first()].speed += (event.skill.onLevelUP/10)
+                        moveCmps[playerEntities.first()].speed += (event.skill.onLevelUP / 10)
                         log.debug { "Speed after ${moveCmps[playerEntities.first()].speed}" }
                     }
 
                     "Cooldown" -> {
                         weaponEntities.forEach { weapon ->
-                            log.debug { "Cooldown before ${attackCmps[weapon].maxCooldown}" }
-                            attackCmps[weapon].maxCooldown += (event.skill.onLevelUP / 10)
-                            log.debug { "Cooldown after ${attackCmps[weapon].maxCooldown}" }
+                            log.debug { "Cooldown before %.2f".format(attackCmps[weapon].maxCooldown) }
+                            log.debug { "Cooldown change %.2f".format(((event.skill.onLevelUP * -1) / 10)) }
+                            attackCmps[weapon].maxCooldown -= ((event.skill.onLevelUP * -1) / 10)
+                            log.debug { "Cooldown after %.2f".format(attackCmps[weapon].maxCooldown) }
+
                         }
                     }
 
@@ -83,7 +85,7 @@ class SkillUpgradeSystem(
 
                         weaponEntities.forEach { weapon ->
                             log.debug { "Damage before ${attackCmps[weapon].damage}" }
-                            attackCmps[weapon].damage += event.skill.onLevelUP
+                            attackCmps[weapon].damage += event.skill.onLevelUP.toInt()
                             log.debug { "Damage after ${attackCmps[weapon].damage}" }
                         }
 

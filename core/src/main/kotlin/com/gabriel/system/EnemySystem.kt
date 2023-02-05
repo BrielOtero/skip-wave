@@ -29,13 +29,12 @@ class EnemySystem(
         val actualLevel = levelCmps[playerEntities.first()].level
 
         //AMOUNT ENEMIES
-        if (actualLevel > 5 && actualLevel != lastLevel) {
+        if (actualLevel > 1 && actualLevel != lastLevel) {
             if (ENEMY_AMOUNT <= 250) {
                 ENEMY_AMOUNT += 2
                 lastLevel = actualLevel
             }
         }
-
 
         //ACTUAL ENEMIES
         if (actualLevel <= enemies.size && actualLevel % 2 == 0 && actualLevel != lastLevelChangeEnemy) {
@@ -48,8 +47,6 @@ class EnemySystem(
             }
             lastLevelChangeEnemy = actualLevel
         }
-
-
 
         //NOTIFY ENEMY SPAWN
         if (enemyEntities.numEntities < ENEMY_AMOUNT) {
@@ -68,11 +65,10 @@ class EnemySystem(
                 )
             }
         }
-
     }
 
     companion object {
-        private var ENEMY_AMOUNT: Int = 50
+        private var ENEMY_AMOUNT: Int = 30
         private val log = logger<EnemySystem>()
     }
 

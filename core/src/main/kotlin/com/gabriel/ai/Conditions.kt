@@ -26,3 +26,7 @@ class CanAttack : Condition() {
 class IsEnemyNearby : Condition() {
     override fun condition() = entity.hasEnemyNearby()
 }
+
+class CanPlayerAttack : Condition() {
+    override fun condition() = entity.canAttack
+}

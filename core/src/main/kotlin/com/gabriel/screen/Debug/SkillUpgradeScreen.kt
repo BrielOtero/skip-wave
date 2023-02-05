@@ -1,4 +1,4 @@
-package com.gabriel.screen
+package com.gabriel.screen.Debug
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -16,7 +16,7 @@ import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class DebugSkillUpgradeScreen : KtxScreen {
+class SkillUpgradeScreen : KtxScreen {
     private val uiStage: Stage = Stage(ExtendViewport(180f, 320f))
     private val gameStage: Stage = Stage(ExtendViewport(8f, 16f))
     private val eWorld = world { }
@@ -56,9 +56,9 @@ class DebugSkillUpgradeScreen : KtxScreen {
             hide()
             show()
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            skillUpgradeView.skill(SkillModel(-1,0, "frame_fgd","nothing",0, 0))
+            skillUpgradeView.skill(SkillModel(-1,0, "frame_fgd","nothing",0, 0f))
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            skillUpgradeView.skill(SkillModel(-1,0, "frame_fgd","nothing",0, 0))
+            skillUpgradeView.skill(SkillModel(-1,0, "frame_fgd","nothing",0, 0f))
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
             skillUpgradeView.popup(Skills(Skill.PLAYER_COOLDOWN, Skill.PLAYER_LIFE, Skill.PLAYER_DAMAGE))

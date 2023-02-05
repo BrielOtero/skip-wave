@@ -1,16 +1,19 @@
 package com.gabriel.system
 
 import com.badlogic.gdx.math.Vector2
+import com.gabriel.SkipWave
 import com.gabriel.component.*
+import com.gabriel.event.EntityAddEvent
 import com.github.quillraven.fleks.AllOf
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
-import ktx.log.debug
+import ktx.app.gdxError
 import ktx.math.component1
 import ktx.math.component2
 import ktx.log.logger
 import ktx.math.vec2
+import ktx.tiled.*
 
 @AllOf([MoveComponent::class, PhysicComponent::class])
 class MoveSystem(
@@ -37,7 +40,7 @@ class MoveSystem(
                 mass * (0f - velX),
                 mass * (0f - velY),
             )
-            refresh(entity, physicCmp)
+            refreshWeaponPosition(entity, physicCmp)
 
             return
         }
@@ -47,7 +50,7 @@ class MoveSystem(
             mass * (moveCmp.speed * moveCmp.sin - velY)
         )
 
-        refresh(entity, physicCmp)
+        refreshWeaponPosition(entity, physicCmp)
 
         imageCmps.getOrNull(entity)?.let { imageCmp ->
             if (moveCmp.cos != 0f) {
@@ -56,11 +59,26 @@ class MoveSystem(
         }
     }
 
-    private fun refresh(entity: Entity, physicCmp: PhysicComponent) {
+    private fun refreshWeaponPosition(entity: Entity, physicCmp: PhysicComponent) {
 
+
+//        EntityAddEvent(
+//            vec2((location.x / SkipWave.UNIT_SCALE) - 25, (location.y / SkipWave.UNIT_SCALE) - 5),
+//            AnimationModel.SLASH_LEFT
+//        )
         if (entity in playerCmps) {
+            var pos: Vector2
             weaponEntities.forEach { weapon ->
-                physicCmps[weapon].body.setLinearVelocity(physicCmps[entity].body.linearVelocity)
+                if (imageCmps[weapon].image.flipX) {
+                    pos = vec2(physicCmp.body.position.x - 1.5f, physicCmp.body.position.y - 0.3f)
+                } else {
+                    pos = vec2(physicCmp.body.position.x + 1.5f, physicCmp.body.position.y - 0.3f)
+                }
+
+//                imageCmps[weapon].image.setPosition(pos.x, pos.y)
+//                imageCmps[weapon].image.moveBy(pos.x, pos.y)
+                physicCmps[weapon].body.setTransform(pos.x,pos.y, physicCmps[weapon].body.angle)
+//                physicCmps[weapon].body.setLinearVelocity(physicCmps[entity].body.linearVelocity)
             }
         }
     }

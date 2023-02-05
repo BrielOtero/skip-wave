@@ -1,5 +1,7 @@
 package com.gabriel.system
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -29,16 +31,21 @@ class LevelSystem(
 //                    log.debug { "ExperienceToNextLevel before ${experienceToNextLevel}" }
 
                     level += 1
-                    experienceToNextLevel = experience+150f
+                    experienceToNextLevel = experience + 300f
 
                     log.debug { "ExperienceToNextLevel ${experienceToNextLevel}" }
 
 //                    log.debug { "ExperienceToNextLevel after ${experienceToNextLevel}" }
                     gameStage.fire(EntityLevelEvent(entity))
+
+
+
+
                 }
             }
         }
     }
+
 
     companion object {
         private val log = logger<LevelSystem>()

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Scaling
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
@@ -21,14 +22,15 @@ class SkillSlot(
     private val slotItemBgd: Drawables?,
     private val uiStage: Stage,
     private val skin: Skin,
+    private val bundle: I18NBundle,
 ) : WidgetGroup(), KGroup, KtxInputAdapter {
 
     private val background = Image(skin[Drawables.FRAME_BGD])
     private val skillImage = Image()
-    val skillName: Label = label("Cooldown", style = Labels.FRAME.skinKey)
-    private val skillLevel: Label = label("Level 2", style = Labels.FRAME.skinKey)
-    private val skillValueAfter: Label = label("+25", style = Labels.FRAME.skinKey)
-    var skillModel: SkillModel = SkillModel(-1, -1, "", "", 0, 0)
+    private val skillName: Label = label("", style = Labels.FRAME.skinKey)
+    private val skillLevel: Label = label("", style = Labels.FRAME.skinKey)
+    private val skillValueAfter: Label = label("", style = Labels.FRAME.skinKey)
+    var skillModel: SkillModel = SkillModel(-1, -1, "", "", 0, 0f)
     private var slotWidth = uiStage.width * 0.8f
     private var slotHeight = uiStage.height * 0.25f
     private var marginOuter = 6f
@@ -45,22 +47,25 @@ class SkillSlot(
             setScaling(Scaling.stretch)
         }
         this += skillName.apply {
-            setSize((slotWidth - marginOuter * 2), skillImage.height/2)
-            setPosition(marginOuter, slotHeight - skillImage.height - marginOuter*2 - skillName.height)
+            setSize((slotWidth - marginOuter * 2), skillImage.height / 2)
+            setPosition(marginOuter, slotHeight - skillImage.height - marginOuter * 2 - skillName.height)
             setFontScale(0.3f)
             toFront()
             setAlignment(Align.center)
         }
         this += skillLevel.apply {
-            setSize((slotWidth - marginOuter * 4) / 2, skillImage.height/2)
-            setPosition(marginOuter * 2, skillName.y-skillLevel.height - marginOuter*2)
+            setSize((slotWidth - marginOuter * 4) / 2, skillImage.height / 2)
+            setPosition(marginOuter * 2, skillName.y - skillLevel.height - marginOuter * 2)
             setFontScale(0.3f)
             toFront()
             setAlignment(Align.center)
         }
         this += skillValueAfter.apply {
-            setSize((slotWidth - marginOuter * 4) / 2, skillImage.height/2)
-            setPosition(skillLevel.x + skillLevel.width + marginOuter, skillName.y-skillValueAfter.height - marginOuter*2)
+            setSize((slotWidth - marginOuter * 4) / 2, skillImage.height / 2)
+            setPosition(
+                skillLevel.x + skillLevel.width + marginOuter,
+                skillName.y - skillValueAfter.height - marginOuter * 2
+            )
             setFontScale(0.3f)
             setColor(Color.GREEN)
             toFront()
@@ -80,9 +85,9 @@ class SkillSlot(
         if (model.onLevelUP > 0) {
             skillValueAfter.setText("+${model.onLevelUP}")
         } else {
-            skillValueAfter.setText(model.onLevelUP)
+            skillValueAfter.setText("${model.onLevelUP}")
         }
-        skillLevel.setText("Level ${model.skillLevel}")
+        skillLevel.setText("${bundle.get("SkillUpgradeView.level")} ${model.skillLevel}")
     }
 
     companion object {
@@ -95,5 +100,6 @@ fun <S> KWidget<S>.skillSlot(
     slotItemBgd: Drawables? = null,
     uiStage: Stage,
     skin: Skin = Scene2DSkin.defaultSkin,
+    bundle: I18NBundle,
     init: SkillSlot.(S) -> Unit = {}
-): SkillSlot = actor(SkillSlot(slotItemBgd, uiStage, skin), init)
+): SkillSlot = actor(SkillSlot(slotItemBgd, uiStage, skin, bundle), init)

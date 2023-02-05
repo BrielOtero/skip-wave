@@ -3,8 +3,10 @@ package com.gabriel.ui.model
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.I18NBundle
 import com.gabriel.component.*
 import com.gabriel.event.*
+import com.gabriel.preferences.GamePreferences
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
@@ -12,6 +14,7 @@ import ktx.log.logger
 
 class GameModel(
     world: World,
+    val bundle: I18NBundle,
     @Qualifier("gameStage") val gameStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 

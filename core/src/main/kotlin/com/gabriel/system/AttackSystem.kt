@@ -42,8 +42,10 @@ class AttackSystem(
             attackCmp.doAttack = false
             attackCmp.state = AttackState.ATTACKING
             attackCmp.cooldown = attackCmp.maxCooldown
-
-            return
+//            gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
+            if (attackCmp.cooldown > 0f) {
+                return
+            }
         }
 
         attackCmp.cooldown -= deltaTime
@@ -102,6 +104,7 @@ class AttackSystem(
                 configureEntity(fixtureEntity) {
                     lifeCmps.getOrNull(it)?.let { lifeCmp ->
                         lifeCmp.takeDamage += attackCmp.damage * MathUtils.random(0.9f, 1.1f)
+                        log.debug { "Attacking" }
                     }
                     if (isAttackerPlayer) {
                         lootCmps.getOrNull(it)?.let { lootCmp ->
@@ -117,6 +120,7 @@ class AttackSystem(
         val isDone = animationCmps.getOrNull(entity)?.isAnimationDone ?: true
         if (isDone) {
             attackCmp.state = AttackState.READY
+            log.debug { "State Ready" }
         }
     }
 

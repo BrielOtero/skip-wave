@@ -4,6 +4,52 @@ size: 2048, 512
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+btn_down
+  rotate: false
+  xy: 1156, 184
+  size: 30, 13
+  split: 10, 10, 4, 4
+  pad: 0, 0, 0, 0
+  orig: 30, 13
+  offset: 0, 0
+  index: -1
+btn_slider_left_down
+  rotate: false
+  xy: 1024, 8
+  size: 14, 13
+  orig: 14, 13
+  offset: 0, 0
+  index: -1
+btn_slider_left_up
+  rotate: false
+  xy: 1324, 436
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+btn_slider_right_down
+  rotate: false
+  xy: 1356, 469
+  size: 14, 13
+  orig: 14, 13
+  offset: 0, 0
+  index: -1
+btn_slider_right_up
+  rotate: false
+  xy: 1104, 98
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+btn_up
+  rotate: false
+  xy: 1204, 198
+  size: 30, 14
+  split: 10, 10, 4, 5
+  pad: 0, 0, 0, 0
+  orig: 30, 14
+  offset: 0, 0
+  index: -1
 experience_progress
   rotate: false
   xy: 1024, 97

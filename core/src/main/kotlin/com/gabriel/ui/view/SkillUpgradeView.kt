@@ -42,14 +42,15 @@ class SkillUpgradeView(
 
         table { tableCell ->
             background = skin[Drawables.FRAME_BGD]
-            label(text = "Level UP!", style = Labels.FRAME.skinKey) { lblCell ->
+            label(text = model.bundle.get("SkillUpgradeView.title"), style = Labels.FRAME.skinKey) { lblCell ->
                 lblCell.row()
                 lblCell.padTop(10f)
                 this.setFontScale(0.4f)
             }
 
             for (i in 1..3) {
-                this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = model.uiStage) { skillCell ->
+                this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = model.uiStage, bundle = model.bundle
+                ) { skillCell ->
                     skillCell.expand().width(model.uiStage.width * 0.8f).height(model.uiStage.height * 0.25f).center().row()
                     skillCell.pad(0f, 10f, 4f, 10f)
 
@@ -58,7 +59,9 @@ class SkillUpgradeView(
                         this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
 
                         model.gameStage.fire(GameResumeEvent())
-                        log.debug { "RESSSSSSSSSSSSSUUUUUUUUUMMMMEEEEEEEE" }
+
+                        log.debug { "Resume" }
+
                         model.gameStage.fire(SkillApplyEvent(skillModel))
 
                         model.uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
@@ -74,7 +77,6 @@ class SkillUpgradeView(
             padBottom(10f)
             tableCell.expand().maxWidth(model.uiStage.width * 0.9f).maxHeight(model.uiStage.height * 0.98f).center()
         }
-
 
         // data binding
         model.onPropertyChange(SkillUpgradeModel::skills) { skills ->

@@ -1,5 +1,6 @@
 package com.gabriel.ui.view
 
+import com.badlogic.gdx.math.Interpolation
 import com.gabriel.ui.model.*
 
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -8,15 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.gabriel.SkipWave
+import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
 import com.gabriel.event.*
 import com.gabriel.ui.Buttons
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
 import com.gabriel.ui.get
 import com.gabriel.ui.widget.SkillSlot
-import ktx.actors.alpha
-import ktx.actors.onTouchDown
-import ktx.actors.plusAssign
+import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
 
@@ -41,33 +42,32 @@ class MainMenuView(
                 this.setFontScale(0.4f)
             }
 
-             textButton(text = "NEW GAME", style = Buttons.DEFAULT.skinKey) { cell ->
+            textButton(text = model.bundle["MainMenuView.newGame"], style = Buttons.DEFAULT.skinKey) { cell ->
                 cell.top().padTop(5f).padBottom(6f)
                     .height(25f).width(110f)
                     .colspan(2)
                     .row()
-                onTouchDown {
-                    log.debug { "TOUCHHHHHHHHHHHHHHHHHHHHHHHH" }
-                    model.gameStage.fire(SetGameScreenEvent())
-                    this@MainMenuView.isVisible=false
-//                    gameStage.fire(NewGameEvent())
 
-//                   uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
+                onClick {
+                    log.debug { "Click on new game button" }
 
-//                   with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
-//                       this.model.disableTouchpad = false
-//                       isVisible = true
-//                   }
+                    model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
+                        Actions.run(Runnable() {
+                            kotlin.run {
+                                model.gameStage.fire(SetGameScreenEvent())
+                            }
+                        }),
+                    )
+//                    model.gameStage.fire(SetGameScreenEvent())
                 }
-
             }
-            textButton(text = "SETTINGS", style = Buttons.DEFAULT.skinKey) { cell ->
+            textButton(text = model.bundle["MainMenuView.settings"], style = Buttons.DEFAULT.skinKey) { cell ->
                 cell.top().padTop(5f).padBottom(6f)
                     .height(25f).width(110f)
                     .colspan(2)
                     .row()
             }
-            textButton(text = "CREDITS", style = Buttons.DEFAULT.skinKey) { cell ->
+            textButton(text = model.bundle["MainMenuView.credits"], style = Buttons.DEFAULT.skinKey) { cell ->
                 cell.top().padTop(5f).padBottom(6f)
                     .height(25f).width(110f)
                     .colspan(2)
@@ -118,4 +118,4 @@ fun <S> KWidget<S>.mainMenuView(
     model: MainMenuModel,
     skin: Skin = Scene2DSkin.defaultSkin,
     init: MainMenuView.(S) -> Unit = {}
-): MainMenuView = actor(MainMenuView(model,  skin), init)
+): MainMenuView = actor(MainMenuView(model, skin), init)

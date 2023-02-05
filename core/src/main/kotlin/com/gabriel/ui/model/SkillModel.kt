@@ -8,7 +8,7 @@ data class SkillModel (
     val atlasKey:String,
     val skillName:String,
     var skillLevel:Int,
-    var onLevelUP:Int,
+    var onLevelUP:Float,
 )
 
 data class Skills(

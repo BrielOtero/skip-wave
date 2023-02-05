@@ -30,6 +30,8 @@ class EntitySpawnSystem(
     private val atlas: TextureAtlas,
     private val spawnCmps: ComponentMapper<SpawnComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
+    private val physicCmps: ComponentMapper<PhysicComponent>,
+    private val imageCmps: ComponentMapper<ImageComponent>,
     private val levelCmps: ComponentMapper<LevelComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 
@@ -161,19 +163,17 @@ class EntitySpawnSystem(
             if (cfg.entityType == EntityType.PLAYER) {
                 gameStage.fire(
                     EntityAddEvent(
-                        vec2((location.x / UNIT_SCALE) + 25, (location.y / UNIT_SCALE) - 5),
+                        vec2(location.x + 1.5f, location.y - 0.3f),
                         AnimationModel.SLASH_RIGHT
                     )
                 )
-
                 gameStage.fire(
                     EntityAddEvent(
-                        vec2((location.x / UNIT_SCALE) - 25, (location.y / UNIT_SCALE) - 5),
+                        vec2(location.x - 1.5f, location.y - 0.3f),
                         AnimationModel.SLASH_LEFT
                     )
                 )
             }
-
         }
         world.remove(entity)
     }
@@ -192,10 +192,7 @@ class EntitySpawnSystem(
             attack = 5f + levelCmps[playerEntities.first()].level
             life = 0.75f + (levelCmps[playerEntities.first()].level / 10)
         }
-
-
 //        levelCmps[playerEntities.first()].level
-
 
         //SPAWN CONFIG
         when (model) {
@@ -205,7 +202,7 @@ class EntitySpawnSystem(
                 attackExtraRange = 0.6f,
                 attackScaling = 0f,
                 speedScaling = 1.2f,
-                lifeScaling = 1f,
+                lifeScaling = 10f,
                 physicScaling = vec2(1f, 0.5f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
             )
@@ -537,6 +534,7 @@ class EntitySpawnSystem(
             is MapChangeEvent -> {
                 val entityLayer = event.map.layer("entities")
                 MAP_SIZE = vec2(event.map.width.toFloat(), event.map.height.toFloat())
+
                 entityLayer.objects.forEach { mapObj ->
                     val typeStr = mapObj.name
                         ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME! MapChangeEvent")
@@ -554,24 +552,41 @@ class EntitySpawnSystem(
                 world.entity {
                     add<SpawnComponent> {
                         this.model = event.model
-                        this.location.set(event.location.x * UNIT_SCALE, event.location.y * UNIT_SCALE)
+                        this.location.set(event.location.x, event.location.y)
                     }
                 }
             }
 
             is EnemyAddEvent -> {
+                val physicCmp = physicCmps[playerEntities.first()]
+                val xPlayer = physicCmp.body.position.x
+                val yPlayer = physicCmp.body.position.y
                 world.entity {
                     add<SpawnComponent> {
                         this.model = event.model
                         this.location.set(
-                            MathUtils.random(2f, MAP_SIZE.x - 2f),
-                            MathUtils.random(2f, MAP_SIZE.y - 2f)
+                            randomExcluded(2f, MAP_SIZE.x - 2f, xPlayer - 10f, xPlayer + 10f),
+                            randomExcluded(2f, MAP_SIZE.y - 2f, yPlayer - 10f, yPlayer + 10f),
                         )
                     }
                 }
             }
         }
         return false
+    }
+
+    private fun randomExcluded(min: Float, max: Float, minExcluded: Float, maxExcluded: Float): Float {
+        var rand = listOf<Float>()
+        val maxEx = if (maxExcluded > max) max else maxExcluded
+        val minEx = if (minExcluded < min) min else minExcluded
+
+//        log.debug { "MaxEx ${maxEx}" }
+//        log.debug { "MinEx ${minEx}" }
+
+        rand += MathUtils.random(min, minEx)
+        rand += MathUtils.random(maxEx, max)
+
+        return rand.shuffled()[0]
     }
 
     companion object {

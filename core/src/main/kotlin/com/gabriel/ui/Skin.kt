@@ -14,6 +14,8 @@ enum class Drawables(
     val atlasKey: String,
 ) {
 //    CHAR_INFO_BGD("char_info"),
+
+    //UI
     LIFE_BAR("life_progress"),
     LIFE_UNDER("life_under"),
     EXPERIENCE_BAR("experience_progress"),
@@ -22,6 +24,16 @@ enum class Drawables(
     FRAME_FGD("frame_fgd"),
     JOY_EXT("joy_ext"),
     JOY_INT("joy_int"),
+    BTN_UP("btn_up"),
+    BTN_DOWN("btn_down"),
+    BTN_SLIDER_RIGHT_UP("btn_slider_right_up"),
+    BTN_SLIDER_RIGHT_DOWN("btn_slider_right_down"),
+    BTN_SLIDER_LEFT_UP("btn_slider_left_up"),
+    BTN_SLIDER_LEFT_DOWN("btn_slider_left_down"),
+
+
+
+    //SKILLS
     PLAYER_LIFE("player_life"),
     PLAYER_REGENERATION("player_regeneration"),
     PLAYER_SPEED("player_speed"),
@@ -37,7 +49,7 @@ enum class Labels {
     val skinKey = this.name.lowercase()
 }
 enum class Buttons{
-    DEFAULT;
+    DEFAULT,RESUME;
 
     val skinKey = this.name.lowercase()
 }
@@ -83,7 +95,12 @@ fun loadSkin() {
 
         textButton(Buttons.DEFAULT.skinKey){
             font = skin[Fonts.DEFAULT_WHITE]
-            up = skin[Drawables.FRAME_BGD]
+            up = skin[Drawables.BTN_UP]
+            down = skin[Drawables.BTN_DOWN]
+        }
+        textButton(Buttons.RESUME.skinKey){
+            font = skin[Fonts.DEFAULT_WHITE]
+            up = skin[Drawables.BTN_UP]
         }
     }
 }

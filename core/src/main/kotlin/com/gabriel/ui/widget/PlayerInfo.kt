@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.I18NBundle
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
 import com.gabriel.ui.get
@@ -17,6 +18,7 @@ import ktx.scene2d.*
 
 class PlayerInfo(
     private val skin: Skin,
+    val bundle: I18NBundle,
 ) : WidgetGroup(), KGroup {
     private val lifeUnder: Image = Image(skin[Drawables.LIFE_UNDER])
     private val lifeBar: Image = Image(skin[Drawables.LIFE_BAR])
@@ -24,7 +26,8 @@ class PlayerInfo(
     private val experienceUnder: Image = Image(skin[Drawables.EXPERIENCE_UNDER])
     private val experienceBar: Image = Image(skin[Drawables.EXPERIENCE_BAR])
     private val experienceText: Label = label("0/50", style = Labels.FRAME.skinKey)
-    private val levelText: Label = label("Level 0", style = Labels.FRAME.skinKey)
+    private val levelText: Label = label("${bundle.get("GameView.wave")} 0", style = Labels.FRAME.skinKey)
+    private val waveBackground: Image = Image(skin[Drawables.LIFE_UNDER])
 
     private var life = 0
     private var lifeMax = 0
@@ -58,10 +61,18 @@ class PlayerInfo(
             setAlignment(Align.center)
             toFront()
         }
+        this += waveBackground.apply {
+            setPosition(0f,0f)
+            setSize(experienceUnder.width,experienceUnder.height)
+        }
 
         this += levelText.apply {
+            setSize(waveBackground.width, waveBackground.height)
             setPosition(0f, 0f)
+            setAlignment(Align.center)
+            toFront()
         }
+
 
         playerExperienceBar(0f, 0f)
     }
@@ -103,7 +114,7 @@ class PlayerInfo(
     }
 
     fun playerLevel(newLevel: Int) {
-        levelText.setText("${"Level"} ${newLevel}")
+        levelText.setText("${bundle.get("GameView.wave")} ${newLevel}")
     }
 
     companion object {
@@ -115,5 +126,6 @@ class PlayerInfo(
 @Scene2dDsl
 fun <S> KWidget<S>.playerInfo(
     skin: Skin = Scene2DSkin.defaultSkin,
+    bundle: I18NBundle,
     init: PlayerInfo.(S) -> Unit = {}
-): PlayerInfo = actor(PlayerInfo(skin), init)
+): PlayerInfo = actor(PlayerInfo(skin, bundle), init)

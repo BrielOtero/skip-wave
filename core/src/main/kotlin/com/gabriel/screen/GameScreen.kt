@@ -6,9 +6,13 @@ import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn
 import com.gabriel.SkipWave
+import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
 import com.gabriel.component.*
 import com.gabriel.event.*
 import com.gabriel.input.PlayerKeyboardInputProcessor
@@ -23,6 +27,7 @@ import com.gabriel.ui.view.recordsView
 import com.gabriel.ui.view.skillUpgradeView
 import com.gabriel.ui.view.touchpadView
 import com.github.quillraven.fleks.world
+import ktx.actors.plusAssign
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
@@ -30,7 +35,7 @@ import ktx.log.logger
 import ktx.math.vec2
 import ktx.scene2d.actors
 
-class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
+class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     private val gameStage = game.gameStage
     private val uiStage = game.uiStage
     private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game_assets.atlas"))
@@ -41,11 +46,14 @@ class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
     }
 
     private val eWorld = world {
+        gameStage.root.color.a = 0f
+        uiStage.root.color.a = 0f
         injectables {
             add("gameStage", gameStage)
             add("uiStage", uiStage)
             add(textureAtlas)
             add(phWorld)
+            add(game.gamePreferences)
         }
         components {
             add<ImageComponent.Companion.ImageComponentListener>()
@@ -67,6 +75,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
             add<DeadSystem>()
             add<LifeSystem>()
             add<LevelSystem>()
+            add<MapSystem>()
             add<SkillUpgradeSystem>()
             add<EnemySystem>()
             add<PhysicSystem>()
@@ -84,15 +93,21 @@ class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
     init {
         gameStage.addListener(this)
         uiStage.actors {
-            gameView(GameModel(eWorld, gameStage))
-            skillUpgradeView(SkillUpgradeModel(eWorld, gameStage,uiStage))
+            gameView(GameModel(eWorld, game.bundle, gameStage))
+            skillUpgradeView(SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage))
             touchpadView(TouchpadModel(eWorld, uiStage))
-            recordsView(RecordsModel(eWorld,gameStage,uiStage))
+            recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
         }
+
 
     }
 
+
     override fun show() {
+
+        this.gameStage.root.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
+        this.uiStage.root.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
+
         log.debug { "GameScreen gets shown" }
 
         eWorld.systems.forEach { system ->
@@ -101,7 +116,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
             }
         }
 
-        currentMap = TmxMapLoader().load(Gdx.files.internal("maps/demo.tmx").path())
+        currentMap = TmxMapLoader().load(Gdx.files.internal("maps/map_0.tmx").path())
         gameStage.fire(MapChangeEvent(currentMap!!))
 
         if (Gdx.app.type == Application.ApplicationType.Desktop) {
@@ -126,7 +141,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
     }
 
     override fun handle(event: Event): Boolean {
-        when(event){
+        when (event) {
             is GamePauseEvent -> {
                 log.debug { "PAUSE game" }
                 pauseWorld(true)
@@ -137,11 +152,17 @@ class GameScreen(private val game: SkipWave) : KtxScreen,EventListener {
                 pauseWorld(false)
             }
 
-            is MainMenuScreenEvent ->{
+            is MainMenuScreenEvent -> {
                 log.debug { "SET SCREEN: MainMenu" }
+
                 gameStage.clear()
                 uiStage.clear()
+
                 game.addScreen(MainMenuScreen(game))
+
+                game.gameStage.root.color.a = 0f
+                game.uiStage.root.color.a = 0f
+
                 game.setScreen<MainMenuScreen>()
                 game.removeScreen<GameScreen>()
                 super.hide()

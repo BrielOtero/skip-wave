@@ -61,9 +61,10 @@ data class AiEntity(
     val attackState: AttackState
         get() = attackCmps[entity].state
 
-
     val isDead: Boolean
         get() = lifeCmps[entity].isDead
+    val canAttack: Boolean
+        get() = attackCmps[entity].state == AttackState.READY
 
 
     fun animation(type: AnimationType, mode: PlayMode = PlayMode.LOOP, resetAnimation: Boolean = false) {

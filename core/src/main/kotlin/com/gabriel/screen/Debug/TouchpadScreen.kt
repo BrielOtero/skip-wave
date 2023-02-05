@@ -1,4 +1,4 @@
-package com.gabriel.screen
+package com.gabriel.screen.Debug
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -16,7 +16,7 @@ import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
-class DebugTouchpadScreen(
+class TouchpadScreen(
     val viewport: ExtendViewport
 ) : KtxScreen {
     private val eWorld = world { }

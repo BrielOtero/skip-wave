@@ -1,18 +1,24 @@
 package com.gabriel.system
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.gabriel.component.AnimationModel
 import com.gabriel.event.*
+import com.gabriel.preferences.GamePreferences
+import com.gabriel.preferences.loadGamePreferences
 import com.github.quillraven.fleks.IntervalSystem
+import com.github.quillraven.fleks.World
 import ktx.assets.disposeSafely
 import ktx.log.logger
 import ktx.tiled.propertyOrNull
 
-class AudioSystem : EventListener, IntervalSystem() {
+class AudioSystem(
+    private val gamePreferences: GamePreferences
+) : EventListener, IntervalSystem() {
 
     private val musicCache = mutableMapOf<String, Music>()
     private val soundCache = mutableMapOf<String, Sound>()
@@ -35,7 +41,8 @@ class AudioSystem : EventListener, IntervalSystem() {
                     val music = musicCache.getOrPut(path) {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
                             isLooping = true
-                            volume = 0.75f
+                            volume = gamePreferences.settings.musicVolume
+//                            volume = 0.75f
 //                            volume=0f
                         }
                     }

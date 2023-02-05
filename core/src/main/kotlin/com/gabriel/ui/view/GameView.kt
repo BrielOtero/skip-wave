@@ -22,32 +22,21 @@ class GameView(
     skin: Skin,
 ) : Table(skin), KTable {
     private val playerInfo: PlayerInfo
-    private val popupLabel: Label
 
     init {
         // UI
 
-
         setFillParent(true)
         table {
-            it.fill().top().row()
-            this@GameView.playerInfo = playerInfo() { cell ->
+            it.top().fill().row()
+            this@GameView.playerInfo = playerInfo(skin, model.bundle) { cell ->
                 setScale(0.8f)
                 cell.expand().minHeight(35f).left().padTop(10f).padLeft(2f)
             }
 //            it.fill().top().row()
         }
-
         table {
             it.expand().row()
-//            background = skin[Drawables.FRAME_BGD]
-
-            this@GameView.popupLabel = label(text = "", style = Labels.FRAME.skinKey) { lblCell ->
-                this.setAlignment(Align.topLeft)
-                this.wrap = true
-//                lblCell.expand().fill().pad(14f)
-            }
-//            this.alpha = 0f
         }
 
 
@@ -82,12 +71,6 @@ class GameView(
             playerLevel(playerLevel)
         }
 
-        //Other
-        model.onPropertyChange(GameModel::lootText) { lootInfo ->
-            popup(lootInfo)
-        }
-
-
     }
 
     fun playerLife(newLife: Float) = playerInfo.playerLife(newLife)
@@ -101,25 +84,6 @@ class GameView(
 
     fun playerLevel(newLevel: Int) = playerInfo.playerLevel(newLevel)
 
-    private fun Actor.resetFadeOutDelay() {
-        this.actions
-            .filterIsInstance<SequenceAction>()
-            .lastOrNull()
-            ?.let { sequence ->
-                val delay = sequence.actions.last() as DelayAction
-                delay.time = 0f
-            }
-    }
-
-    fun popup(infoText: String) {
-        popupLabel.txt = infoText
-        if (popupLabel.parent.alpha == 0f) {
-            popupLabel.parent.clearActions()
-            popupLabel.parent += sequence(fadeIn(0.2f), delay(4f, fadeOut(0.75f)))
-        } else {
-            popupLabel.parent.resetFadeOutDelay()
-        }
-    }
 }
 
 @Scene2dDsl

@@ -3,10 +3,11 @@ import attackWeapon:"com.gabriel.ai.AttackWeaponTask"
 
 
 # Conditions
+import canPlayerAttack?:"com.gabriel.ai.CanPlayerAttack"
 
 subtree name:"attack"
     sequence
-        attackWeapon
+      (canPlayerAttack?) attackWeapon
 
 root
   selector

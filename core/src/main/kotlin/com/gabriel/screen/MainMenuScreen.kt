@@ -1,9 +1,12 @@
 package com.gabriel.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.gabriel.SkipWave
+import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
 import com.gabriel.event.*
 import com.gabriel.ui.model.MainMenuModel
 import com.gabriel.ui.view.*
@@ -14,7 +17,7 @@ import ktx.scene2d.actors
 class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
     private val gameStage = game.gameStage
     private val uiStage = game.uiStage
-    private val model = MainMenuModel(uiStage, gameStage)
+    private val model = MainMenuModel(game.bundle,uiStage, gameStage)
 
     init {
         Gdx.input.inputProcessor = uiStage
@@ -23,6 +26,8 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
         uiStage.actors {
             mainMenuView(model)
         }
+        gameStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
+        uiStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
     }
 
 
@@ -47,12 +52,13 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
         when (event) {
             is SetGameScreenEvent -> {
                 log.debug { "Set Screen" }
-//                if (game.containsScreen<GameScreen>()) {
-//                    game.removeScreen<GameScreen>()
-//                }
+
                 gameStage.clear()
                 uiStage.clear()
                 game.addScreen(GameScreen(game))
+
+                game.gameStage.root.color.a=0f
+                game.uiStage.root.color.a=0f
                 game.setScreen<GameScreen>()
                 game.removeScreen<MainMenuScreen>()
                 super.hide()
@@ -63,7 +69,6 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
         }
         return true
     }
-
 
     companion object {
         private val log = logger<MainMenuScreen>()

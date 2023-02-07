@@ -55,7 +55,7 @@ class LifeSystem(
                     if (it in playerCmps) {
                         // revive player after 7 seconds
                         reviveTime = 700f
-                        gameStage.fire(PlayerDeathEvent())
+                        gameStage.fire(PlayerDeathEvent(entity))
                     }
                 }
             }

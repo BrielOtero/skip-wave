@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.gabriel.component.*
 import com.gabriel.event.*
-import com.gabriel.preferences.GamePreferences
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
@@ -21,7 +20,7 @@ class GameModel(
     private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper()
     private val lifeCmps: ComponentMapper<LifeComponent> = world.mapper()
     private val experienceCmps: ComponentMapper<ExperienceComponent> = world.mapper()
-    private val levelCmps: ComponentMapper<LevelComponent> = world.mapper()
+    private val levelCmps: ComponentMapper<WaveComponent> = world.mapper()
 
     var playerLife by propertyNotify(0f)
     var playerLifeMax by propertyNotify(0f)
@@ -71,7 +70,7 @@ class GameModel(
                     playerExperienceToNextLevel = experienceCmp.experienceToNextLevel - experienceCmp.experience
                     playerExperienceTempValue = experienceCmp.experience
                     playerExperience = 0f
-                    playerLevel = levelCmp.level
+                    playerLevel = levelCmp.wave
                     playerExperienceBar = playerExperience / playerExperienceToNextLevel
                 }
 

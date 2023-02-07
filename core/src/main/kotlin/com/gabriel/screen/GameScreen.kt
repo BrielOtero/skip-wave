@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn
 import com.gabriel.SkipWave
 import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
@@ -17,6 +16,7 @@ import com.gabriel.component.*
 import com.gabriel.event.*
 import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.input.PlayerTouchInputProcessor
+import com.gabriel.preferences.saveGamePreferences
 import com.gabriel.system.*
 import com.gabriel.ui.model.GameModel
 import com.gabriel.ui.model.RecordsModel
@@ -27,7 +27,7 @@ import com.gabriel.ui.view.recordsView
 import com.gabriel.ui.view.skillUpgradeView
 import com.gabriel.ui.view.touchpadView
 import com.github.quillraven.fleks.world
-import ktx.actors.plusAssign
+import ktx.actors.alpha
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
@@ -46,8 +46,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     }
 
     private val eWorld = world {
-        gameStage.root.color.a = 0f
-        uiStage.root.color.a = 0f
+
         injectables {
             add("gameStage", gameStage)
             add("uiStage", uiStage)
@@ -74,7 +73,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             add<ExperienceSystem>()
             add<DeadSystem>()
             add<LifeSystem>()
-            add<LevelSystem>()
+            add<WaveSystem>()
             add<MapSystem>()
             add<SkillUpgradeSystem>()
             add<EnemySystem>()
@@ -91,6 +90,8 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     }
 
     init {
+        gameStage.root.alpha = 0f
+        uiStage.root.alpha = 0f
         gameStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, game.bundle, gameStage))
@@ -104,9 +105,8 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
 
     override fun show() {
-
-        this.gameStage.root.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
-        this.uiStage.root.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
+        this.gameStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
+        this.uiStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
 
         log.debug { "GameScreen gets shown" }
 
@@ -115,9 +115,9 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
                 gameStage.addListener(system)
             }
         }
-
         currentMap = TmxMapLoader().load(Gdx.files.internal("maps/map_0.tmx").path())
         gameStage.fire(MapChangeEvent(currentMap!!))
+
 
         if (Gdx.app.type == Application.ApplicationType.Desktop) {
             PlayerKeyboardInputProcessor(eWorld, uiStage)
@@ -160,13 +160,22 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
                 game.addScreen(MainMenuScreen(game))
 
-                game.gameStage.root.color.a = 0f
-                game.uiStage.root.color.a = 0f
+                game.gameStage.root.alpha = 0f
+                game.uiStage.root.alpha = 0f
 
                 game.setScreen<MainMenuScreen>()
                 game.removeScreen<GameScreen>()
                 super.hide()
-                dispose()
+                this.dispose()
+            }
+
+            is NewMapEvent -> {
+                currentMap= TmxMapLoader().load(event.path)
+                gameStage.fire(MapChangeEvent(currentMap!!))
+            }
+
+            is SavePreferencesEvent ->{
+                game.preferences.saveGamePreferences(game.gamePreferences)
             }
 
             else -> return false
@@ -185,6 +194,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     }
 
     override fun dispose() {
+        super.dispose()
         textureAtlas.disposeSafely()
         eWorld.dispose()
         currentMap?.disposeSafely()

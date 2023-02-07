@@ -11,7 +11,7 @@ import ktx.log.logger
 
 class EnemySystem(
     @Qualifier("gameStage") private var gameStage: Stage,
-    private var levelCmps: ComponentMapper<LevelComponent>,
+    private var waveCmps: ComponentMapper<WaveComponent>,
 
     ) : IntervalSystem() {
     private val enemyEntities = world.family(allOf = arrayOf(EnemyComponent::class))
@@ -26,7 +26,7 @@ class EnemySystem(
 
 
     override fun onTick() {
-        val actualLevel = levelCmps[playerEntities.first()].level
+        val actualLevel = waveCmps[playerEntities.first()].wave
 
         //AMOUNT ENEMIES
         if (actualLevel > 1 && actualLevel != lastLevel) {

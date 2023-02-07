@@ -31,7 +31,7 @@ class GameView(
             it.top().fill().row()
             this@GameView.playerInfo = playerInfo(skin, model.bundle) { cell ->
                 setScale(0.8f)
-                cell.expand().minHeight(35f).left().padTop(10f).padLeft(2f)
+                cell.expand().minHeight(35f).left().padTop(18f).padLeft(2f)
             }
 //            it.fill().top().row()
         }

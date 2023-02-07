@@ -16,6 +16,7 @@ fun Stage.fire(event: Event) {
 }
 
 data class MapChangeEvent(val map: TiledMap) : Event()
+data class NewMapEvent(val path: String) : Event()
 class CollisionDespawnEvent(val cell: Cell) : Event()
 class EntityAttackEvent(val model: AnimationModel) : Event()
 class EntityDeathEvent(val model: AnimationModel) : Event()
@@ -27,7 +28,7 @@ class EnemyAddEvent(val model: AnimationModel) : Event()
 class MovementEvent() : Event()
 class StartMovementEvent(val x: Float, val y: Float) : Event()
 class EnemyDeathEvent(val experienceCmp: ExperienceComponent) : Event()
-class PlayerDeathEvent():Event()
+class PlayerDeathEvent(val entity: Entity):Event()
 class EntityExperienceEvent(val entity: Entity) : Event()
 class EntityLevelEvent(val entity: Entity) : Event()
 class SkillEvent(val skill0: Skill, val skill1: Skill, val skill2: Skill) : Event()
@@ -36,6 +37,7 @@ class GamePauseEvent ():Event()
 class GameResumeEvent ():Event()
 class SetGameScreenEvent():Event()
 class MainMenuScreenEvent():Event()
+class SavePreferencesEvent():Event()
 
 
 class TestEvent():Event()

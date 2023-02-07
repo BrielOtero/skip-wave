@@ -23,9 +23,7 @@ data class GamePreferences(
 )
 
 
-fun Preferences.saveGamePreferences() {
-    val gamePreferences = GamePreferences()
-
+fun Preferences.saveGamePreferences(gamePreferences: GamePreferences) {
     this.flush {
         set(PREF_KEY_SAVE_STATE, Json().toJson(gamePreferences))
     }

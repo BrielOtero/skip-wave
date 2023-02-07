@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.ExperienceComponent
-import com.gabriel.component.LevelComponent
 import com.gabriel.component.PlayerComponent
 import com.gabriel.event.EnemyDeathEvent
 import com.gabriel.event.EntityExperienceEvent

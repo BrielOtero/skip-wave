@@ -41,7 +41,7 @@ class SkillUpgradeView(
         setFillParent(true)
 
         table { tableCell ->
-            background = skin[Drawables.FRAME_BGD]
+            background = skin[Drawables.FRAME_FGD]
             label(text = model.bundle.get("SkillUpgradeView.title"), style = Labels.FRAME.skinKey) { lblCell ->
                 lblCell.row()
                 lblCell.padTop(10f)

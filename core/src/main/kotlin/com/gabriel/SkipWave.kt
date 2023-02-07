@@ -18,6 +18,7 @@ import com.gabriel.screen.Debug.GameUiScreen
 import com.gabriel.screen.Debug.RecordsScreen
 import com.gabriel.ui.disposeSkin
 import com.gabriel.ui.loadSkin
+import ktx.actors.alpha
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
@@ -33,7 +34,7 @@ class SkipWave : KtxGame<KtxScreen>() {
     lateinit var bundle: I18NBundle
     val gameStage: Stage by lazy { Stage(gameViewport) }
     val uiStage: Stage by lazy { Stage(uiViewport) }
-    private val preferences: Preferences by lazy { Gdx.app.getPreferences(PREF_NAME) }
+    val preferences: Preferences by lazy { Gdx.app.getPreferences(PREF_NAME) }
     lateinit var gamePreferences: GamePreferences
 
 
@@ -53,8 +54,8 @@ class SkipWave : KtxGame<KtxScreen>() {
             }
         }
 
-        gameStage.root.color.a = 0f
-        uiStage.root.color.a = 0f
+        gameStage.root.alpha = 0f
+        uiStage.root.alpha = 0f
         gamePreferences = preferences.loadGamePreferences()!!
 
         loadSkin()
@@ -78,7 +79,6 @@ class SkipWave : KtxGame<KtxScreen>() {
 
     override fun dispose() {
         super.dispose()
-        preferences.saveGamePreferences()
         gameStage.disposeSafely()
         uiStage.disposeSafely()
         batch.disposeSafely()

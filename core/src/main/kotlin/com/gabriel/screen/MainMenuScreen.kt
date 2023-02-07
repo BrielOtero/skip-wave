@@ -10,6 +10,7 @@ import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
 import com.gabriel.event.*
 import com.gabriel.ui.model.MainMenuModel
 import com.gabriel.ui.view.*
+import ktx.actors.alpha
 import ktx.app.KtxScreen
 import ktx.log.logger
 import ktx.scene2d.actors
@@ -57,8 +58,8 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
                 uiStage.clear()
                 game.addScreen(GameScreen(game))
 
-                game.gameStage.root.color.a=0f
-                game.uiStage.root.color.a=0f
+//                game.gameStage.root.alpha=0f
+//                game.uiStage.root.alpha=0f
                 game.setScreen<GameScreen>()
                 game.removeScreen<MainMenuScreen>()
                 super.hide()

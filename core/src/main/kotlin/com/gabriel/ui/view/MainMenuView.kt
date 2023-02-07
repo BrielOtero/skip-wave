@@ -51,14 +51,14 @@ class MainMenuView(
                 onClick {
                     log.debug { "Click on new game button" }
 
-                    model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
-                        Actions.run(Runnable() {
-                            kotlin.run {
-                                model.gameStage.fire(SetGameScreenEvent())
-                            }
-                        }),
-                    )
-//                    model.gameStage.fire(SetGameScreenEvent())
+//                    model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
+//                        Actions.run(Runnable() {
+//                            kotlin.run {
+//                                model.gameStage.fire(SetGameScreenEvent())
+//                            }
+//                        }),
+//                    )
+                    model.gameStage.fire(SetGameScreenEvent())
                 }
             }
             textButton(text = model.bundle["MainMenuView.settings"], style = Buttons.DEFAULT.skinKey) { cell ->

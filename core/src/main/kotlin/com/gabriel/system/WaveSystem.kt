@@ -1,23 +1,16 @@
 package com.gabriel.system
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import com.badlogic.gdx.scenes.scene2d.Event
-import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.ExperienceComponent
-import com.gabriel.component.LevelComponent
-import com.gabriel.component.LifeComponent
-import com.gabriel.component.PlayerComponent
+import com.gabriel.component.WaveComponent
 import com.gabriel.event.*
 import com.github.quillraven.fleks.*
 import ktx.log.logger
-import kotlin.math.pow
 
-@AllOf([LevelComponent::class])
-class LevelSystem(
+@AllOf([WaveComponent::class])
+class WaveSystem(
     private val experienceCmps: ComponentMapper<ExperienceComponent>,
-    private val levelCmps: ComponentMapper<LevelComponent>,
+    private val levelCmps: ComponentMapper<WaveComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : IteratingSystem() {
@@ -29,18 +22,12 @@ class LevelSystem(
                 with(levelCmps[entity]) {
 
 //                    log.debug { "ExperienceToNextLevel before ${experienceToNextLevel}" }
-
-                    level += 1
+                    wave += 1
                     experienceToNextLevel = experience + 300f
 
                     log.debug { "ExperienceToNextLevel ${experienceToNextLevel}" }
-
 //                    log.debug { "ExperienceToNextLevel after ${experienceToNextLevel}" }
                     gameStage.fire(EntityLevelEvent(entity))
-
-
-
-
                 }
             }
         }
@@ -48,7 +35,7 @@ class LevelSystem(
 
 
     companion object {
-        private val log = logger<LevelSystem>()
+        private val log = logger<WaveSystem>()
     }
 
 

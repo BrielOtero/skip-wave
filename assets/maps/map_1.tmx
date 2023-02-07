@@ -1,187 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="62" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="2521">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="62" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="2521">
  <editorsettings>
   <export target="../../../../../Documents/videogame/Survivor/assets/maps/demo..tmx" format="tmx"/>
  </editorsettings>
  <properties>
   <property name="music" value="audio/fields.ogg"/>
  </properties>
- <tileset firstgid="1" name="TilesetWater" tilewidth="16" tileheight="16" tilecount="476" columns="28">
-  <image source="images/TilesetWater.png" width="448" height="272"/>
-  <tile id="1">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="7.96875" width="16" height="8.03125"/>
-   </objectgroup>
-  </tile>
-  <tile id="28">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="7.00153" y="0" width="8.99847" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="29">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="30">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="9" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="33">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="8.98681"/>
-    <object id="2" x="0" y="9" width="8.98611" height="7"/>
-   </objectgroup>
-  </tile>
-  <tile id="34">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="8.98889"/>
-    <object id="2" x="6.98438" y="9.01563" width="9.01563" height="6.98438"/>
-   </objectgroup>
-  </tile>
-  <tile id="56">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="7.03125" y="0" width="8.96875" height="8.96875"/>
-   </objectgroup>
-  </tile>
-  <tile id="57">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="8.98438"/>
-   </objectgroup>
-  </tile>
-  <tile id="58">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="9" height="9.03125"/>
-   </objectgroup>
-  </tile>
-  <tile id="61">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="9.00781" height="16"/>
-    <object id="2" x="9.03237" y="7.99256" width="6.96763" height="7.99072"/>
-   </objectgroup>
-  </tile>
-  <tile id="62">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="7.01111" y="0" width="8.98889" height="16"/>
-    <object id="2" x="0" y="8.00061" width="7" height="7.99939"/>
-   </objectgroup>
-  </tile>
- </tileset>
- <tileset firstgid="477" name="TilesetHouse" tilewidth="16" tileheight="16" tilecount="759" columns="33">
-  <image source="images/TilesetHouse.png" width="528" height="368"/>
-  <tile id="118">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="1" width="16" height="15"/>
-   </objectgroup>
-  </tile>
-  <tile id="119">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="120">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="1" width="16" height="15"/>
-   </objectgroup>
-  </tile>
-  <tile id="151">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="152">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="153">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="184">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="185">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="186">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="217">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="218">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="219">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="250">
-   <objectgroup draworder="index" id="2">
-    <object id="10" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="251">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="252">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="689">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="2" y="4" width="14" height="12"/>
-   </objectgroup>
-  </tile>
-  <tile id="690">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="2" width="16" height="14"/>
-   </objectgroup>
-  </tile>
-  <tile id="691">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="4" width="14" height="12"/>
-   </objectgroup>
-  </tile>
-  <tile id="722">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="724">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="16"/>
-   </objectgroup>
-  </tile>
-  <tile id="755">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="9"/>
-   </objectgroup>
-  </tile>
-  <tile id="757">
-   <objectgroup draworder="index" id="2">
-    <object id="1" x="0" y="0" width="16" height="8.97778"/>
-   </objectgroup>
-  </tile>
- </tileset>
- <tileset firstgid="1236" name="entities" tilewidth="32" tileheight="32" tilecount="2" columns="0">
+ <tileset firstgid="1" name="entities" tilewidth="32" tileheight="32" tilecount="2" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="4">
    <image width="32" height="32" source="../raw/graphics/actors/player/idle_00.png"/>
@@ -190,7 +15,7 @@
    <image width="16" height="16" source="../raw/graphics/actors/skull/run_00.png"/>
   </tile>
  </tileset>
- <tileset firstgid="1242" name="TilesetFloor" tilewidth="16" tileheight="16" tilecount="572" columns="22">
+ <tileset firstgid="7" name="TilesetFloor" tilewidth="16" tileheight="16" tilecount="572" columns="22">
   <image source="images/TilesetFloor.png" width="352" height="417"/>
   <tile id="1">
    <objectgroup draworder="index" id="2">
@@ -250,13 +75,13 @@
  </tileset>
  <layer id="1" name="background" width="62" height="60">
   <data encoding="base64" compression="zlib">
-   eJztz7EJhEAAAMELFANt3R6+xEfQ2MM2ZoNh472XMbbV8sznazqH5d83pW9L35a+LX1b+rb0benb0relb0vflr4tfVv6tvRt6dvSt6VvS9+Wvi19W/q29G3p29K3pW9L35a+LfL3vn79SY75/AKY/U/J
+   eJztz8EJgEAQBMFNRARNwYdma6geGEZ1wzDvOmbmwnau7eO1TW6p3Fa5rXJb5bbKbZXbKrdVbqvcVrmtclvltsptldsqt1Vuq9xWua1yW+W2ym2V2yq3VW6r3Fa5rXJbye77/1fas8wflQlGyw==
   </data>
  </layer>
  <layer id="5" name="randbackground" width="62" height="60">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
- <objectgroup id="4" name="entities" offsetx="0" offsety="16"/>
+ <objectgroup id="7" name="entities"/>
 </map>

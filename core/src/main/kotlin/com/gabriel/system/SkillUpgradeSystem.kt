@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.*
 import com.gabriel.event.*
+import com.gabriel.ui.model.Skills
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.Qualifier
@@ -16,23 +17,18 @@ class SkillUpgradeSystem(
     private val moveCmps: ComponentMapper<MoveComponent>,
     private val attackCmps: ComponentMapper<AttackComponent>,
 ) : IntervalSystem(), EventListener {
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
-    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
-    private val skillsModel = Skill.values()
-    private lateinit var skillTest: HashMap<String, Skill>
-
-    val numSkill: Int = 3
+    private var playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private var weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
+    private var skillsModel = Skill.values()
+    private val numSkill: Int = 3
 
     init {
         skillsModel.forEach { skill ->
-            skillTest = HashMap()
-            skillTest.put(skill.skillName, skill)
+            skill.resetSkillLevel()
         }
     }
 
-
     override fun onTick() {
-
     }
 
     override fun handle(event: Event): Boolean {
@@ -40,7 +36,6 @@ class SkillUpgradeSystem(
             is EntityLevelEvent -> {
                 log.debug { "Skill System Level Event" }
                 val shuffledSkills = (skillsModel.indices).shuffled().take(numSkill)
-                gameStage.fire(TestEvent())
                 gameStage.fire(
                     SkillEvent(
                         skillsModel[shuffledSkills[0]],
@@ -88,17 +83,10 @@ class SkillUpgradeSystem(
                             attackCmps[weapon].damage += event.skill.onLevelUP.toInt()
                             log.debug { "Damage after ${attackCmps[weapon].damage}" }
                         }
-
-                    }
-
-                }
-
-                skillsModel.forEach { skillModel ->
-                    if (skillModel.skillEntityId == event.skill.skillEntityId) {
-                        skillModel.skillLevel += 1
-                        log.debug { "Level up on ${skillModel.name}" }
                     }
                 }
+                skillsModel[event.skill.skillEntityId].skillLevel += 1
+
             }
 
             else -> return false

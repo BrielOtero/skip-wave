@@ -1,7 +1,6 @@
 package com.gabriel.ui.widget
 
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -27,7 +26,7 @@ class PlayerInfo(
     private val experienceBar: Image = Image(skin[Drawables.EXPERIENCE_BAR])
     private val experienceText: Label = label("0/50", style = Labels.FRAME.skinKey)
     private val levelText: Label = label("${bundle.get("GameView.wave")} 0", style = Labels.FRAME.skinKey)
-    private val waveBackground: Image = Image(skin[Drawables.LIFE_UNDER])
+    private val playerUIBackground: Image = Image(skin[Drawables.FRAME_BGD])
 
     private var life = 0
     private var lifeMax = 0
@@ -35,43 +34,46 @@ class PlayerInfo(
     private var experienceToNextLevel = 50
 
     init {
-
+        this += playerUIBackground.apply {
+            setPosition(0f, 0f)
+            setSize(experienceUnder.width + 12f, 40f + lifeUnder.height + 8f)
+        }
         this += lifeUnder.apply {
-            setPosition(0f, 36f)
+            setPosition(6f, 40f)
         }
         this += lifeBar.apply {
-            setPosition(0f, 36f)
+            setPosition(6f, 40f)
         }
         this += lifeText.apply {
             setSize(lifeUnder.width, lifeUnder.height)
-            setPosition(0f, 36f)
+            setPosition(6f, 40f)
             setAlignment(Align.center)
             toFront()
         }
 
         this += experienceUnder.apply {
-            setPosition(0f, 18f)
+            setPosition(6f, 22f)
         }
         this += experienceBar.apply {
-            setPosition(0f, 18f)
+            setPosition(6f, 22f)
         }
         this += experienceText.apply {
             setSize(experienceUnder.width, experienceUnder.height)
-            setPosition(0f, 18f)
+            setPosition(6f, 22f)
             setAlignment(Align.center)
             toFront()
-        }
-        this += waveBackground.apply {
-            setPosition(0f,0f)
-            setSize(experienceUnder.width,experienceUnder.height)
         }
 
         this += levelText.apply {
-            setSize(waveBackground.width, waveBackground.height)
-            setPosition(0f, 0f)
+            setSize(experienceUnder.width, experienceUnder.height)
+            setPosition(6f, 4f)
             setAlignment(Align.center)
             toFront()
         }
+
+
+
+
 
 
         playerExperienceBar(0f, 0f)

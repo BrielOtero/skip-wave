@@ -6,7 +6,7 @@ filter: Nearest, Nearest
 repeat: none
 btn_down
   rotate: false
-  xy: 1156, 184
+  xy: 1324, 437
   size: 30, 13
   split: 10, 10, 4, 4
   pad: 0, 0, 0, 0
@@ -15,21 +15,21 @@ btn_down
   index: -1
 btn_slider_left_down
   rotate: false
-  xy: 1024, 8
+  xy: 1124, 120
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
   index: -1
 btn_slider_left_up
   rotate: false
-  xy: 1324, 436
+  xy: 1356, 468
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 btn_slider_right_down
   rotate: false
-  xy: 1356, 469
+  xy: 1024, 8
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
@@ -89,9 +89,18 @@ frame_bgd
   index: -1
 frame_fgd
   rotate: false
+  xy: 1156, 169
+  size: 30, 28
+  split: 4, 23, 12, 12
+  pad: 0, 0, 0, 0
+  orig: 30, 28
+  offset: 0, 0
+  index: -1
+frame_purple
+  rotate: false
   xy: 1404, 482
   size: 30, 30
-  split: 10, 10, 10, 10
+  split: 7, 7, 7, 7
   pad: 0, 0, 0, 0
   orig: 30, 30
   offset: 0, 0

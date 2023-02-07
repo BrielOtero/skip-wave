@@ -32,7 +32,7 @@ class EntitySpawnSystem(
     private val playerCmps: ComponentMapper<PlayerComponent>,
     private val physicCmps: ComponentMapper<PhysicComponent>,
     private val imageCmps: ComponentMapper<ImageComponent>,
-    private val levelCmps: ComponentMapper<LevelComponent>,
+    private val waveCmps: ComponentMapper<WaveComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : EventListener, IteratingSystem() {
@@ -113,7 +113,7 @@ class EntitySpawnSystem(
                         add<ExperienceComponent>() {
                             experienceToNextLevel = 50f
                         }
-                        add<LevelComponent>()
+                        add<WaveComponent>()
                         add<StateComponent>() {
                             stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
                         }
@@ -189,8 +189,8 @@ class EntitySpawnSystem(
             attack = 5f
             life = 0.75f
         } else {
-            attack = 5f + levelCmps[playerEntities.first()].level
-            life = 0.75f + (levelCmps[playerEntities.first()].level / 10)
+            attack = 5f + waveCmps[playerEntities.first()].wave
+            life = 0.75f + (waveCmps[playerEntities.first()].wave / 10)
         }
 //        levelCmps[playerEntities.first()].level
 
@@ -256,7 +256,7 @@ class EntitySpawnSystem(
                 lifeScaling = life,
                 speedScaling = 0.4f,
                 attackScaling = attack,
-                dropExperience = 10f,
+                dropExperience = 100f,
                 physicScaling = vec2(0.9f, 0.9f),
 //                physicOffset = vec2(0f, -5f * UNIT_SCALE),
                 aiTreePath = "ai/enemy.tree"

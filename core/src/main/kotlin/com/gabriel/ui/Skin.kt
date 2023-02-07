@@ -22,6 +22,7 @@ enum class Drawables(
     EXPERIENCE_UNDER("experience_under"),
     FRAME_BGD("frame_bgd"),
     FRAME_FGD("frame_fgd"),
+    FRAME_PURPLE("frame_purple"),
     JOY_EXT("joy_ext"),
     JOY_INT("joy_int"),
     BTN_UP("btn_up"),
@@ -100,7 +101,7 @@ fun loadSkin() {
         }
         textButton(Buttons.RESUME.skinKey){
             font = skin[Fonts.DEFAULT_WHITE]
-            up = skin[Drawables.BTN_UP]
+            up = skin[Drawables.FRAME_FGD]
         }
     }
 }

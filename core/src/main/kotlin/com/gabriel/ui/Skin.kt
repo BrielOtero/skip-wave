@@ -1,7 +1,6 @@
 package com.gabriel.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -20,17 +19,25 @@ enum class Drawables(
     LIFE_UNDER("life_under"),
     EXPERIENCE_BAR("experience_progress"),
     EXPERIENCE_UNDER("experience_under"),
+
     FRAME_BGD("frame_bgd"),
+    FRAME_BGD_LIGHT("frame_bgd_light"),
     FRAME_FGD("frame_fgd"),
+    FRAME_FGD_LIGHT("frame_fgd_light"),
+    FRAME_FGD_DARK("frame_fgd_dark"),
     FRAME_PURPLE("frame_purple"),
+
+
     JOY_EXT("joy_ext"),
     JOY_INT("joy_int"),
+
     BTN_UP("btn_up"),
     BTN_DOWN("btn_down"),
-    BTN_SLIDER_RIGHT_UP("btn_slider_right_up"),
-    BTN_SLIDER_RIGHT_DOWN("btn_slider_right_down"),
+    BTN_PAUSE("btn_pause"),
     BTN_SLIDER_LEFT_UP("btn_slider_left_up"),
     BTN_SLIDER_LEFT_DOWN("btn_slider_left_down"),
+    BTN_SLIDER_RIGHT_UP("btn_slider_right_up"),
+    BTN_SLIDER_RIGHT_DOWN("btn_slider_right_down"),
 
 
 
@@ -49,8 +56,13 @@ enum class Labels {
 
     val skinKey = this.name.lowercase()
 }
+enum class TextButtons{
+    DEFAULT,TITLE;
+
+    val skinKey = this.name.lowercase()
+}
 enum class Buttons{
-    DEFAULT,RESUME;
+    LEFT,RIGHT,PAUSE;
 
     val skinKey = this.name.lowercase()
 }
@@ -94,14 +106,27 @@ fun loadSkin() {
 //            }
         }
 
-        textButton(Buttons.DEFAULT.skinKey){
+        textButton(TextButtons.DEFAULT.skinKey){
             font = skin[Fonts.DEFAULT_WHITE]
             up = skin[Drawables.BTN_UP]
             down = skin[Drawables.BTN_DOWN]
         }
-        textButton(Buttons.RESUME.skinKey){
+        textButton(TextButtons.TITLE.skinKey){
             font = skin[Fonts.DEFAULT_WHITE]
-            up = skin[Drawables.FRAME_FGD]
+            up = skin[Drawables.FRAME_FGD_LIGHT]
+
+        }
+
+        button(Buttons.LEFT.skinKey){
+            up = skin[Drawables.BTN_SLIDER_LEFT_UP]
+            down = skin[Drawables.BTN_SLIDER_LEFT_DOWN]
+        }
+        button(Buttons.RIGHT.skinKey){
+            up = skin[Drawables.BTN_SLIDER_RIGHT_UP]
+            down = skin[Drawables.BTN_SLIDER_RIGHT_DOWN]
+        }
+        button(Buttons.PAUSE.skinKey){
+            up = skin[Drawables.BTN_PAUSE]
         }
     }
 }

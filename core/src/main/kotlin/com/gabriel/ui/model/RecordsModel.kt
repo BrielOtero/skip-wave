@@ -13,6 +13,7 @@ import com.gabriel.preferences.GamePreferences
 import com.gabriel.ui.view.GameView
 import com.gabriel.ui.view.RecordsView
 import com.gabriel.ui.view.SkillUpgradeView
+import com.gabriel.ui.view.TouchpadView
 import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
@@ -56,7 +57,13 @@ class RecordsModel(
                 gameStage.fire(GamePauseEvent())
                 uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible = false
                 uiStage.actors.filterIsInstance<GameView>().first().isVisible = false
+                with(uiStage.actors.filterIsInstance<TouchpadView>().first()){
+                    isVisible=false
+                    this.model.disableTouchpad=true
+                }
+
                 uiStage.actors.filterIsInstance<RecordsView>().first().isVisible = true
+
 
                 if (isNewRecord) {
                     gamePreferences.records.wave = reachWave

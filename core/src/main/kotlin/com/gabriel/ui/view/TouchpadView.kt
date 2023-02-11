@@ -1,5 +1,6 @@
 package com.gabriel.ui.view
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.gabriel.event.MovementEvent
@@ -11,7 +12,7 @@ import ktx.scene2d.*
 
 
 class TouchpadView(
-     val model: TouchpadModel,
+    val model: TouchpadModel,
     skin: Skin,
 ) : Table(skin), KTable {
     private var positionX: Float = 0f
@@ -21,9 +22,10 @@ class TouchpadView(
 
 
     init {
-        alpha = 0f
-
         // UI
+        alpha = 0f
+        setPosition(-100f, 0f)
+
         touchpad(0f) { cell ->
             cell.size(70f, 70f)
         }.onChangeEvent {
@@ -40,17 +42,24 @@ class TouchpadView(
             }
         }
 
-        //Data binding
+        // DATA BINDING
         model.onPropertyChange(TouchpadModel::touchpadLocation) { touchpadLocation ->
-            positionX = touchpadLocation.x * scale
-            positionY = touchpadLocation.y * scale
-            setPosition(positionX, this@TouchpadView.stage.height - positionY)
+            setTouchpad(touchpadLocation)
         }
 
         model.onPropertyChange(TouchpadModel::opacity) { opacity ->
-            this.alpha = opacity
+            setTouchpadVisible(opacity)
         }
-        setPosition(-100f, 0f)
+    }
+
+    private fun setTouchpad(touchpadLocation: Vector2) {
+        positionX = touchpadLocation.x * scale
+        positionY = touchpadLocation.y * scale
+        setPosition(positionX, this@TouchpadView.stage.height - positionY)
+    }
+
+    private fun setTouchpadVisible(opacity: Float) {
+        this.alpha = opacity
     }
 
     companion object {

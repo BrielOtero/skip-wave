@@ -1,22 +1,15 @@
 package com.gabriel.ui.view
 
-import com.badlogic.gdx.math.Interpolation
 import com.gabriel.ui.model.*
 
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.gabriel.SkipWave
-import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.gabriel.event.*
-import com.gabriel.ui.Buttons
+import com.gabriel.ui.TextButtons
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
 import com.gabriel.ui.get
-import com.gabriel.ui.widget.SkillSlot
 import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
@@ -26,13 +19,16 @@ class MainMenuView(
     skin: Skin
 ) : KTable, Table(skin) {
 
-    private val skillSlots = mutableListOf<SkillSlot>()
+    private val btnNewGame: TextButton
+    private val btnSettings: TextButton
+    private val btnCredits: TextButton
+    private val btnExit:TextButton
 
     init {
+
         //UI
         setFillParent(true)
-        background = skin[Drawables.FRAME_FGD]
-
+        background = skin[Drawables.FRAME_BGD]
         table { tableCell ->
 
             label(text = "SKIP WAVE", style = Labels.FRAME.skinKey) { lblCell ->
@@ -42,69 +38,65 @@ class MainMenuView(
                 this.setFontScale(0.4f)
             }
 
-            textButton(text = model.bundle["MainMenuView.newGame"], style = Buttons.DEFAULT.skinKey) { cell ->
-                cell.top().padTop(5f).padBottom(6f)
-                    .height(25f).width(110f)
-                    .colspan(2)
-                    .row()
+            this@MainMenuView.btnNewGame =
+                textButton(text = model.bundle["MainMenuView.newGame"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                    cell.top().padTop(5f).padBottom(6f)
+                        .height(25f).width(110f)
+                        .colspan(2)
+                        .row()
+                }
 
-                onClick {
-                    log.debug { "Click on new game button" }
+            this@MainMenuView.btnSettings =
+                textButton(text = model.bundle["MainMenuView.settings"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                    cell.top().padTop(5f).padBottom(6f)
+                        .height(25f).width(110f)
+                        .colspan(2)
+                        .row()
+                }
 
-//                    model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
+            this@MainMenuView.btnCredits =
+                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                    cell.top().padTop(5f).padBottom(6f)
+                        .height(25f).width(110f)
+                        .colspan(2)
+                        .row()
+                }
+            this@MainMenuView.btnExit=
+                textButton(text = model.bundle["MainMenuView.exit"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                    cell.top().padTop(5f).padBottom(6f)
+                        .height(25f).width(110f)
+                        .colspan(2)
+                        .row()
+                }
+
+            tableCell.expand().padBottom(10f).fill().center()
+        }
+
+        //EVENTS
+        btnNewGame.onTouchDown {
+            log.debug { "BTN: NEW GAME" }
+            model.uiStage.fire(ButtonPressedEvent())
+            model.gameStage.fire(SetGameScreenEvent())
+//            model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
 //                        Actions.run(Runnable() {
 //                            kotlin.run {
 //                                model.gameStage.fire(SetGameScreenEvent())
 //                            }
 //                        }),
 //                    )
-                    model.gameStage.fire(SetGameScreenEvent())
-                }
-            }
-            textButton(text = model.bundle["MainMenuView.settings"], style = Buttons.DEFAULT.skinKey) { cell ->
-                cell.top().padTop(5f).padBottom(6f)
-                    .height(25f).width(110f)
-                    .colspan(2)
-                    .row()
-            }
-            textButton(text = model.bundle["MainMenuView.credits"], style = Buttons.DEFAULT.skinKey) { cell ->
-                cell.top().padTop(5f).padBottom(6f)
-                    .height(25f).width(110f)
-                    .colspan(2)
-                    .row()
-            }
-
-            padBottom(10f)
-            tableCell.expand().fill().center()
         }
 
-
-        // data binding
-//        model.onPropertyChange(SkillUpgradeModel::skills) { skills ->
-//            popup(skills)
-//            log.debug { "View OnPropertyChange Skills" }
-//        }
-
-    }
-
-    fun popup(skills: Skills) {
-        if (this.alpha == 0f) {
-            this.clearActions()
-            this.setPosition(0f, 0f)
-            this += Actions.sequence(Actions.fadeIn(0.2f))
+        btnSettings.onTouchDown {
+            log.debug { "BTN: SETTINGS" }
+            model.uiStage.fire(ButtonPressedEvent())
+            model.gameStage.fire(ShowSettingsViewEvent(true))
+        }
+        btnExit.onTouchDown {
+            log.debug { "BTN: EXIT" }
+            model.uiStage.fire(ButtonPressedEvent())
+            model.gameStage.fire(ExitGameEvent())
         }
     }
-
-    private fun Actor.resetFadeOutDelay() {
-        this.actions
-            .filterIsInstance<SequenceAction>()
-            .lastOrNull()
-            ?.let { sequence ->
-                val delay = sequence.actions.last() as DelayAction
-                delay.time = 0f
-            }
-    }
-
 
     companion object {
         private val log = logger<MainMenuView>()

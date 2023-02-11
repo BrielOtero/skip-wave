@@ -4,17 +4,26 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.gabriel.event.ButtonPressedEvent
+import com.gabriel.event.GamePauseEvent
+import com.gabriel.event.ShowPauseViewEvent
+import com.gabriel.event.fire
+import com.gabriel.ui.Buttons
 import com.gabriel.ui.Labels
+import com.gabriel.ui.TextButtons
 import com.gabriel.ui.model.GameModel
 import com.gabriel.ui.widget.PlayerInfo
 import com.gabriel.ui.widget.playerInfo
 import ktx.actors.alpha
+import ktx.actors.onTouchDown
 import ktx.actors.plusAssign
 import ktx.actors.txt
+import ktx.log.logger
 import ktx.scene2d.*
 
 class GameView(
@@ -22,6 +31,7 @@ class GameView(
     skin: Skin,
 ) : Table(skin), KTable {
     private val playerInfo: PlayerInfo
+    private val btnPause: Button
 
     init {
         // UI
@@ -33,14 +43,23 @@ class GameView(
                 setScale(0.8f)
                 cell.expand().minHeight(35f).left().padTop(18f).padLeft(2f)
             }
-//            it.fill().top().row()
+            this@GameView.btnPause = button(style = Buttons.PAUSE.skinKey, skin = skin) { cell ->
+                cell.expand().top().right().padTop(4f).padRight(4f)
+            }
         }
         table {
             it.expand().row()
         }
 
+        //EVENTS
 
-        // data binding
+        btnPause.onTouchDown {
+            log.debug { "BTN: PAUSE" }
+            model.gameStage.fire(ButtonPressedEvent())
+            model.gameStage.fire(ShowPauseViewEvent())
+        }
+
+        // DATA BINDING
 
         //Life
         model.onPropertyChange(GameModel::playerLife) { playerLife ->
@@ -81,9 +100,11 @@ class GameView(
         playerInfo.playerExperienceToNextLevel(newExperienceToNextLevel)
 
     fun playerExperienceBar(percentage: Float) = playerInfo.playerExperienceBar(percentage, 0.25f)
-
     fun playerLevel(newLevel: Int) = playerInfo.playerLevel(newLevel)
 
+    companion object{
+        private val log = logger<GameView>()
+    }
 }
 
 @Scene2dDsl

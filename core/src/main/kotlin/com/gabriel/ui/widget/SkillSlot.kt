@@ -19,27 +19,25 @@ import ktx.log.logger
 import ktx.scene2d.*
 
 class SkillSlot(
-    private val slotItemBgd: Drawables?,
-    private val uiStage: Stage,
     private val skin: Skin,
+    private val uiStage: Stage,
     private val bundle: I18NBundle,
 ) : WidgetGroup(), KGroup, KtxInputAdapter {
 
-    private val background = Image(skin[Drawables.FRAME_BGD])
+    private val background = Image(skin[Drawables.FRAME_FGD])
     private val skillImage = Image()
     private val skillName: Label = label("", style = Labels.FRAME.skinKey)
     private val skillLevel: Label = label("", style = Labels.FRAME.skinKey)
     private val skillValueAfter: Label = label("", style = Labels.FRAME.skinKey)
-    var skillModel: SkillModel = SkillModel(-1, -1, "", "", 0, 0f)
     private var slotWidth = uiStage.width * 0.8f
     private var slotHeight = uiStage.height * 0.25f
     private var marginOuter = 6f
+    var skillModel: SkillModel = SkillModel(-1, -1, "", "", 0, 0f)
 
     init {
 
         this += background.apply {
             setFillParent(true)
-//            setBounds(0f, 0f, uiStage.width, 80f)
         }
         this += skillImage.apply {
             setSize(slotHeight * 0.3f, slotHeight * 0.3f)
@@ -97,9 +95,8 @@ class SkillSlot(
 
 @Scene2dDsl
 fun <S> KWidget<S>.skillSlot(
-    slotItemBgd: Drawables? = null,
-    uiStage: Stage,
     skin: Skin = Scene2DSkin.defaultSkin,
+    uiStage: Stage,
     bundle: I18NBundle,
     init: SkillSlot.(S) -> Unit = {}
-): SkillSlot = actor(SkillSlot(slotItemBgd, uiStage, skin, bundle), init)
+): SkillSlot = actor(SkillSlot( skin,uiStage, bundle), init)

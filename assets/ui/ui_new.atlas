@@ -6,30 +6,37 @@ filter: Nearest, Nearest
 repeat: none
 btn_down
   rotate: false
-  xy: 1324, 437
+  xy: 1024, 8
   size: 30, 13
   split: 10, 10, 4, 4
   pad: 0, 0, 0, 0
   orig: 30, 13
   offset: 0, 0
   index: -1
+btn_pause
+  rotate: false
+  xy: 1324, 404
+  size: 18, 18
+  orig: 18, 18
+  offset: 0, 0
+  index: -1
 btn_slider_left_down
   rotate: false
-  xy: 1124, 120
+  xy: 1234, 199
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
   index: -1
 btn_slider_left_up
   rotate: false
-  xy: 1356, 468
+  xy: 1386, 468
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 btn_slider_right_down
   rotate: false
-  xy: 1024, 8
+  xy: 1464, 499
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
@@ -80,6 +87,15 @@ font_white
   index: -1
 frame_bgd
   rotate: false
+  xy: 1124, 153
+  size: 44, 44
+  split: 15, 15, 15, 15
+  pad: 0, 0, 0, 0
+  orig: 44, 44
+  offset: 0, 0
+  index: -1
+frame_bgd_light
+  rotate: false
   xy: 1024, 53
   size: 44, 44
   split: 15, 15, 15, 15
@@ -89,7 +105,25 @@ frame_bgd
   index: -1
 frame_fgd
   rotate: false
-  xy: 1156, 169
+  xy: 1356, 454
+  size: 30, 28
+  split: 4, 23, 12, 12
+  pad: 0, 0, 0, 0
+  orig: 30, 28
+  offset: 0, 0
+  index: -1
+frame_fgd_dark
+  rotate: false
+  xy: 1434, 484
+  size: 30, 28
+  split: 4, 23, 12, 12
+  pad: 0, 0, 0, 0
+  orig: 30, 28
+  offset: 0, 0
+  index: -1
+frame_fgd_light
+  rotate: false
+  xy: 1324, 422
   size: 30, 28
   split: 4, 23, 12, 12
   pad: 0, 0, 0, 0
@@ -135,35 +169,35 @@ life_under
   index: -1
 player_cooldown
   rotate: false
-  xy: 1324, 450
+  xy: 1024, 21
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_damage
   rotate: false
-  xy: 1068, 65
+  xy: 1124, 121
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_life
   rotate: false
-  xy: 1124, 133
+  xy: 1168, 165
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_regeneration
   rotate: false
-  xy: 1124, 165
+  xy: 1324, 450
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_speed
   rotate: false
-  xy: 1024, 21
+  xy: 1068, 65
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

@@ -71,11 +71,6 @@ class PlayerInfo(
             toFront()
         }
 
-
-
-
-
-
         playerExperienceBar(0f, 0f)
     }
 

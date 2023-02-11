@@ -15,6 +15,7 @@ class GameModel(
     world: World,
     val bundle: I18NBundle,
     @Qualifier("gameStage") val gameStage: Stage,
+    @Qualifier("uiStage") val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
     private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper()

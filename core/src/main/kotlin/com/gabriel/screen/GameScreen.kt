@@ -18,14 +18,8 @@ import com.gabriel.input.PlayerKeyboardInputProcessor
 import com.gabriel.input.PlayerTouchInputProcessor
 import com.gabriel.preferences.saveGamePreferences
 import com.gabriel.system.*
-import com.gabriel.ui.model.GameModel
-import com.gabriel.ui.model.RecordsModel
-import com.gabriel.ui.model.SkillUpgradeModel
-import com.gabriel.ui.model.TouchpadModel
-import com.gabriel.ui.view.gameView
-import com.gabriel.ui.view.recordsView
-import com.gabriel.ui.view.skillUpgradeView
-import com.gabriel.ui.view.touchpadView
+import com.gabriel.ui.model.*
+import com.gabriel.ui.view.*
 import com.github.quillraven.fleks.world
 import ktx.actors.alpha
 import ktx.app.KtxScreen
@@ -84,6 +78,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             add<CameraSystem>()
             add<FloatingTextSystem>()
             add<RenderSystem>()
+            add<VibrateSystem>()
             add<AudioSystem>()
             add<DebugSystem>()
         }
@@ -93,11 +88,14 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         gameStage.root.alpha = 0f
         uiStage.root.alpha = 0f
         gameStage.addListener(this)
+        uiStage.addListener(this)
         uiStage.actors {
-            gameView(GameModel(eWorld, game.bundle, gameStage))
+            gameView(GameModel(eWorld, game.bundle, gameStage,uiStage))
             skillUpgradeView(SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage))
             touchpadView(TouchpadModel(eWorld, uiStage))
             recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
+            pauseView(PauseModel(game.bundle,gameStage,uiStage))
+            settingsView(SettingsModel(game.bundle,game.gamePreferences,gameStage,uiStage))
         }
 
 
@@ -107,6 +105,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     override fun show() {
         this.gameStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
         this.uiStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
+//        uiStage.isDebugAll = true
 
         log.debug { "GameScreen gets shown" }
 
@@ -152,7 +151,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
                 pauseWorld(false)
             }
 
-            is MainMenuScreenEvent -> {
+            is SetMainMenuScreenEvent -> {
                 log.debug { "SET SCREEN: MainMenu" }
 
                 gameStage.clear()
@@ -175,8 +174,16 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             }
 
             is SavePreferencesEvent ->{
+                log.debug { "SAVE GAME" }
+                log.debug { "${game.gamePreferences.settings.musicVolume}" }
                 game.preferences.saveGamePreferences(game.gamePreferences)
             }
+
+            is ExitGameEvent ->{
+                log.debug { "EXIT GAME" }
+                Gdx.app.exit()
+            }
+
 
             else -> return false
         }

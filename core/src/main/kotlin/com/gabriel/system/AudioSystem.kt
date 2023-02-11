@@ -1,7 +1,6 @@
 package com.gabriel.system
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.scenes.scene2d.Event
@@ -9,9 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.gabriel.component.AnimationModel
 import com.gabriel.event.*
 import com.gabriel.preferences.GamePreferences
-import com.gabriel.preferences.loadGamePreferences
 import com.github.quillraven.fleks.IntervalSystem
-import com.github.quillraven.fleks.World
 import ktx.assets.disposeSafely
 import ktx.log.logger
 import ktx.tiled.propertyOrNull
@@ -28,23 +25,50 @@ class AudioSystem(
         if (soundRequests.isEmpty()) {
             return
         }
-
         soundRequests.values.forEach { it.play(1f) }
         soundRequests.clear()
     }
 
     override fun handle(event: Event): Boolean {
         when (event) {
+
+
+            is ShowMainMenuViewEvent -> {
+                val path = "audio/main_menu.ogg"
+
+                log.debug { "Changing music to $path" }
+                val music = musicCache.getOrPut(path) {
+                    Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
+                        isLooping = true
+                        volume = gamePreferences.settings.musicVolume
+                    }
+                }
+                music.play()
+
+                return true
+            }
+
             is MapChangeEvent -> {
                 event.map.propertyOrNull<String>("music")?.let { path ->
                     log.debug { "Changing music to $path" }
                     val music = musicCache.getOrPut(path) {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
+//                            isLooping = true
+                            volume = gamePreferences.settings.musicVolume
+//                            volume =0f
+                            if (position > 2) {
+                                log.debug { "RESET" }
+                                position = 0F
+                            }
+                        }
+                    }
+                    music.setOnCompletionListener {
+                        val newPath = path.replace("intro", "loop")
+                        log.debug { "Changing music to $newPath" }
+                        Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
                             isLooping = true
                             volume = gamePreferences.settings.musicVolume
-//                            volume = 0.75f
-//                            volume=0f
-                        }
+                        }.play()
                     }
                     music.play()
                 }
@@ -68,6 +92,8 @@ class AudioSystem(
 
                 }
             }
+
+            is ButtonPressedEvent -> queueSound("audio/button.wav")
 
             is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.wav")
             is EntityLevelEvent -> queueSound("audio/level_up.wav")

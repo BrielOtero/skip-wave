@@ -128,7 +128,6 @@ class EntitySpawnSystem(
 
                     EntityType.WEAPON -> {
                         add<WeaponComponent>()
-//                        log.debug { "$location" }
                     }
 
                     EntityType.SPAWN -> {
@@ -202,9 +201,9 @@ class EntitySpawnSystem(
                 attackExtraRange = 0.6f,
                 attackScaling = 0f,
                 speedScaling = 1.2f,
-                lifeScaling = 10f,
-                physicScaling = vec2(1f, 0.5f),
-                physicOffset = vec2(0f, -5f * UNIT_SCALE),
+                lifeScaling = 1000f,
+                physicScaling = vec2(0.8f, 0.5f),
+                physicOffset = vec2(0f, -8f * UNIT_SCALE),
             )
 
 
@@ -266,7 +265,7 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 1.2f,
+                speedScaling = 1f,
                 attackScaling = attack,
                 dropExperience = 10f,
                 physicScaling = vec2(0.9f, 0.9f),

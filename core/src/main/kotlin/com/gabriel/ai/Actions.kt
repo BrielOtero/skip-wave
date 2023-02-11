@@ -24,8 +24,8 @@ class AttackTask : Action() {
     override fun execute(): Status {
 //        println("Attack")
         if (status != Status.RUNNING) {
+            entity.animation(AnimationType.ATTACK)
             entity.doAndStartAttack()
-            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
             entity.fireEvent(EntityAggroEvent(entity.entity))
             return Status.RUNNING
         }
@@ -33,6 +33,7 @@ class AttackTask : Action() {
         if (entity.isAnimationDone) {
             entity.animation(AnimationType.RUN)
             entity.stopMovement()
+
             return Status.SUCCEEDED
         }
 
@@ -88,62 +89,62 @@ class MoveTask(
 }
 
 
-class IdleTask(
-    @JvmField
-    @TaskAttribute(required = true)
-    var duration: FloatDistribution? = null
-
-) : Action() {
-    private var currentDuration = 0f
-
-    override fun execute(): Status {
-        if (status != Status.RUNNING) {
-            entity.animation(AnimationType.IDLE)
-            currentDuration = duration?.nextFloat() ?: 1f
-            return Status.RUNNING
-        }
-
-        currentDuration -= GdxAI.getTimepiece().deltaTime
-        if (currentDuration <= 0f) {
-            return Status.SUCCEEDED
-        }
-
-        return Status.RUNNING
-    }
-
-    override fun copyTo(task: Task<AiEntity>): Task<AiEntity> {
-        (task as IdleTask).duration = duration
-        return task
-    }
-
-}
-
-class WanderTask : Action() {
-
-    private val startPos = vec2()
-    private val targetPos = vec2()
-
-    override fun execute(): Status {
-        if (status != Status.RUNNING) {
-            entity.animation(AnimationType.RUN)
-
-            if (startPos.isZero) {
-                startPos.set(entity.position)
-            }
-
-            targetPos.set(startPos)
-            targetPos.x += MathUtils.random(-3f, 3f)
-            targetPos.y += MathUtils.random(-3f, 3f)
-            entity.moveTo(targetPos)
-            return Status.RUNNING
-        }
-
-        if (entity.inRange(0.5f, targetPos)) {
-            entity.stopMovement()
-            return Status.SUCCEEDED
-        }
-
-        return Status.RUNNING
-    }
-}
+//class IdleTask(
+//    @JvmField
+//    @TaskAttribute(required = true)
+//    var duration: FloatDistribution? = null
+//
+//) : Action() {
+//    private var currentDuration = 0f
+//
+//    override fun execute(): Status {
+//        if (status != Status.RUNNING) {
+//            entity.animation(AnimationType.IDLE)
+//            currentDuration = duration?.nextFloat() ?: 1f
+//            return Status.RUNNING
+//        }
+//
+//        currentDuration -= GdxAI.getTimepiece().deltaTime
+//        if (currentDuration <= 0f) {
+//            return Status.SUCCEEDED
+//        }
+//
+//        return Status.RUNNING
+//    }
+//
+//    override fun copyTo(task: Task<AiEntity>): Task<AiEntity> {
+//        (task as IdleTask).duration = duration
+//        return task
+//    }
+//
+//}
+//
+//class WanderTask : Action() {
+//
+//    private val startPos = vec2()
+//    private val targetPos = vec2()
+//
+//    override fun execute(): Status {
+//        if (status != Status.RUNNING) {
+//            entity.animation(AnimationType.RUN)
+//
+//            if (startPos.isZero) {
+//                startPos.set(entity.position)
+//            }
+//
+//            targetPos.set(startPos)
+//            targetPos.x += MathUtils.random(-3f, 3f)
+//            targetPos.y += MathUtils.random(-3f, 3f)
+//            entity.moveTo(targetPos)
+//            return Status.RUNNING
+//        }
+//
+//        if (entity.inRange(0.5f, targetPos)) {
+//            entity.stopMovement()
+//            return Status.SUCCEEDED
+//        }
+//
+//        return Status.RUNNING
+//    }
+//}
 

@@ -62,7 +62,7 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
             skillUpgradeView.skill(SkillModel(-1, 0, "frame_fgd", "nothing", 0, 0f))
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
-            skillUpgradeView.popup(Skills(Skill.PLAYER_COOLDOWN, Skill.PLAYER_LIFE, Skill.PLAYER_DAMAGE))
+            skillUpgradeView.popupSkills(Skills(Skill.PLAYER_COOLDOWN, Skill.PLAYER_LIFE, Skill.PLAYER_DAMAGE))
         }
 
 

@@ -10,7 +10,7 @@ import canAttack?:"com.gabriel.ai.CanAttack"
 
 subtree name:"attack"
     sequence
-        (isEnemyNearby?) (canAttack?) attack
+        (canAttack?) attack
         wait seconds:"uniform,2"
 
 subtree name:"move"

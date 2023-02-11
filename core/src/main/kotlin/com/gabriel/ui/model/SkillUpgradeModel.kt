@@ -6,8 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.utils.I18NBundle
 import com.gabriel.component.Skill
-import com.gabriel.event.SkillEvent
-import com.gabriel.event.TestEvent
+import com.gabriel.event.*
 import com.gabriel.ui.view.GameView
 import com.gabriel.ui.view.TouchpadView
 import com.github.quillraven.fleks.Qualifier
@@ -37,6 +36,16 @@ class SkillUpgradeModel(
                 with(uiStage.actors.filterIsInstance<TouchpadView>().first()){
                     isVisible=false
                     this.model.disableTouchpad=true
+                }
+            }
+
+            is SkillApplyEvent ->{
+                gameStage.fire(ButtonPressedEvent())
+                gameStage.fire(GameResumeEvent())
+                uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
+                with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
+                    this.model.disableTouchpad = false
+                    isVisible = true
                 }
             }
 

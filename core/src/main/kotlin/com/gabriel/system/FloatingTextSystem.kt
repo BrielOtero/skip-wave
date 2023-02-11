@@ -6,13 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.FloatingTextComponent
-import com.gabriel.component.PlayerComponent
 import com.gabriel.event.SkillEvent
-import com.gabriel.event.TestEvent
-import com.gabriel.ui.model.SkillUpgradeModel
-import com.gabriel.ui.model.Skills
-import com.gabriel.ui.view.GameView
-import com.gabriel.ui.view.TouchpadView
 import com.github.quillraven.fleks.*
 import ktx.math.vec2
 

@@ -1,15 +1,11 @@
 package com.gabriel.ui.view
 
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.utils.Align
 import com.gabriel.event.*
 import com.gabriel.ui.Drawables
 import com.gabriel.ui.Labels
@@ -17,11 +13,9 @@ import com.gabriel.ui.get
 import com.gabriel.ui.model.SkillModel
 import com.gabriel.ui.model.Skills
 import com.gabriel.ui.model.SkillUpgradeModel
-import com.gabriel.ui.model.TouchpadModel
 import com.gabriel.ui.widget.SkillSlot
 import com.gabriel.ui.widget.skillSlot
 import ktx.actors.alpha
-import ktx.actors.onClick
 import ktx.actors.onTouchDown
 import ktx.actors.plusAssign
 import ktx.log.logger
@@ -35,41 +29,30 @@ class SkillUpgradeView(
     private val skillSlots = mutableListOf<SkillSlot>()
 
     init {
+        //UI
         this.alpha = 0f
         setPosition(-500f, 0f)
-        //UI
         setFillParent(true)
 
         table { tableCell ->
-            background = skin[Drawables.FRAME_FGD]
+            background = skin[Drawables.FRAME_BGD]
             label(text = model.bundle.get("SkillUpgradeView.title"), style = Labels.FRAME.skinKey) { lblCell ->
-                lblCell.row()
-                lblCell.padTop(10f)
+                lblCell.padTop(10f).padBottom(8f).row()
                 this.setFontScale(0.4f)
             }
 
             for (i in 1..3) {
                 this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = model.uiStage, bundle = model.bundle
                 ) { skillCell ->
-                    skillCell.expand().width(model.uiStage.width * 0.8f).height(model.uiStage.height * 0.25f).center().row()
+                    skillCell.expand().width(model.uiStage.width * 0.8f).height(model.uiStage.height * 0.25f).center()
+                        .row()
                     skillCell.pad(0f, 10f, 4f, 10f)
 
                     onTouchDown {
-                        this.setPosition(-500f, 0f)
+                        this@SkillUpgradeView.setPosition(-500f, 0f)
                         this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
-
-                        model.gameStage.fire(GameResumeEvent())
-
-                        log.debug { "Resume" }
-
                         model.gameStage.fire(SkillApplyEvent(skillModel))
 
-                        model.uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
-
-                        with(model.uiStage.actors.filterIsInstance<TouchpadView>().first()) {
-                            this.model.disableTouchpad = false
-                            isVisible = true
-                        }
                     }
 
                 }
@@ -78,15 +61,14 @@ class SkillUpgradeView(
             tableCell.expand().maxWidth(model.uiStage.width * 0.9f).maxHeight(model.uiStage.height * 0.98f).center()
         }
 
-        // data binding
+        // DATA BINDING
         model.onPropertyChange(SkillUpgradeModel::skills) { skills ->
-            popup(skills)
-            log.debug { "View OnPropertyChange Skills" }
+            popupSkills(skills)
         }
 
     }
 
-    fun popup(skills: Skills) {
+    fun popupSkills(skills: Skills) {
 
         with(skills.skill1) {
             skill(SkillModel(0, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
@@ -104,17 +86,6 @@ class SkillUpgradeView(
             this += Actions.sequence(Actions.fadeIn(0.2f))
         }
     }
-
-    private fun Actor.resetFadeOutDelay() {
-        this.actions
-            .filterIsInstance<SequenceAction>()
-            .lastOrNull()
-            ?.let { sequence ->
-                val delay = sequence.actions.last() as DelayAction
-                delay.time = 0f
-            }
-    }
-
     fun skill(skillModel: SkillModel) {
         skillSlots[skillModel.slotIdx].skill(skillModel)
     }
@@ -122,7 +93,6 @@ class SkillUpgradeView(
     companion object {
         private val log = logger<SkillUpgradeView>()
     }
-
 }
 
 

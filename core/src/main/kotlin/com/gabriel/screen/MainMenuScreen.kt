@@ -1,6 +1,7 @@
 package com.gabriel.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
@@ -8,9 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.gabriel.SkipWave
 import com.gabriel.SkipWave.Companion.ANIMATION_DURATION
 import com.gabriel.event.*
+import com.gabriel.preferences.saveGamePreferences
+import com.gabriel.system.*
 import com.gabriel.ui.model.MainMenuModel
+import com.gabriel.ui.model.SettingsModel
 import com.gabriel.ui.view.*
-import ktx.actors.alpha
+import com.github.quillraven.fleks.world
 import ktx.app.KtxScreen
 import ktx.log.logger
 import ktx.scene2d.actors
@@ -18,28 +22,57 @@ import ktx.scene2d.actors
 class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
     private val gameStage = game.gameStage
     private val uiStage = game.uiStage
-    private val model = MainMenuModel(game.bundle,uiStage, gameStage)
+    private val mainMenuModel = MainMenuModel(game.bundle,uiStage, gameStage)
+    private val settingsModel = SettingsModel(game.bundle,game.gamePreferences, gameStage,uiStage)
+
+    private val eWorld = world {
+
+        injectables {
+//            add("gameStage", gameStage)
+//            add("uiStage", uiStage)
+            add(game.gamePreferences)
+        }
+
+        systems {
+            add<VibrateSystem>()
+            add<AudioSystem>()
+        }
+    }
 
     init {
         Gdx.input.inputProcessor = uiStage
-        uiStage.addListener(model)
+        uiStage.addListener(mainMenuModel)
+        uiStage.addListener(settingsModel)
         uiStage.addListener(this)
+        gameStage.addListener(this)
         uiStage.actors {
-            mainMenuView(model)
+            mainMenuView(mainMenuModel)
+            settingsView(settingsModel)
         }
         gameStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
         uiStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
     }
 
 
+
+
     override fun show() {
         log.debug { "MainMenuScreen gets shown" }
+        eWorld.systems.forEach { system ->
+            if (system is EventListener) {
+                gameStage.addListener(system)
+            }
+        }
+        gameStage.fire(ShowMainMenuViewEvent())
 //        uiStage.isDebugAll = true
     }
 
     override fun render(delta: Float) {
         uiStage.act()
         uiStage.draw()
+        val dt = delta.coerceAtMost(0.25f)
+        GdxAI.getTimepiece().update(dt)
+        eWorld.update(dt)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -66,9 +99,25 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
                 dispose()
             }
 
+            is SavePreferencesEvent ->{
+                log.debug { "SAVE GAME" }
+                log.debug { "${game.gamePreferences.settings.musicVolume}" }
+                game.preferences.saveGamePreferences(game.gamePreferences)
+            }
+
+            is ExitGameEvent ->{
+                log.debug { "EXIT GAME" }
+                Gdx.app.exit()
+            }
+
             else -> return false
         }
         return true
+    }
+
+    override fun dispose() {
+        super.dispose()
+        eWorld.dispose()
     }
 
     companion object {

@@ -33,7 +33,6 @@ class AttackSystem(
 
         if (attackCmp.isReady && !attackCmp.doAttack) {
             // entity does not want to attack and is not executing an attack -> do nothing
-
             return
         }
 
@@ -104,7 +103,6 @@ class AttackSystem(
                 configureEntity(fixtureEntity) {
                     lifeCmps.getOrNull(it)?.let { lifeCmp ->
                         lifeCmp.takeDamage += attackCmp.damage * MathUtils.random(0.9f, 1.1f)
-                        log.debug { "Attacking" }
                     }
                     if (isAttackerPlayer) {
                         lootCmps.getOrNull(it)?.let { lootCmp ->
@@ -120,7 +118,6 @@ class AttackSystem(
         val isDone = animationCmps.getOrNull(entity)?.isAnimationDone ?: true
         if (isDone) {
             attackCmp.state = AttackState.READY
-            log.debug { "State Ready" }
         }
     }
 

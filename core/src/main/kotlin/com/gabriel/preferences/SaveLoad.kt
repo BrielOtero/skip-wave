@@ -11,6 +11,7 @@ import com.gabriel.SkipWave.Companion.PREF_KEY_SAVE_STATE
 data class Settings(
     var musicVolume: Float = 0.50f,
     var effectsVolume: Float = 0.75f,
+    var vibrator: Boolean = true,
 )
 
 data class Records(

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-	compileSdkVersion 30
+	compileSdk 33
 	sourceSets {
 		main {
 			manifest.srcFile 'AndroidManifest.xml'
@@ -30,11 +30,11 @@ android {
 		exclude 'META-INF/dependencies.txt'
 	}
 	defaultConfig {
-		applicationId 'com.gabriel'
+		applicationId 'com.goldev.skipwave'
 		minSdkVersion 19
-		targetSdkVersion 30
-		versionCode 1
-		versionName "1.0"
+		targetSdkVersion 33
+		versionCode 2
+		versionName "2.0"
 		multiDexEnabled true
 	}
 	compileOptions {
@@ -124,7 +124,7 @@ task run(type: Exec) {
 	}
 
 	def adb = path + "/platform-tools/adb"
-	commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.gabriel/com.gabriel.android.AndroidLauncher'
+	commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.goldev.skipwave/com.goldev.skipwave.android.AndroidLauncher'
 }
 
 eclipse.project.name = appName + "-android"

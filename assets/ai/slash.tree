@@ -1,9 +1,9 @@
 # Actions
-import attackWeapon:"com.gabriel.ai.AttackWeaponTask"
+import attackWeapon:"com.goldev.skipwave.ai.AttackWeaponTask"
 
 
 # Conditions
-import canPlayerAttack?:"com.gabriel.ai.CanPlayerAttack"
+import canPlayerAttack?:"com.goldev.skipwave.ai.CanPlayerAttack"
 
 subtree name:"attack"
     sequence

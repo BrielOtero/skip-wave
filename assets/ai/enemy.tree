@@ -1,12 +1,12 @@
 # Actions
-import idle:"com.gabriel.ai.IdleTask"
-import move:"com.gabriel.ai.MoveTask"
-import wander:"com.gabriel.ai.WanderTask"
-import attack:"com.gabriel.ai.AttackTask"
+import idle:"com.goldev.skipwave.ai.IdleTask"
+import move:"com.goldev.skipwave.ai.MoveTask"
+import wander:"com.goldev.skipwave.ai.WanderTask"
+import attack:"com.goldev.skipwave.ai.AttackTask"
 
 # Conditions
-import isEnemyNearby?:"com.gabriel.ai.IsEnemyNearby"
-import canAttack?:"com.gabriel.ai.CanAttack"
+import isEnemyNearby?:"com.goldev.skipwave.ai.IsEnemyNearby"
+import canAttack?:"com.goldev.skipwave.ai.CanAttack"
 
 subtree name:"attack"
     sequence

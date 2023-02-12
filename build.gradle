@@ -32,7 +32,7 @@ configure(subprojects - project(':android')) {
 
 subprojects {
 	version = '1.0.0'
-	ext.appName = 'Survivor'
+	ext.appName = 'SkipWave'
 	repositories {
 		mavenCentral()
 		maven { url 'https://s01.oss.sonatype.org' }
@@ -44,4 +44,4 @@ subprojects {
 	}
 }
 
-eclipse.project.name = 'Survivor' + '-parent'
+eclipse.project.name = 'SkipWave' + '-parent'

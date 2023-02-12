@@ -1,5 +1,6 @@
 package com.goldev.skipwave.ui.view
 
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -23,7 +24,7 @@ class SettingsView(
 
     private var cvMusic: ChangeValue
     private var cvEffects: ChangeValue
-    private var btnSaveChanges: TextButton
+    private var btnApplyChanges: TextButton
     private val internalTable: Table
 
 
@@ -94,8 +95,8 @@ class SettingsView(
                 audioCell.expand().top().width(140f).maxHeight(180f).padBottom(10f).fill().row()
             }
 
-            this@SettingsView.btnSaveChanges = textButton(
-                text = this@SettingsView.model.bundle["SettingsView.saveChanges"],
+            this@SettingsView.btnApplyChanges = textButton(
+                text = this@SettingsView.model.bundle["SettingsView.applyChanges"],
                 style = TextButtons.DEFAULT.skinKey
             ) { cell ->
                 cell.width(140f).padBottom(10f)
@@ -121,10 +122,13 @@ class SettingsView(
             this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
             this@SettingsView.model.effectsVolume = getValue()
         }
-        btnSaveChanges.onTouchDown {
+        btnApplyChanges.onTouchDown {
             model.gameStage.fire(ButtonPressedEvent())
             this@SettingsView.model.saveSettings()
             this@SettingsView.isVisible = false
+            if(model.isMainMenuCall){
+                model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
+            }
         }
 
         // DATA BINDING

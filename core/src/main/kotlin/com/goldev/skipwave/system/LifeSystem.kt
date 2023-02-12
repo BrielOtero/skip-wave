@@ -28,7 +28,7 @@ class LifeSystem(
     @Qualifier("gameStage") private val gameStage: Stage,
 ) : IteratingSystem() {
     private val damageFont = BitmapFont(Gdx.files.internal("ui/thaleah_fat.fnt")).apply { data.setScale(0.33f) }
-    private val floatingTextStyle = LabelStyle(damageFont, Color.YELLOW)
+    private val floatingTextStyle = LabelStyle(damageFont, Color.WHITE)
     private val floatingTextStylePlayer = LabelStyle(damageFont, Color.RED)
 
     override fun onTickEntity(entity: Entity) {

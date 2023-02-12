@@ -22,7 +22,6 @@ class CreditsView(
 
     private val btnExit: TextButton
 
-
     init {
 
         //UI

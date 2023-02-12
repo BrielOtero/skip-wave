@@ -1,5 +1,6 @@
 package com.goldev.skipwave.ui.view
 
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -94,6 +95,7 @@ class MainMenuView(
 
         btnSettings.onTouchDown {
             log.debug { "BTN: SETTINGS" }
+            this@MainMenuView.touchable=Touchable.disabled
             model.uiStage.fire(ButtonPressedEvent())
             model.gameStage.fire(ShowSettingsViewEvent(true))
         }

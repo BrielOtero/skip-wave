@@ -26,6 +26,7 @@ import com.goldev.skipwave.event.EntityAddEvent
 import com.goldev.skipwave.event.MapChangeEvent
 import com.goldev.skipwave.event.fire
 import ktx.log.logger
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 @AllOf([SpawnComponent::class])
@@ -33,10 +34,10 @@ class EntitySpawnSystem(
     private val phWorld: World,
     private val atlas: TextureAtlas,
     private val spawnCmps: ComponentMapper<SpawnComponent>,
-    private val playerCmps: ComponentMapper<PlayerComponent>,
     private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val imageCmps: ComponentMapper<ImageComponent>,
     private val waveCmps: ComponentMapper<WaveComponent>,
+    private val moveCmps: ComponentMapper<MoveComponent>,
+
     @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : EventListener, IteratingSystem() {
@@ -186,18 +187,22 @@ class EntitySpawnSystem(
         log.debug { "Type ${model.name}" }
 
         //ENEMY LEVEL SCALE
-        val dropExperience = 10f
-
+        val dropExperience: Float
         val attack: Float
         val life: Float
+        val playerMoveSpeed: Float
         if (playerEntities.isEmpty) {
+            dropExperience = 10f
             attack = 5f
             life = 0.75f
+            playerMoveSpeed = 1f
         } else {
-            attack = 5f + waveCmps[playerEntities.first()].wave
-            life = 0.75f + (waveCmps[playerEntities.first()].wave / 10)
+            val wave = waveCmps[playerEntities.first()].wave
+            attack = 5f + wave
+            life = 0.75f + wave
+            playerMoveSpeed = moveCmps[playerEntities.first()].speed
+            dropExperience = 10f * (wave + 1)
         }
-//        levelCmps[playerEntities.first()].level
 
         //SPAWN CONFIG
         when (model) {
@@ -271,7 +276,7 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 1f,
+                speedScaling = playerMoveSpeed * 0.3f,
                 attackScaling = attack,
                 dropExperience = dropExperience,
                 physicScaling = vec2(0.9f, 0.9f),
@@ -414,8 +419,8 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
-                attackScaling = attack,
+                speedScaling = playerMoveSpeed * 0.3f,
+                attackScaling = attack * 0.7f,
                 dropExperience = dropExperience,
                 physicScaling = vec2(0.9f, 0.9f),
                 aiTreePath = "ai/enemy.tree"
@@ -425,8 +430,8 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
-                attackScaling = attack,
+                speedScaling = playerMoveSpeed * 0.3f,
+                attackScaling = attack * 0.8f,
                 dropExperience = dropExperience,
                 physicScaling = vec2(0.9f, 0.9f),
                 aiTreePath = "ai/enemy.tree"

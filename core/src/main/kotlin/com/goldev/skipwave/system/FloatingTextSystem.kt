@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.FloatingTextComponent
 import com.goldev.skipwave.event.SkillEvent
 import com.github.quillraven.fleks.*
+import com.goldev.skipwave.event.ShowPauseViewEvent
 import ktx.math.vec2
 
 @AllOf([FloatingTextComponent::class])
@@ -48,16 +49,19 @@ class FloatingTextSystem(
         }
     }
 
+    private fun clearText() {
+        textEntities.forEach { entity ->
+            world.remove(entity)
+        }
+    }
+
     override fun handle(event: Event): Boolean {
 
         when (event) {
-            is SkillEvent -> {
-                textEntities.forEach { entity ->
-                    with(textCmps[entity]) {
-                        world.remove(entity)
-                    }
-                }
-            }
+            is SkillEvent -> clearText()
+
+            is ShowPauseViewEvent -> clearText()
+
             else -> return false
         }
         return true

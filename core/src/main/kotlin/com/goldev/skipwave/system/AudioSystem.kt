@@ -25,13 +25,35 @@ class AudioSystem(
         if (soundRequests.isEmpty()) {
             return
         }
-        soundRequests.values.forEach { it.play(1f) }
+        soundRequests.values.forEach { it.play(gamePreferences.settings.effectsVolume) }
         soundRequests.clear()
+    }
+
+    init {
+        log.debug { "INIIIIT" }
+        soundRequests.clear()
+        musicCache.clear()
+        soundRequests.clear()
+    }
+
+    private fun clearMusic() {
+        musicCache.forEach { musicSong ->
+            musicSong.value.stop()
+        }
     }
 
     override fun handle(event: Event): Boolean {
         when (event) {
+            is SavePreferencesEvent -> {
+                log.debug { "CHANGE AUDIO" }
+                musicCache.forEach { musicSong ->
+                    musicSong.value.volume = gamePreferences.settings.musicVolume
+                }
+            }
+
             is ShowMainMenuViewEvent -> {
+//                musicCache.clear()
+                clearMusic()
                 val path = "audio/main_menu.ogg"
 
                 log.debug { "Changing music to $path" }
@@ -51,13 +73,9 @@ class AudioSystem(
                     log.debug { "Changing music to $path" }
                     val music = musicCache.getOrPut(path) {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
-//                            isLooping = true
+
                             volume = gamePreferences.settings.musicVolume
-//                            volume =0f
-                            if (position > 2) {
-                                log.debug { "RESET" }
-                                position = 0F
-                            }
+
                             setOnCompletionListener {
                                 val newPath = path.replace("intro", "loop")
                                 log.debug { "Changing music to $newPath" }
@@ -79,7 +97,6 @@ class AudioSystem(
                 } else {
                     queueSound("audio/${event.model.atlasKey}_attack.wav")
                 }
-
             }
 
             is EntityDeathEvent -> {
@@ -92,7 +109,6 @@ class AudioSystem(
             }
 
             is ButtonPressedEvent -> queueSound("audio/button.wav")
-
             is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.wav")
             is EntityLevelEvent -> queueSound("audio/level_up.wav")
         }
@@ -108,9 +124,7 @@ class AudioSystem(
         }
 
         val sound = soundCache.getOrPut(soundPath) {
-            Gdx.audio.newSound(Gdx.files.internal(soundPath)).apply {
-                setVolume()
-            }
+            Gdx.audio.newSound(Gdx.files.internal(soundPath))
         }
         soundRequests[soundPath] = sound
     }

@@ -8,6 +8,7 @@ import com.github.quillraven.fleks.*
 import com.goldev.skipwave.event.EntityLevelEvent
 import com.goldev.skipwave.event.fire
 import ktx.log.logger
+import kotlin.math.pow
 
 @AllOf([WaveComponent::class])
 class WaveSystem(
@@ -24,7 +25,7 @@ class WaveSystem(
                 with(waveCmps[entity]) {
 //                    log.debug { "Experience NEXT WAVE before ${experienceToNextLevel}" }
                     wave += 1
-                    experienceToNextLevel = experience + 500f
+                    experienceToNextLevel = experience + (wave/0.2f).pow(2f)
 
 //                    log.debug { "Experience NEXT WAVE after ${experienceToNextLevel}" }
                     gameStage.fire(EntityLevelEvent(entity))

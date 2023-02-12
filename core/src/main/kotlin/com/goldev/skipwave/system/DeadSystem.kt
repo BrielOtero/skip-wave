@@ -16,7 +16,7 @@ class DeadSystem(
     private val animationCmps: ComponentMapper<AnimationComponent>,
     private val enemyCmps: ComponentMapper<EnemyComponent>,
     private val experienceCmps: ComponentMapper<ExperienceComponent>,
-    private val playerCmps:ComponentMapper<PlayerComponent>,
+    private val playerCmps: ComponentMapper<PlayerComponent>,
     @Qualifier("gameStage") private val gameStage: Stage
 ) : IteratingSystem() {
 
@@ -24,24 +24,25 @@ class DeadSystem(
         val deadCmp = deadCmps[entity]
         if (deadCmp.reviveTime == 0f) {
 
-//            if (deadCmp.waitForAnimation) {
-//                if (animationCmps[entity].isAnimationDone) {
-//                    deadCmp.waitForAnimation=false
-//                    world.remove(entity)
-//                }
-//                return
-//            }
+            if (deadCmp.waitForAnimation) {
+                if (animationCmps[entity].isAnimationDone) {
+                    deadCmp.waitForAnimation = false
+                    world.remove(entity)
+                }
+                return
+            }
 
             gameStage.fire(EntityDeathEvent(animationCmps[entity].model))
             if (entity in enemyCmps) {
                 gameStage.fire(EnemyDeathEvent(experienceCmps[entity]))
             }
-//            if (animationCmps[entity].isAnimationDone) {
-//                world.remove(entity)
-//            } else {
-//                deadCmp.waitForAnimation = true
-//            }
+
+            if (animationCmps[entity].isAnimationDone) {
                 world.remove(entity)
+            } else {
+                deadCmp.waitForAnimation = true
+            }
+//            world.remove(entity)
 
             return
         }
@@ -60,7 +61,8 @@ class DeadSystem(
             configureEntity(entity) { deadCmps.remove(entity) }
         }
     }
-    companion object{
+
+    companion object {
         private val log = logger<DeadSystem>()
     }
 }

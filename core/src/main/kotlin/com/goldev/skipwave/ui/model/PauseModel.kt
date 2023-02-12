@@ -9,6 +9,7 @@ import com.goldev.skipwave.ui.view.GameView
 import com.goldev.skipwave.ui.view.PauseView
 import com.github.quillraven.fleks.Qualifier
 import com.goldev.skipwave.event.*
+import com.goldev.skipwave.ui.view.TouchpadView
 import ktx.log.logger
 
 class PauseModel(
@@ -27,11 +28,19 @@ class PauseModel(
                 gameStage.fire(GamePauseEvent())
                 uiStage.actors.filterIsInstance<PauseView>().first().isVisible = true
                 uiStage.actors.filterIsInstance<GameView>().first().isVisible = false
+                with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
+                    this.model.disableTouchpad = true
+                    isVisible = false
+                }
             }
 
             is HidePauseViewEvent -> {
                 uiStage.actors.filterIsInstance<PauseView>().first().isVisible = false
                 uiStage.actors.filterIsInstance<GameView>().first().isVisible = true
+                with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
+                    this.model.disableTouchpad = false
+                    isVisible = true
+                }
                 gameStage.fire(GameResumeEvent())
             }
 

@@ -31,8 +31,6 @@ class AudioSystem(
 
     override fun handle(event: Event): Boolean {
         when (event) {
-
-
             is ShowMainMenuViewEvent -> {
                 val path = "audio/main_menu.ogg"
 
@@ -60,15 +58,15 @@ class AudioSystem(
                                 log.debug { "RESET" }
                                 position = 0F
                             }
+                            setOnCompletionListener {
+                                val newPath = path.replace("intro", "loop")
+                                log.debug { "Changing music to $newPath" }
+                                Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
+                                    isLooping = true
+                                    volume = gamePreferences.settings.musicVolume
+                                }.play()
+                            }
                         }
-                    }
-                    music.setOnCompletionListener {
-                        val newPath = path.replace("intro", "loop")
-                        log.debug { "Changing music to $newPath" }
-                        Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
-                            isLooping = true
-                            volume = gamePreferences.settings.musicVolume
-                        }.play()
                     }
                     music.play()
                 }

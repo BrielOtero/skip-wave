@@ -5,6 +5,7 @@ import com.gabriel.ui.model.*
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.utils.Scaling
 import com.gabriel.event.*
 import com.gabriel.ui.TextButtons
 import com.gabriel.ui.Drawables
@@ -22,7 +23,7 @@ class MainMenuView(
     private val btnNewGame: TextButton
     private val btnSettings: TextButton
     private val btnCredits: TextButton
-    private val btnExit:TextButton
+    private val btnExit: TextButton
 
     init {
 
@@ -34,8 +35,14 @@ class MainMenuView(
             label(text = "SKIP WAVE", style = Labels.FRAME.skinKey) { lblCell ->
                 lblCell.row()
                 lblCell.padTop(10f)
-                lblCell.padBottom(100f)
+                lblCell.padBottom(10f)
                 this.setFontScale(0.4f)
+            }
+
+
+            image(skin[Drawables.PLAYER]) { imageCell ->
+                setScaling(Scaling.stretch)
+                imageCell.height(50f).width(50f).padBottom(10f).row()
             }
 
             this@MainMenuView.btnNewGame =
@@ -61,7 +68,7 @@ class MainMenuView(
                         .colspan(2)
                         .row()
                 }
-            this@MainMenuView.btnExit=
+            this@MainMenuView.btnExit =
                 textButton(text = model.bundle["MainMenuView.exit"], style = TextButtons.DEFAULT.skinKey) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
                         .height(25f).width(110f)

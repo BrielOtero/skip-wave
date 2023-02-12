@@ -18,6 +18,7 @@ import com.gabriel.ui.widget.skillSlot
 import ktx.actors.alpha
 import ktx.actors.onTouchDown
 import ktx.actors.plusAssign
+import ktx.actors.then
 import ktx.log.logger
 import ktx.scene2d.*
 
@@ -31,6 +32,7 @@ class SkillUpgradeView(
     init {
         //UI
         this.alpha = 0f
+        this.isVisible = false
         setPosition(-500f, 0f)
         setFillParent(true)
 
@@ -42,7 +44,8 @@ class SkillUpgradeView(
             }
 
             for (i in 1..3) {
-                this@SkillUpgradeView.skillSlots += skillSlot(skin = skin, uiStage = model.uiStage, bundle = model.bundle
+                this@SkillUpgradeView.skillSlots += skillSlot(
+                    skin = skin, uiStage = model.uiStage, bundle = model.bundle
                 ) { skillCell ->
                     skillCell.expand().width(model.uiStage.width * 0.8f).height(model.uiStage.height * 0.25f).center()
                         .row()
@@ -50,7 +53,13 @@ class SkillUpgradeView(
 
                     onTouchDown {
                         this@SkillUpgradeView.setPosition(-500f, 0f)
-                        this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f))
+                        this@SkillUpgradeView += Actions.sequence(Actions.fadeOut(0.2f)).then(
+                            Actions.run(Runnable() {
+                                kotlin.run {
+                                    this@SkillUpgradeView.isVisible = false
+                                }
+                            }),
+                        )
                         model.gameStage.fire(SkillApplyEvent(skillModel))
 
                     }
@@ -83,9 +92,11 @@ class SkillUpgradeView(
         if (this.alpha == 0f) {
             this.clearActions()
             this.setPosition(0f, 0f)
+            this@SkillUpgradeView.isVisible = true
             this += Actions.sequence(Actions.fadeIn(0.2f))
         }
     }
+
     fun skill(skillModel: SkillModel) {
         skillSlots[skillModel.slotIdx].skill(skillModel)
     }

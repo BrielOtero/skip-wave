@@ -26,7 +26,7 @@ class LifeSystem(
     private val animationCmps: ComponentMapper<AnimationComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
 ) : IteratingSystem() {
-    private val damageFont = BitmapFont(Gdx.files.internal("damage.fnt")).apply { data.setScale(0.23f) }
+    private val damageFont = BitmapFont(Gdx.files.internal("ui/thaleah_fat.fnt")).apply { data.setScale(0.33f) }
     private val floatingTextStyle = LabelStyle(damageFont, Color.YELLOW)
     private val floatingTextStylePlayer = LabelStyle(damageFont, Color.RED)
 

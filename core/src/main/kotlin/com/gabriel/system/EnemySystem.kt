@@ -30,8 +30,8 @@ class EnemySystem(
 
         //AMOUNT ENEMIES
         if (actualLevel > 1 && actualLevel != lastLevel) {
-            if (ENEMY_AMOUNT <= 250) {
-                ENEMY_AMOUNT += 2
+            if (ENEMY_AMOUNT <= 500) {
+                ENEMY_AMOUNT += 5
                 lastLevel = actualLevel
             }
         }

@@ -90,12 +90,12 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         gameStage.addListener(this)
         uiStage.addListener(this)
         uiStage.actors {
-            gameView(GameModel(eWorld, game.bundle, gameStage,uiStage))
+            gameView(GameModel(eWorld, game.bundle, gameStage, uiStage))
             skillUpgradeView(SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage))
             touchpadView(TouchpadModel(eWorld, uiStage))
             recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
-            pauseView(PauseModel(game.bundle,gameStage,uiStage))
-            settingsView(SettingsModel(game.bundle,game.gamePreferences,gameStage,uiStage))
+            pauseView(PauseModel(game.bundle, gameStage, uiStage))
+            settingsView(SettingsModel(game.bundle, game.gamePreferences, gameStage, uiStage))
         }
 
 
@@ -169,17 +169,17 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             }
 
             is NewMapEvent -> {
-                currentMap= TmxMapLoader().load(event.path)
+                currentMap = TmxMapLoader().load(event.path)
                 gameStage.fire(MapChangeEvent(currentMap!!))
             }
 
-            is SavePreferencesEvent ->{
+            is SavePreferencesEvent -> {
                 log.debug { "SAVE GAME" }
                 log.debug { "${game.gamePreferences.settings.musicVolume}" }
                 game.preferences.saveGamePreferences(game.gamePreferences)
             }
 
-            is ExitGameEvent ->{
+            is ExitGameEvent -> {
                 log.debug { "EXIT GAME" }
                 Gdx.app.exit()
             }
@@ -190,9 +190,14 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         return true
     }
 
-//    override fun pause() = pauseWorld(true)
-//
-//    override fun resume() = pauseWorld(false)
+    override fun pause() {
+        if (!uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible &&
+            !uiStage.actors.filterIsInstance<PauseView>().first().isVisible
+        ) {
+            gameStage.fire(ShowPauseViewEvent())
+        }
+
+    }
 
     override fun render(delta: Float) {
         val dt = delta.coerceAtMost(0.25f)

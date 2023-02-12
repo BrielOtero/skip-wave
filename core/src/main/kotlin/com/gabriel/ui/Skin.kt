@@ -15,6 +15,8 @@ enum class Drawables(
 //    CHAR_INFO_BGD("char_info"),
 
     //UI
+    PLAYER("player"),
+
     LIFE_BAR("life_progress"),
     LIFE_UNDER("life_under"),
     EXPERIENCE_BAR("experience_progress"),

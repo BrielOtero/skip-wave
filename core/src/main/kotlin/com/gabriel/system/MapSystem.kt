@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.gabriel.component.AnimationModel
+import com.gabriel.component.ExperienceComponent
 import com.gabriel.component.WaveComponent
 import com.gabriel.event.*
 import com.github.quillraven.fleks.ComponentMapper
@@ -15,6 +16,7 @@ import ktx.log.logger
 class MapSystem(
     @Qualifier("gameStage") private val gameStage: Stage,
     private val waveCmps: ComponentMapper<WaveComponent>,
+    private val experienceCmps: ComponentMapper<ExperienceComponent>,
 ) : IntervalSystem(), EventListener {
     private var maps = MAPS.values().toList()
     private var lastWaveChange = 0
@@ -23,12 +25,17 @@ class MapSystem(
 
     override fun handle(event: Event?): Boolean {
         when (event) {
-            is HalfOfNextWaveExperienceEvent -> {
+            is EntityExperienceEvent -> {
+
                 val waveCmp = waveCmps[event.entity]
-                if (waveCmp.wave != lastWaveChange) {
-                    gameStage.fire(NewMapEvent(maps.shuffled()[0].path))
-                    log.debug { "Wave ${waveCmp.wave}" }
-                    lastWaveChange = waveCmp.wave
+                val experienceCmp = experienceCmps[event.entity]
+
+                if ((waveCmps[event.entity].wave % 2 == 0) && experienceCmp.experience >= (experienceCmp.experienceToNextLevel) / 2) {
+                    if (waveCmp.wave != lastWaveChange) {
+                        gameStage.fire(NewMapEvent(maps.shuffled()[0].path))
+                        log.debug { "MAP CHANGE ON ${waveCmp.wave} with ${experienceCmp.experience} exp" }
+                        lastWaveChange = waveCmp.wave
+                    }
                 }
 
             }

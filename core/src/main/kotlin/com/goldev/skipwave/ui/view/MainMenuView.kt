@@ -22,7 +22,7 @@ class MainMenuView(
 
     private val btnNewGame: TextButton
     private val btnSettings: TextButton
-    private val btnCredits: TextButton
+//    private val btnCredits: TextButton
     private val btnExit: TextButton
 
     init {
@@ -61,13 +61,13 @@ class MainMenuView(
                         .row()
                 }
 
-            this@MainMenuView.btnCredits =
-                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
-                    cell.top().padTop(5f).padBottom(6f)
-                        .height(25f).width(110f)
-                        .colspan(2)
-                        .row()
-                }
+//            this@MainMenuView.btnCredits =
+//                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
+//                    cell.top().padTop(5f).padBottom(6f)
+//                        .height(25f).width(110f)
+//                        .colspan(2)
+//                        .row()
+//                }
             this@MainMenuView.btnExit =
                 textButton(text = model.bundle["MainMenuView.exit"], style = TextButtons.DEFAULT.skinKey) { cell ->
                     cell.top().padTop(5f).padBottom(6f)

@@ -22,7 +22,6 @@ class TouchpadModel(
 
     private val tmpVec = vec2()
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
-    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
     private var playerCos = 0f
     private var playerSin = 0f
     var knobPercentX = 0f

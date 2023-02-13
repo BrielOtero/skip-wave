@@ -24,7 +24,7 @@ class TouchpadView(
     init {
         // UI
         alpha = 0f
-        setPosition(-100f, 0f)
+        setPosition(-200f, 0f)
 
         touchpad(0f) { cell ->
             cell.size(70f, 70f)

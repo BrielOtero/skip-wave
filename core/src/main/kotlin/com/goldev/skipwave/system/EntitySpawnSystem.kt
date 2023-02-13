@@ -199,7 +199,7 @@ class EntitySpawnSystem(
         } else {
             val wave = waveCmps[playerEntities.first()].wave
             attack = 5f + wave
-            life = 0.75f + wave
+            life = 0.75f + (wave + 1 / 2)
             playerMoveSpeed = moveCmps[playerEntities.first()].speed
             dropExperience = 10f * (wave + 1)
         }

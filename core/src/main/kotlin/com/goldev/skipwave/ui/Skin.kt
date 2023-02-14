@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import ktx.assets.disposeSafely
+import ktx.collections.defaultSetSize
 import ktx.scene2d.Scene2DSkin
 import ktx.style.*
 
@@ -116,7 +117,6 @@ fun loadSkin() {
         textButton(TextButtons.TITLE.skinKey){
             font = skin[Fonts.DEFAULT_WHITE]
             up = skin[Drawables.FRAME_FGD_LIGHT]
-
         }
 
         button(Buttons.LEFT.skinKey){
@@ -129,6 +129,9 @@ fun loadSkin() {
         }
         button(Buttons.PAUSE.skinKey){
             up = skin[Drawables.BTN_PAUSE]
+        }
+        scrollPane {
+//            vScrollKnob=skin[Drawables.BTN_PAUSE]
         }
     }
 }

@@ -56,9 +56,8 @@ class SkipWave : KtxGame<KtxScreen>(){
         gamePreferences = preferences.loadGamePreferences()!!
 
         loadSkin()
-        val locale: Locale = Locale.getDefault()
-        log.debug { "LOCALE ${locale.displayName}" }
-        bundle = I18NBundle.createBundle(Gdx.files.internal("i18n/MyBundle"), locale)
+        log.debug { "LOCALE ${Locale.getDefault().displayName}" }
+        bundle = I18NBundle.createBundle(Gdx.files.internal("i18n/MyBundle"))
 
 
         addScreen(MainMenuScreen(this))

@@ -58,7 +58,7 @@ class ChangeValue(
         //MANAGE EVENTS
 
         btnLeft.onTouchDown {
-            log.debug { "TOUCH LEFT" }
+            log.debug { "BTN: TOUCH LEFT" }
             var value = lblValue.text.toString().toInt()
             btnLeftTouchUp = false
             timerLeft = java.util.Timer()
@@ -69,7 +69,6 @@ class ChangeValue(
                             if (lblValue.text.toString().toInt() > 0) {
                                 value--
                                 lblValue.setText(value)
-                                log.debug { "Delay" }
                             }else{
                                 timerLeft.cancel();
                             }
@@ -84,7 +83,7 @@ class ChangeValue(
         btnLeft.onClick { btnLeftTouchUp = true }
 
         btnRight.onTouchDown {
-            log.debug { "TOUCH RIGHT" }
+            log.debug { "BTN: TOUCH RIGHT" }
             var value = lblValue.text.toString().toInt()
             btnRightTouchUp = false
             timerRight= java.util.Timer()
@@ -95,7 +94,6 @@ class ChangeValue(
                             if (lblValue.text.toString().toInt() < 100) {
                                 value++
                                 lblValue.setText(value)
-                                log.debug { "Delay" }
                             }else{
                                 timerRight.cancel();
                             }

@@ -116,15 +116,15 @@ class SettingsView(
         }
 
         //EVENTS
-//        cvMusic.onTouchDown {
-//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
-//        }
+        cvMusic.onTouchDown {
+            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+        }
         cvMusic.onClick {
             this@SettingsView.model.musicVolume = getValue()
         }
-//        cvEffects.onTouchDown {
-//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
-//        }
+        cvEffects.onTouchDown {
+            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+        }
         cvEffects.onClick {
             this@SettingsView.model.effectsVolume = getValue()
         }

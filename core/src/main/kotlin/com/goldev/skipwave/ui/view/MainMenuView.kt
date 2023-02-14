@@ -26,7 +26,7 @@ class MainMenuView(
     private val btnNewGame: TextButton
     private val btnSettings: TextButton
 
-    //    private val btnCredits: TextButton
+    private val btnCredits: TextButton
     private val btnExit: TextButton
     private val versionName: String = "1.3"
 
@@ -64,13 +64,13 @@ class MainMenuView(
                         .row()
                 }
 
-//            this@MainMenuView.btnCredits =
-//                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
-//                    cell.top().padTop(5f).padBottom(6f)
-//                        .height(25f).width(110f)
-//                        .colspan(2)
-//                        .row()
-//                }
+            this@MainMenuView.btnCredits =
+                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                    cell.top().padTop(5f).padBottom(6f)
+                        .height(25f).width(110f)
+                        .colspan(2)
+                        .row()
+                }
             this@MainMenuView.btnExit =
                 textButton(text = model.bundle["MainMenuView.exit"], style = TextButtons.DEFAULT.skinKey) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
@@ -78,7 +78,10 @@ class MainMenuView(
                         .colspan(2)
                         .row()
                 }
-            label(text =  "${model.bundle["MainMenuView.version"]}: ${this@MainMenuView.versionName}", style = Labels.FRAME.skinKey) { cell ->
+            label(
+                text = "${model.bundle["MainMenuView.version"]}: ${this@MainMenuView.versionName}",
+                style = Labels.FRAME.skinKey
+            ) { cell ->
                 cell.bottom().expand().padTop(5f).padBottom(6f).row()
                 this.setFontScale(0.2f)
             }
@@ -105,6 +108,10 @@ class MainMenuView(
             this@MainMenuView.touchable = Touchable.disabled
             model.uiStage.fire(ButtonPressedEvent())
             model.gameStage.fire(ShowSettingsViewEvent(true))
+        }
+        btnCredits.onTouchDown {
+            model.uiStage.actors.filterIsInstance<CreditsView>().first().isVisible = true
+            model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.disabled
         }
         btnExit.onTouchDown {
             log.debug { "BTN: EXIT" }

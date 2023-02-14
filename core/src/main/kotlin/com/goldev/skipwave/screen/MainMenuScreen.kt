@@ -15,6 +15,8 @@ import com.github.quillraven.fleks.world
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.system.AudioSystem
 import com.goldev.skipwave.system.VibrateSystem
+import com.goldev.skipwave.ui.model.CreditsModel
+import com.goldev.skipwave.ui.view.creditsView
 import com.goldev.skipwave.ui.view.mainMenuView
 import com.goldev.skipwave.ui.view.settingsView
 import ktx.app.KtxScreen
@@ -24,8 +26,6 @@ import ktx.scene2d.actors
 class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
     private val gameStage = game.gameStage
     private val uiStage = game.uiStage
-    private val mainMenuModel = MainMenuModel(game.bundle,uiStage, gameStage)
-    private val settingsModel = SettingsModel(game.bundle,game.gamePreferences, gameStage,uiStage)
 
     private val eWorld = world {
 
@@ -43,19 +43,16 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
     init {
         Gdx.input.inputProcessor = uiStage
-        uiStage.addListener(mainMenuModel)
-        uiStage.addListener(settingsModel)
         uiStage.addListener(this)
         gameStage.addListener(this)
         uiStage.actors {
-            mainMenuView(mainMenuModel)
-            settingsView(settingsModel)
+            mainMenuView(MainMenuModel(game.bundle, uiStage, gameStage))
+            settingsView(SettingsModel(game.bundle, game.gamePreferences, gameStage, uiStage))
+            creditsView(CreditsModel(game.bundle, gameStage, uiStage))
         }
         gameStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
         uiStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
     }
-
-
 
 
     override fun show() {
@@ -66,7 +63,7 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
             }
         }
         gameStage.fire(ShowMainMenuViewEvent())
-        uiStage.isDebugAll = true
+//        uiStage.isDebugAll = true
     }
 
     override fun render(delta: Float) {
@@ -101,13 +98,13 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
                 dispose()
             }
 
-            is SavePreferencesEvent ->{
+            is SavePreferencesEvent -> {
                 log.debug { "SAVE GAME" }
                 log.debug { "${game.gamePreferences.settings.musicVolume}" }
                 game.preferences.saveGamePreferences(game.gamePreferences)
             }
 
-            is ExitGameEvent ->{
+            is ExitGameEvent -> {
                 log.debug { "EXIT GAME" }
                 Gdx.app.exit()
             }

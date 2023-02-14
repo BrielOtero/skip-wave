@@ -36,7 +36,7 @@ class SkillUpgradeView(
 
         table { tableCell ->
             background = skin[Drawables.FRAME_BGD]
-            label(text = model.bundle.get("SkillUpgradeView.title"), style = Labels.FRAME.skinKey) { lblCell ->
+            label(text = model.bundle["SkillUpgradeView.title"], style = Labels.FRAME.skinKey) { lblCell ->
                 lblCell.padTop(10f).padBottom(8f).row()
                 this.setFontScale(0.4f)
             }

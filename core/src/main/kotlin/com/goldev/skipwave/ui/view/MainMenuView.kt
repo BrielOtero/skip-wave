@@ -1,9 +1,11 @@
 package com.goldev.skipwave.ui.view
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.ui.model.MainMenuModel
@@ -14,6 +16,7 @@ import com.goldev.skipwave.ui.get
 import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
+import java.util.jar.Manifest
 
 class MainMenuView(
     model: MainMenuModel,
@@ -22,8 +25,10 @@ class MainMenuView(
 
     private val btnNewGame: TextButton
     private val btnSettings: TextButton
-//    private val btnCredits: TextButton
+
+    //    private val btnCredits: TextButton
     private val btnExit: TextButton
+    private val versionName: String = "1.3"
 
     init {
 
@@ -33,12 +38,10 @@ class MainMenuView(
         table { tableCell ->
 
             label(text = "SKIP WAVE", style = Labels.FRAME.skinKey) { lblCell ->
-                lblCell.row()
-                lblCell.padTop(10f)
-                lblCell.padBottom(10f)
+                lblCell.height(50f).width(150f).padBottom(10f).padTop(70f).row()
+                setAlignment(Align.center)
                 this.setFontScale(0.4f)
             }
-
 
             image(skin[Drawables.PLAYER]) { imageCell ->
                 setScaling(Scaling.stretch)
@@ -75,6 +78,10 @@ class MainMenuView(
                         .colspan(2)
                         .row()
                 }
+            label(text =  "${model.bundle["MainMenuView.version"]}: ${this@MainMenuView.versionName}", style = Labels.FRAME.skinKey) { cell ->
+                cell.bottom().expand().padTop(5f).padBottom(6f).row()
+                this.setFontScale(0.2f)
+            }
 
             tableCell.expand().padBottom(10f).fill().center()
         }
@@ -95,7 +102,7 @@ class MainMenuView(
 
         btnSettings.onTouchDown {
             log.debug { "BTN: SETTINGS" }
-            this@MainMenuView.touchable=Touchable.disabled
+            this@MainMenuView.touchable = Touchable.disabled
             model.uiStage.fire(ButtonPressedEvent())
             model.gameStage.fire(ShowSettingsViewEvent(true))
         }

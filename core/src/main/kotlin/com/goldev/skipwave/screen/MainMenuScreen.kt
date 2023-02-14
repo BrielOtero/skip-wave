@@ -66,7 +66,7 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
             }
         }
         gameStage.fire(ShowMainMenuViewEvent())
-//        uiStage.isDebugAll = true
+        uiStage.isDebugAll = true
     }
 
     override fun render(delta: Float) {

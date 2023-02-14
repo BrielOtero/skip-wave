@@ -13,7 +13,9 @@ import com.goldev.skipwave.ui.get
 import com.goldev.skipwave.ui.model.SettingsModel
 import com.goldev.skipwave.ui.widget.ChangeValue
 import com.goldev.skipwave.ui.widget.changeValue
+import ktx.actors.onClick
 import ktx.actors.onTouchDown
+import ktx.actors.onTouchUp
 import ktx.log.logger
 import ktx.scene2d.*
 
@@ -114,19 +116,23 @@ class SettingsView(
         }
 
         //EVENTS
-        cvMusic.onTouchDown {
-            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+//        cvMusic.onTouchDown {
+//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+//        }
+        cvMusic.onClick {
             this@SettingsView.model.musicVolume = getValue()
         }
-        cvEffects.onTouchDown {
-            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+//        cvEffects.onTouchDown {
+//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+//        }
+        cvEffects.onClick {
             this@SettingsView.model.effectsVolume = getValue()
         }
         btnApplyChanges.onTouchDown {
             model.gameStage.fire(ButtonPressedEvent())
             this@SettingsView.model.saveSettings()
             this@SettingsView.isVisible = false
-            if(model.isMainMenuCall){
+            if (model.isMainMenuCall) {
                 model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
             }
         }
@@ -143,7 +149,7 @@ class SettingsView(
             internalTable.background = null
         } else {
             this.background = null
-            internalTable.background= skin[Drawables.FRAME_BGD]
+            internalTable.background = skin[Drawables.FRAME_BGD]
         }
     }
 

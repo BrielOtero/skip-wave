@@ -7,13 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.I18NBundle
+import com.badlogic.gdx.utils.Timer
+import com.badlogic.gdx.utils.Timer.Task
 import com.goldev.skipwave.ui.Buttons
 import com.goldev.skipwave.ui.Labels
+import ktx.actors.onClick
 import ktx.actors.onTouchDown
 import ktx.actors.plusAssign
 import ktx.app.KtxInputAdapter
 import ktx.log.logger
 import ktx.scene2d.*
+import java.util.*
+
 
 class ChangeValue(
     private val defaultValue: Float,
@@ -25,6 +30,11 @@ class ChangeValue(
     private val btnLeft: Button = button(style = Buttons.LEFT.skinKey)
     private val btnRight: Button = button(style = Buttons.RIGHT.skinKey)
     private val lblValue: Label = label(defaultValue.toInt().toString(), style = Labels.FRAME.skinKey)
+    private lateinit var timerLeft: java.util.Timer
+    private lateinit var timerRight : java.util.Timer
+
+    private var btnLeftTouchUp = false
+    private var btnRightTouchUp = false
 
 
     init {
@@ -50,26 +60,64 @@ class ChangeValue(
         btnLeft.onTouchDown {
             log.debug { "TOUCH LEFT" }
             var value = lblValue.text.toString().toInt()
-            if (lblValue.text.toString().toInt() > 0) {
-                value--
-                lblValue.setText(value)
-            }
+            btnLeftTouchUp = false
+            timerLeft = java.util.Timer()
+            timerLeft.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    synchronized(this) {
+                        if (!btnLeftTouchUp) {
+                            if (lblValue.text.toString().toInt() > 0) {
+                                value--
+                                lblValue.setText(value)
+                                log.debug { "Delay" }
+                            }else{
+                                timerLeft.cancel();
+                            }
+                        } else {
+                            timerLeft.cancel();
+                        }
+                    }
+                }
+            }, 0, 100)
         }
+
+        btnLeft.onClick { btnLeftTouchUp = true }
 
         btnRight.onTouchDown {
             log.debug { "TOUCH RIGHT" }
             var value = lblValue.text.toString().toInt()
-            if (lblValue.text.toString().toInt() < 100) {
-                value++
-                lblValue.setText(value)
-            }
+            btnRightTouchUp = false
+            timerRight= java.util.Timer()
+            timerRight.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    synchronized(this) {
+                        if (!btnRightTouchUp) {
+                            if (lblValue.text.toString().toInt() < 100) {
+                                value++
+                                lblValue.setText(value)
+                                log.debug { "Delay" }
+                            }else{
+                                timerRight.cancel();
+                            }
+                        } else {
+                            timerRight.cancel();
+                        }
+                    }
+                }
+            }, 0, 100)
         }
+
+        btnRight.onClick { btnRightTouchUp = true }
+
     }
+
     fun getValue() = lblValue.text.toString().toFloat()
+
     companion object {
         private var log = logger<ChangeValue>()
     }
 }
+
 
 @Scene2dDsl
 fun <S> KWidget<S>.changeValue(

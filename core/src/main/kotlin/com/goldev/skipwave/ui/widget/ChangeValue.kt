@@ -9,11 +9,11 @@ import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.Timer.Task
+import com.goldev.skipwave.event.ButtonPressedEvent
+import com.goldev.skipwave.event.fire
 import com.goldev.skipwave.ui.Buttons
 import com.goldev.skipwave.ui.Labels
-import ktx.actors.onClick
-import ktx.actors.onTouchDown
-import ktx.actors.plusAssign
+import ktx.actors.*
 import ktx.app.KtxInputAdapter
 import ktx.log.logger
 import ktx.scene2d.*
@@ -21,19 +21,21 @@ import java.util.*
 
 
 class ChangeValue(
-    private val defaultValue: Float,
-    private val uiStage: Stage,
+    private val defaultValue: Int,
+    private val gameStage: Stage,
     private val skin: Skin,
     private val bundle: I18NBundle,
 ) : WidgetGroup(), KGroup, KtxInputAdapter {
 
     private val btnLeft: Button = button(style = Buttons.LEFT.skinKey)
     private val btnRight: Button = button(style = Buttons.RIGHT.skinKey)
-    private val lblValue: Label = label(defaultValue.toInt().toString(), style = Labels.FRAME.skinKey)
+    private val lblValue: Label = label(defaultValue.toString(), style = Labels.FRAME.skinKey)
     private lateinit var timerLeft: java.util.Timer
-    private lateinit var timerRight : java.util.Timer
+    private lateinit var timerRight: java.util.Timer
 
+    private var btnLeftTouchDown = false
     private var btnLeftTouchUp = false
+    private var btnRightTouchDown = false
     private var btnRightTouchUp = false
 
 
@@ -59,8 +61,15 @@ class ChangeValue(
 
         btnLeft.onTouchDown {
             log.debug { "BTN: TOUCH LEFT" }
+            btnLeftTouchDown = true
+
+            if (btnRightTouchDown) {
+                return@onTouchDown
+            }
+
             var value = lblValue.text.toString().toInt()
             btnLeftTouchUp = false
+            gameStage.fire(ButtonPressedEvent())
             timerLeft = java.util.Timer()
             timerLeft.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
@@ -69,7 +78,7 @@ class ChangeValue(
                             if (lblValue.text.toString().toInt() > 0) {
                                 value--
                                 lblValue.setText(value)
-                            }else{
+                            } else {
                                 timerLeft.cancel();
                             }
                         } else {
@@ -80,13 +89,27 @@ class ChangeValue(
             }, 0, 100)
         }
 
-        btnLeft.onClick { btnLeftTouchUp = true }
+        btnLeft.onClick {
+            btnLeftTouchUp = true
+            btnLeftTouchDown = false
+        }
+        btnLeft.onExit {
+            btnLeftTouchUp = true
+            btnLeftTouchDown = false
+        }
 
         btnRight.onTouchDown {
             log.debug { "BTN: TOUCH RIGHT" }
+            btnRightTouchDown = true
+
+            if (btnLeftTouchDown) {
+                return@onTouchDown
+            }
+
+            gameStage.fire(ButtonPressedEvent())
             var value = lblValue.text.toString().toInt()
             btnRightTouchUp = false
-            timerRight= java.util.Timer()
+            timerRight = java.util.Timer()
             timerRight.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     synchronized(this) {
@@ -94,7 +117,7 @@ class ChangeValue(
                             if (lblValue.text.toString().toInt() < 100) {
                                 value++
                                 lblValue.setText(value)
-                            }else{
+                            } else {
                                 timerRight.cancel();
                             }
                         } else {
@@ -105,11 +128,21 @@ class ChangeValue(
             }, 0, 100)
         }
 
-        btnRight.onClick { btnRightTouchUp = true }
+        btnRight.onClick {
+            btnRightTouchUp = true
+            btnRightTouchDown = false
+        }
+        btnRight.onExit {
+            btnRightTouchUp = true
+            btnRightTouchDown = false
+        }
 
     }
 
-    fun getValue() = lblValue.text.toString().toFloat()
+    fun getValue() = lblValue.text.toString().toInt()
+    fun setValue(value: Int) {
+        lblValue.setText(value.toString())
+    }
 
     companion object {
         private var log = logger<ChangeValue>()
@@ -119,7 +152,7 @@ class ChangeValue(
 
 @Scene2dDsl
 fun <S> KWidget<S>.changeValue(
-    defaultValue: Float,
+    defaultValue: Int,
     uiStage: Stage,
     skin: Skin = Scene2DSkin.defaultSkin,
     bundle: I18NBundle,

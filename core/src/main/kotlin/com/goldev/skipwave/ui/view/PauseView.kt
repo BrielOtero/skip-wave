@@ -68,18 +68,24 @@ class PauseView(
         btnResume.onTouchDown {
             log.debug { "BTN: RESUME" }
             model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnResume.onClick {
             model.gameStage.fire(HidePauseViewEvent())
         }
 
         btnSettings.onTouchDown{
             log.debug { "BTN: SETTINGS" }
             model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnSettings.onClick {
             model.gameStage.fire(ShowSettingsViewEvent(false))
         }
 
         btnMainMenu.onTouchDown {
             log.debug { "BTN: MAIN MENU" }
             model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnMainMenu.onClick {
             model.gameStage.fire(SetMainMenuScreenEvent())
         }
 

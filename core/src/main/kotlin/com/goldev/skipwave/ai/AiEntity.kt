@@ -151,6 +151,7 @@ data class AiEntity(
     fun inTargetRange(range: Float): Boolean {
         val aiCmp = aiCmps[entity]
         if (aiCmp.target == NO_TARGET) {
+            println("NO TARGET")
             return true
         }
 

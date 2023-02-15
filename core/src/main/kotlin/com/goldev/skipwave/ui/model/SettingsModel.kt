@@ -20,17 +20,19 @@ class SettingsModel(
     @Qualifier("uiStage") val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
-    var musicVolume by propertyNotify(gamePreferences.settings.musicVolume * 100)
-    var effectsVolume by propertyNotify(gamePreferences.settings.effectsVolume * 100)
+    var musicVolume by propertyNotify(0)
+    var effectsVolume by propertyNotify(0)
     var isMainMenuCall by propertyNotify(true)
 
     init {
         gameStage.addListener(this)
+        uiStage.addListener(this)
+
     }
 
     fun saveSettings() {
-        gamePreferences.settings.musicVolume = musicVolume / 100
-        gamePreferences.settings.effectsVolume = effectsVolume / 100
+        gamePreferences.settings.musicVolume = musicVolume.toFloat() / 100
+        gamePreferences.settings.effectsVolume = effectsVolume.toFloat() / 100
         gameStage.fire(SavePreferencesEvent())
         if (isMainMenuCall) {
             uiStage.actors.filterIsInstance<MainMenuView>().first().isVisible = true
@@ -43,8 +45,8 @@ class SettingsModel(
                 log.debug { "EVENT: ShowSettingsEvent" }
 
                 isMainMenuCall = event.isMainMenuCall
-                musicVolume = (gamePreferences.settings.musicVolume * 100)
-                effectsVolume = (gamePreferences.settings.effectsVolume * 100)
+                musicVolume = (gamePreferences.settings.musicVolume * 100).toInt()
+                effectsVolume = (gamePreferences.settings.effectsVolume * 100).toInt()
 
                 uiStage.actors.filterIsInstance<SettingsView>().first().isVisible = true
             }

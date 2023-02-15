@@ -15,6 +15,8 @@ class MainMenuModel(
 
     init {
         uiStage.addListener(this)
+        gameStage.addListener(this)
+
     }
 
     override fun handle(event: Event): Boolean {

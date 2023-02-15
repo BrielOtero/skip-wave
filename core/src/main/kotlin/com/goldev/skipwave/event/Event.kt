@@ -36,9 +36,9 @@ class SkillApplyEvent(val skill: SkillModel) : Event()
 class GamePauseEvent() : Event()
 class GameResumeEvent() : Event()
 class SavePreferencesEvent() : Event()
-class ExitGameEvent():Event()
-class ButtonPressedEvent():Event()
-class HalfOfNextWaveExperienceEvent(val entity: Entity):Event()
+class ExitGameEvent() : Event()
+class ButtonPressedEvent() : Event()
+class HalfOfNextWaveExperienceEvent(val entity: Entity) : Event()
 
 // CHANGE SCREENS
 class SetGameScreenEvent() : Event()
@@ -49,5 +49,6 @@ class ShowSettingsViewEvent(val isMainMenuCall: Boolean) : Event()
 class ShowPauseViewEvent() : Event()
 class HidePauseViewEvent() : Event()
 class ShowMainMenuViewEvent() : Event()
+class ShowCreditsViewEvent() : Event()
 
 

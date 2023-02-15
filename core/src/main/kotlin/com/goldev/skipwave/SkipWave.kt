@@ -34,7 +34,6 @@ class SkipWave : KtxGame<KtxScreen>(){
     val preferences: Preferences by lazy { Gdx.app.getPreferences(PREF_NAME) }
     lateinit var gamePreferences: GamePreferences
 
-
     override fun create() {
         Gdx.app.logLevel = LOG_DEBUG
         when (Gdx.app.type) {
@@ -50,7 +49,6 @@ class SkipWave : KtxGame<KtxScreen>(){
                 uiViewport = ExtendViewport(180f, 320f)
             }
         }
-
         gameStage.root.alpha = 0f
         uiStage.root.alpha = 0f
         gamePreferences = preferences.loadGamePreferences()!!

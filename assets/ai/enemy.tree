@@ -15,7 +15,7 @@ subtree name:"attack"
 
 subtree name:"move"
   sequence
-    move range:2.0
+    move range:0
 
 root
   selector

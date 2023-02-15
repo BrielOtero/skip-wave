@@ -114,6 +114,8 @@ class RecordsView(
         btnMainMenu.onClick {
             log.debug { "BTN: MAIN MENU" }
             model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnMainMenu.onClick {
             model.gameStage.fire(SetMainMenuScreenEvent())
         }
 

@@ -48,7 +48,7 @@ enum class DefaultState : EntityState {
                 entity.changeToPreviousState()
             } else if (attackCmp.isReady) {
                 // start another attack
-                entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
+                entity.animation(AnimationType.ATTACK, Animation.PlayMode.LOOP, true)
                 entity.startAttack()
             }
         }

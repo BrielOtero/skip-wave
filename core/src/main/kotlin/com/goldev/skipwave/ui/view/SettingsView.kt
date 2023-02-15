@@ -27,6 +27,7 @@ class SettingsView(
     private var cvMusic: ChangeValue
     private var cvEffects: ChangeValue
     private var btnApplyChanges: TextButton
+    private var btnCancelChanges: TextButton
     private val internalTable: Table
 
 
@@ -68,7 +69,7 @@ class SettingsView(
 
                 this@SettingsView.cvMusic = changeValue(
                     this@SettingsView.model.musicVolume,
-                    this@SettingsView.model.uiStage,
+                    this@SettingsView.model.gameStage,
                     skin,
                     this@SettingsView.model.bundle
                 ) { cell ->
@@ -86,7 +87,7 @@ class SettingsView(
 
                 this@SettingsView.cvEffects = changeValue(
                     this@SettingsView.model.effectsVolume,
-                    this@SettingsView.model.uiStage,
+                    this@SettingsView.model.gameStage,
                     skin,
                     this@SettingsView.model.bundle
                 ) { changeValueMusic ->
@@ -94,7 +95,7 @@ class SettingsView(
 
                 }
 
-                audioCell.expand().top().width(140f).maxHeight(180f).padBottom(10f).fill().row()
+                audioCell.expand().width(140f).maxHeight(180f).padBottom(0f).fill().row()
             }
 
             this@SettingsView.btnApplyChanges = textButton(
@@ -106,8 +107,17 @@ class SettingsView(
                     .row()
             }
 
+            this@SettingsView.btnCancelChanges = textButton(
+                text = this@SettingsView.model.bundle["SettingsView.cancelChanges"],
+                style = TextButtons.DEFAULT.skinKey
+            ) { cell ->
+                cell.width(140f).padBottom(10f)
+                    .height(25f).fill()
+                    .row()
+            }
+
             tableCell.fill().width(this@SettingsView.model.uiStage.width * 0.9f)
-                .height(this@SettingsView.model.uiStage.height * 0.75f)
+                .height(this@SettingsView.model.uiStage.height * 0.85f)
                 .center()
 
 //            tableCell.expand().fill().maxWidth(this@SettingsView.model.uiStage.width * 0.9f)
@@ -116,21 +126,30 @@ class SettingsView(
         }
 
         //EVENTS
-        cvMusic.onTouchDown {
-            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
-        }
-        cvMusic.onClick {
-            this@SettingsView.model.musicVolume = getValue()
-        }
-        cvEffects.onTouchDown {
-            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
-        }
-        cvEffects.onClick {
-            this@SettingsView.model.effectsVolume = getValue()
-        }
+//        cvMusic.onTouchDown {
+//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+//        }
+//
+//        cvEffects.onTouchDown {
+//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
+//        }
+
         btnApplyChanges.onTouchDown {
             model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnApplyChanges.onClick {
+            this@SettingsView.model.musicVolume = cvMusic.getValue()
+            this@SettingsView.model.effectsVolume = cvEffects.getValue()
             this@SettingsView.model.saveSettings()
+            this@SettingsView.isVisible = false
+            if (model.isMainMenuCall) {
+                model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
+            }
+        }
+        btnCancelChanges.onTouchDown {
+            model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnCancelChanges.onClick {
             this@SettingsView.isVisible = false
             if (model.isMainMenuCall) {
                 model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
@@ -140,6 +159,12 @@ class SettingsView(
         // DATA BINDING
         model.onPropertyChange(SettingsModel::isMainMenuCall) { isMainMenuCall ->
             changeBackground(isMainMenuCall)
+        }
+        model.onPropertyChange(SettingsModel::musicVolume) { musicVolume ->
+            setMusicVolume(musicVolume)
+        }
+        model.onPropertyChange(SettingsModel::effectsVolume) { effectsVolume ->
+            setEffectsVolume(effectsVolume)
         }
     }
 
@@ -153,6 +178,13 @@ class SettingsView(
         }
     }
 
+    private fun setMusicVolume(musicVolume: Int) {
+        cvMusic.setValue(musicVolume)
+    }
+
+    private fun setEffectsVolume(effectsVolume: Int) {
+        cvEffects.setValue(effectsVolume)
+    }
 
     companion object {
         private var log = logger<SettingsView>()

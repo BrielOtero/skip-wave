@@ -30,32 +30,35 @@ class EnemySystem(
 
 
     override fun onTick() {
-        val actualLevel = waveCmps[playerEntities.first()].wave
+        val currentWave = waveCmps[playerEntities.first()].wave
 
         //AMOUNT ENEMIES
-        if (actualLevel > 1 && actualLevel != lastLevel) {
+        if (currentWave > 1 && currentWave != lastLevel) {
             if (ENEMY_AMOUNT <= 500) {
                 ENEMY_AMOUNT += 5
-                lastLevel = actualLevel
+                lastLevel = currentWave
             }
         }
 
         //ACTUAL ENEMIES
-        if (actualLevel <= enemies.size && actualLevel % 2 == 0 && actualLevel != lastLevelChangeEnemy) {
-            if (actualLevel == 0) {
-                actualEnemy = enemies[actualLevel]
-                log.debug { "ENEMY ADDED ${enemies[actualLevel].name}" }
-            } else {
-                actualEnemy = enemies[actualLevel - 1]
-                log.debug { "ENEMY ADDED ${enemies[actualLevel-1].name}" }
-            }
-            lastLevelChangeEnemy = actualLevel
+        if (currentWave <= enemies.size  && currentWave != lastLevelChangeEnemy) {
+//            if (currentWave == 0) {
+//                actualEnemy = enemies[currentWave]
+//                log.debug { "ENEMY ADDED ${enemies[currentWave].name}" }
+//            } else {
+//                actualEnemy = enemies[currentWave - 1]
+//                log.debug { "ENEMY ADDED ${enemies[currentWave-1].name}" }
+//            }
+
+            actualEnemy = enemies[currentWave]
+            log.debug { "ENEMY ADDED ${enemies[currentWave].name}" }
+            lastLevelChangeEnemy = currentWave
         }
 
         //NOTIFY ENEMY SPAWN
         if (enemyEntities.numEntities < ENEMY_AMOUNT) {
 
-            if (actualLevel <= enemies.size) {
+            if (currentWave <= enemies.size) {
                 gameStage.fire(
                     EnemyAddEvent(
                         actualEnemy

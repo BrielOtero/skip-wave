@@ -46,7 +46,7 @@ class AttackWeaponTask : Action() {
             return Status.RUNNING
         }
 
-        if(entity.attackState== AttackState.ATTACKING){
+        if (entity.attackState == AttackState.ATTACKING) {
             entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, false)
             return Status.RUNNING;
         }
@@ -70,11 +70,13 @@ class MoveTask(
             entity.animation(AnimationType.RUN)
             return Status.RUNNING
         }
+
         entity.setPlayerForTarget()
         entity.moveToTarget()
         if (entity.inTargetRange(range)) {
             return Status.SUCCEEDED
         }
+
         return Status.RUNNING
     }
 

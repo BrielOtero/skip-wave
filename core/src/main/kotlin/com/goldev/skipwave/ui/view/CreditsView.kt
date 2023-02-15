@@ -59,10 +59,10 @@ class CreditsView(
     }
 
     init {
+        isVisible = false
 
         //UI
         setFillParent(true)
-//        isVisible=false
         background = skin[Drawables.FRAME_BGD]
 
         add(tbCreditsView)
@@ -73,9 +73,10 @@ class CreditsView(
 
         btnExit.onTouchDown {
             log.debug { "BTN: EXIT" }
-            model.uiStage.fire(ButtonPressedEvent())
-            model.gameStage.fire(ExitGameEvent())
+            model.gameStage.fire(ButtonPressedEvent())
 
+        }
+        btnExit.onClick {
             this@CreditsView.isVisible = false
             model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
         }

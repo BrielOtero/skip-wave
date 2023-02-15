@@ -10,6 +10,8 @@ import com.goldev.skipwave.ui.Buttons
 import com.goldev.skipwave.ui.model.GameModel
 import com.goldev.skipwave.ui.widget.PlayerInfo
 import com.goldev.skipwave.ui.widget.playerInfo
+import ktx.actors.onClick
+import ktx.actors.onExit
 import ktx.actors.onTouchDown
 import ktx.log.logger
 import ktx.scene2d.*
@@ -44,6 +46,8 @@ class GameView(
         btnPause.onTouchDown {
             log.debug { "BTN: PAUSE" }
             model.gameStage.fire(ButtonPressedEvent())
+        }
+        btnPause.onClick {
             model.gameStage.fire(ShowPauseViewEvent())
         }
 

@@ -28,10 +28,9 @@ class MainMenuView(
 
     private val btnCredits: TextButton
     private val btnExit: TextButton
-    private val versionName: String = "1.3"
+    private val versionName: String = "1.4"
 
     init {
-
         //UI
         setFillParent(true)
         background = skin[Drawables.FRAME_BGD]
@@ -93,7 +92,6 @@ class MainMenuView(
         btnNewGame.onTouchDown {
             log.debug { "BTN: NEW GAME" }
             model.uiStage.fire(ButtonPressedEvent())
-            model.gameStage.fire(SetGameScreenEvent())
 //            model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
 //                        Actions.run(Runnable() {
 //                            kotlin.run {
@@ -102,19 +100,31 @@ class MainMenuView(
 //                        }),
 //                    )
         }
+        btnNewGame.onClick {
+            model.gameStage.fire(SetGameScreenEvent())
+        }
 
         btnSettings.onTouchDown {
             log.debug { "BTN: SETTINGS" }
-            this@MainMenuView.touchable = Touchable.disabled
             model.uiStage.fire(ButtonPressedEvent())
+
+        }
+        btnSettings.onClick {
+            this@MainMenuView.touchable = Touchable.disabled
             model.gameStage.fire(ShowSettingsViewEvent(true))
         }
         btnCredits.onTouchDown {
-            model.uiStage.actors.filterIsInstance<CreditsView>().first().isVisible = true
-            model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.disabled
+            log.debug { "BTN: CREDITS" }
+            model.uiStage.fire(ButtonPressedEvent())
+        }
+        btnCredits.onClick {
+            this@MainMenuView.touchable  = Touchable.disabled
+            model.gameStage.fire(ShowCreditsViewEvent())
         }
         btnExit.onTouchDown {
             log.debug { "BTN: EXIT" }
+        }
+        btnExit.onClick {
             model.uiStage.fire(ButtonPressedEvent())
             model.gameStage.fire(ExitGameEvent())
         }

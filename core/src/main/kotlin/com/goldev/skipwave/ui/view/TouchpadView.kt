@@ -24,7 +24,7 @@ class TouchpadView(
     init {
         // UI
         alpha = 0f
-        setPosition(-200f, 0f)
+        setPosition(-400f, 0f)
 
         touchpad(0f) { cell ->
             cell.size(70f, 70f)
@@ -38,7 +38,7 @@ class TouchpadView(
 
             if (!isTouched && knobPercentX == 0f && knobPercentY == 0f) {
                 this@TouchpadView.alpha = 1f
-                this@TouchpadView.model.touchpadLocation = vec2(knobPercentX, knobPercentY - 200f)
+                this@TouchpadView.model.touchpadLocation = vec2(knobPercentX, knobPercentY - 400f)
             }
         }
 

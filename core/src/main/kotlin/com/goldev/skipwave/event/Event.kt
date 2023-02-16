@@ -48,6 +48,8 @@ class SetMainMenuScreenEvent() : Event()
 class ShowSettingsViewEvent(val isMainMenuCall: Boolean) : Event()
 class ShowPauseViewEvent() : Event()
 class HidePauseViewEvent() : Event()
+class ShowTutorialViewEvent() : Event()
+class HideTutorialViewEvent() : Event()
 class ShowMainMenuViewEvent() : Event()
 class ShowCreditsViewEvent() : Event()
 

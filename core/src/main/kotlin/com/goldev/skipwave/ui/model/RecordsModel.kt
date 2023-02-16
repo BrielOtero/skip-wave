@@ -33,7 +33,7 @@ class RecordsModel(
 
     var isNewRecord by propertyNotify(false)
     var reachWave by propertyNotify(0)
-    var recordWave by propertyNotify(gamePreferences.records.wave)
+    var recordWave by propertyNotify(gamePreferences.game.wave)
 
     init {
         gameStage.addListener(this)
@@ -46,7 +46,7 @@ class RecordsModel(
                 log.debug { "SHOW RECORDS" }
 
                 val tempReachWave = waveCmps[event.entity].wave
-                val tempRecordWave = gamePreferences.records.wave
+                val tempRecordWave = gamePreferences.game.wave
                 isNewRecord = tempReachWave > tempRecordWave
                 if (isNewRecord) {
                     recordWave = tempReachWave
@@ -68,7 +68,7 @@ class RecordsModel(
 
 
                 if (isNewRecord) {
-                    gamePreferences.records.wave = reachWave
+                    gamePreferences.game.wave = reachWave
                     gameStage.fire(SavePreferencesEvent())
                 }
             }

@@ -48,7 +48,9 @@ class GameView(
             model.gameStage.fire(ButtonPressedEvent())
         }
         btnPause.onClick {
-            model.gameStage.fire(ShowPauseViewEvent())
+            if (!model.uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible) {
+                model.gameStage.fire(ShowPauseViewEvent())
+            }
         }
 
         // DATA BINDING
@@ -94,7 +96,7 @@ class GameView(
     fun playerExperienceBar(percentage: Float) = playerInfo.playerExperienceBar(percentage, 0.25f)
     fun playerLevel(newLevel: Int) = playerInfo.playerLevel(newLevel)
 
-    companion object{
+    companion object {
         private val log = logger<GameView>()
     }
 }

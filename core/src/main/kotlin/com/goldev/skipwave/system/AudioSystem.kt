@@ -31,15 +31,15 @@ class AudioSystem(
 
     init {
         log.debug { "INIIIIT" }
-        soundRequests.clear()
-        musicCache.clear()
-        soundRequests.clear()
     }
 
     private fun clearMusic() {
         musicCache.forEach { musicSong ->
             musicSong.value.stop()
         }
+        soundRequests.clear()
+        soundCache.clear()
+        musicCache.clear()
     }
 
     override fun handle(event: Event): Boolean {
@@ -53,7 +53,7 @@ class AudioSystem(
 
             is ShowMainMenuViewEvent -> {
 //                musicCache.clear()
-                clearMusic()
+//                clearMusic()
                 val path = "audio/main_menu.ogg"
 
                 log.debug { "Changing music to $path" }
@@ -73,16 +73,18 @@ class AudioSystem(
                     log.debug { "Changing music to $path" }
                     val music = musicCache.getOrPut(path) {
                         Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
-
                             volume = gamePreferences.settings.musicVolume
 
                             setOnCompletionListener {
                                 val newPath = path.replace("intro", "loop")
+                                val musicLoop = musicCache.getOrPut(newPath){
+                                    Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
+                                        isLooping = true
+                                        volume = gamePreferences.settings.musicVolume
+                                    }
+                                }
+                                musicLoop.play()
                                 log.debug { "Changing music to $newPath" }
-                                Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
-                                    isLooping = true
-                                    volume = gamePreferences.settings.musicVolume
-                                }.play()
                             }
                         }
                     }

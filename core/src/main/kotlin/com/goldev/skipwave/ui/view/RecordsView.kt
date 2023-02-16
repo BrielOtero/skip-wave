@@ -83,7 +83,7 @@ class RecordsView(
 
                     }
                     this@RecordsView.lblRecordWave = label(
-                        text = "${this@RecordsView.model.gamePreferences.records.wave}",
+                        text = "${this@RecordsView.model.gamePreferences.game.wave}",
                         style = Labels.FRAME.skinKey
                     ) { lblCell ->
                         lblCell.padTop(10f).padBottom(6f).row()

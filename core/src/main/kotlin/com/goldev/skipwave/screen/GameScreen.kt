@@ -91,6 +91,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         uiStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, game.bundle, gameStage, uiStage))
+            tutorialView(TutorialModel(game.bundle,gameStage,uiStage))
             skillUpgradeView(SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage))
             touchpadView(TouchpadModel(eWorld, uiStage))
             recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
@@ -156,14 +157,13 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
                 gameStage.clear()
                 uiStage.clear()
-
                 game.addScreen(MainMenuScreen(game))
 
                 game.gameStage.root.alpha = 0f
                 game.uiStage.root.alpha = 0f
 
-                game.setScreen<MainMenuScreen>()
                 game.removeScreen<GameScreen>()
+                game.setScreen<MainMenuScreen>()
                 super.hide()
                 this.dispose()
             }
@@ -207,8 +207,8 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
     override fun dispose() {
         super.dispose()
-        textureAtlas.disposeSafely()
         eWorld.dispose()
+        textureAtlas.disposeSafely()
         currentMap?.disposeSafely()
         phWorld.disposeSafely()
     }

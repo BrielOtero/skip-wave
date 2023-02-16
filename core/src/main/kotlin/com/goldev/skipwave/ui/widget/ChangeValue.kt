@@ -1,6 +1,7 @@
 package com.goldev.skipwave.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -61,80 +62,87 @@ class ChangeValue(
 
         btnLeft.onTouchDown {
             log.debug { "BTN: TOUCH LEFT" }
-            btnLeftTouchDown = true
 
-            if (btnRightTouchDown) {
-                return@onTouchDown
-            }
+            if (!btnRightTouchDown) {
+                btnRight.isDisabled = true
+                btnLeftTouchDown = true
 
-            var value = lblValue.text.toString().toInt()
-            btnLeftTouchUp = false
-            gameStage.fire(ButtonPressedEvent())
-            timerLeft = java.util.Timer()
-            timerLeft.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    synchronized(this) {
-                        if (!btnLeftTouchUp) {
-                            if (lblValue.text.toString().toInt() > 0) {
-                                value--
-                                lblValue.setText(value)
+                btnLeftTouchUp = false
+                gameStage.fire(ButtonPressedEvent())
+                timerLeft = java.util.Timer()
+                timerLeft.scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        synchronized(this) {
+                            if (!btnLeftTouchUp) {
+                                var value = lblValue.text.toString().toInt()
+                                if (lblValue.text.toString().toInt() > 0) {
+                                    value--
+                                    lblValue.setText(value)
+                                } else {
+                                    timerLeft.cancel();
+                                }
                             } else {
                                 timerLeft.cancel();
                             }
-                        } else {
-                            timerLeft.cancel();
                         }
                     }
-                }
-            }, 0, 100)
+                }, 0, 100)
+            }
+
         }
 
         btnLeft.onClick {
             btnLeftTouchUp = true
             btnLeftTouchDown = false
+            btnRight.isDisabled = false
         }
         btnLeft.onExit {
             btnLeftTouchUp = true
             btnLeftTouchDown = false
+            btnRight.isDisabled = false
+
         }
 
         btnRight.onTouchDown {
             log.debug { "BTN: TOUCH RIGHT" }
-            btnRightTouchDown = true
 
-            if (btnLeftTouchDown) {
-                return@onTouchDown
-            }
+            if (!btnLeftTouchDown) {
+                btnLeft.isDisabled = true
+                btnRightTouchDown = true
 
-            gameStage.fire(ButtonPressedEvent())
-            var value = lblValue.text.toString().toInt()
-            btnRightTouchUp = false
-            timerRight = java.util.Timer()
-            timerRight.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    synchronized(this) {
-                        if (!btnRightTouchUp) {
-                            if (lblValue.text.toString().toInt() < 100) {
-                                value++
-                                lblValue.setText(value)
+                gameStage.fire(ButtonPressedEvent())
+                btnRightTouchUp = false
+                timerRight = java.util.Timer()
+                timerRight.scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        synchronized(this) {
+                            var value = lblValue.text.toString().toInt()
+                            if (!btnRightTouchUp) {
+                                if (lblValue.text.toString().toInt() < 100) {
+                                    value++
+                                    lblValue.setText(value)
+                                } else {
+                                    timerRight.cancel();
+                                }
                             } else {
                                 timerRight.cancel();
                             }
-                        } else {
-                            timerRight.cancel();
                         }
                     }
-                }
-            }, 0, 100)
+                }, 0, 100)
+            }
+
         }
 
         btnRight.onClick {
             btnRightTouchUp = true
             btnRightTouchDown = false
+            btnLeft.isDisabled = false
         }
         btnRight.onExit {
             btnRightTouchUp = true
             btnRightTouchDown = false
+            btnLeft.isDisabled = false
         }
 
     }

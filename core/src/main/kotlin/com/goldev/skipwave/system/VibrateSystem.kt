@@ -16,18 +16,17 @@ class VibrateSystem(
 ) : EventListener, IntervalSystem() {
 
     override fun onTick() {
-
     }
 
     override fun handle(event: Event): Boolean {
         when (event) {
             is ButtonPressedEvent -> {
                 log.debug { "VIBRATE" }
-                vibrate(100)
+                vibrate(50)
 
             }
 
-            is MapChangeEvent -> vibrate(200)
+            is MapChangeEvent -> vibrate(100)
             is EntityLevelEvent -> vibrate(100)
         }
         return false

@@ -3,11 +3,14 @@ package com.goldev.skipwave.input
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys.*
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.scenes.scene2d.Event
+import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.goldev.skipwave.event.StartMovementEvent
-import com.goldev.skipwave.event.fire
 import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
+import com.goldev.skipwave.event.*
+import com.goldev.skipwave.ui.view.TouchpadView
+import com.goldev.skipwave.ui.view.TutorialView
 import ktx.app.KtxInputAdapter
 import ktx.log.logger
 
@@ -23,7 +26,6 @@ class PlayerTouchInputProcessor(
         multiplexer.addProcessor(this) // set stage as first input processor
 
         Gdx.input.inputProcessor = multiplexer
-
     }
 
 
@@ -34,9 +36,7 @@ class PlayerTouchInputProcessor(
         return true
     }
 
-
-
-    companion object{
+    companion object {
         private val log = logger<PlayerTouchInputProcessor>()
     }
 

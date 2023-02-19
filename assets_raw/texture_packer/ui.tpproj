@@ -1,6 +1,6 @@
 name=ui_new
 filename=
-output=../../ui
+output=../../assets/ui
 
 alias=false
 alphaThreshold=0

@@ -37,7 +37,7 @@ class TouchpadView(
             this@TouchpadView.model.isTouch = isTouched
 
             if (!isTouched && knobPercentX == 0f && knobPercentY == 0f) {
-                this@TouchpadView.alpha = 1f
+                this@TouchpadView.alpha = 0f
                 this@TouchpadView.model.touchpadLocation = vec2(knobPercentX, knobPercentY - 400f)
             }
         }

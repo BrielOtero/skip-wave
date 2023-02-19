@@ -9,9 +9,10 @@ import com.goldev.skipwave.SkipWave.Companion.PREF_KEY_SAVE_STATE
 
 
 data class Settings(
-    var musicVolume: Float = 1f,
+    var musicVolume: Float = 0.3f,
     var effectsVolume: Float = 1f,
     var vibrator: Boolean = true,
+    var accelerometer: Boolean = true,
 )
 
 data class Game(
@@ -27,8 +28,14 @@ data class GamePreferences(
 
 fun Preferences.saveGamePreferences(gamePreferences: GamePreferences) {
     this.flush {
+        println("HEy")
+        println(gamePreferences.settings.javaClass.kotlin.simpleName)
         set(PREF_KEY_SAVE_STATE, Json().toJson(gamePreferences))
     }
+}
+
+fun getName(any: Any): String? {
+    return any.javaClass.kotlin.simpleName?.lowercase()
 }
 
 fun Preferences.loadGamePreferences(): GamePreferences? {

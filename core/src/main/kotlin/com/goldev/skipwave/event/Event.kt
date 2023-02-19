@@ -38,7 +38,7 @@ class GameResumeEvent() : Event()
 class SavePreferencesEvent() : Event()
 class ExitGameEvent() : Event()
 class ButtonPressedEvent() : Event()
-class HalfOfNextWaveExperienceEvent(val entity: Entity) : Event()
+class ShakeEvent() : Event()
 
 // CHANGE SCREENS
 class SetGameScreenEvent() : Event()

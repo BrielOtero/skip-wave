@@ -11,13 +11,16 @@ import com.goldev.skipwave.component.AnimationModel
 import com.goldev.skipwave.component.EnemyComponent
 import com.goldev.skipwave.component.PlayerComponent
 import com.goldev.skipwave.component.WaveComponent
+import com.goldev.skipwave.event.ShowTutorialViewEvent
+import com.goldev.skipwave.preferences.GamePreferences
 import ktx.log.logger
 
 class EnemySystem(
     @Qualifier("gameStage") private var gameStage: Stage,
     private var waveCmps: ComponentMapper<WaveComponent>,
+    private val gamePreferences: GamePreferences
 
-    ) : IntervalSystem() {
+) : IntervalSystem() {
     private val enemyEntities = world.family(allOf = arrayOf(EnemyComponent::class))
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
     private var lastLevel = 0
@@ -28,7 +31,7 @@ class EnemySystem(
             it != AnimationModel.UNDEFINED && it != AnimationModel.PLAYER && it != AnimationModel.CHEST && it != AnimationModel.SLASH_LEFT && it != AnimationModel.SLASH_RIGHT
         }
 
-
+    private var showTutorial = true
     override fun onTick() {
         val currentWave = waveCmps[playerEntities.first()].wave
 
@@ -41,15 +44,7 @@ class EnemySystem(
         }
 
         //ACTUAL ENEMIES
-        if (currentWave <= enemies.size  && currentWave != lastLevelChangeEnemy) {
-//            if (currentWave == 0) {
-//                actualEnemy = enemies[currentWave]
-//                log.debug { "ENEMY ADDED ${enemies[currentWave].name}" }
-//            } else {
-//                actualEnemy = enemies[currentWave - 1]
-//                log.debug { "ENEMY ADDED ${enemies[currentWave-1].name}" }
-//            }
-
+        if (currentWave <= enemies.size && currentWave != lastLevelChangeEnemy) {
             actualEnemy = enemies[currentWave]
             log.debug { "ENEMY ADDED ${enemies[currentWave].name}" }
             lastLevelChangeEnemy = currentWave
@@ -70,6 +65,10 @@ class EnemySystem(
                         enemies.shuffled()[0]
                     )
                 )
+            }
+        } else {
+            if (!gamePreferences.game.tutorialComplete) {
+                gameStage.fire(ShowTutorialViewEvent())
             }
         }
     }

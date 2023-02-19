@@ -1,12 +1,15 @@
 package com.goldev.skipwave.ui.view
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Touchable
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
+import com.goldev.skipwave.SkipWave.Companion.ANIMATION_DURATION
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.ui.model.MainMenuModel
 import com.goldev.skipwave.ui.TextButtons
@@ -26,7 +29,7 @@ class MainMenuView(
     private val btnNewGame: TextButton
     private val btnSettings: TextButton
 
-//    private val btnCredits: TextButton
+    private val btnCredits: TextButton
     private val btnExit: TextButton
     private val versionName: String = "1.5"
 
@@ -63,13 +66,13 @@ class MainMenuView(
                         .row()
                 }
 
-//            this@MainMenuView.btnCredits =
-//                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
-//                    cell.top().padTop(5f).padBottom(6f)
-//                        .height(25f).width(110f)
-//                        .colspan(2)
-//                        .row()
-//                }
+            this@MainMenuView.btnCredits =
+                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                    cell.top().padTop(5f).padBottom(6f)
+                        .height(25f).width(110f)
+                        .colspan(2)
+                        .row()
+                }
             this@MainMenuView.btnExit =
                 textButton(text = model.bundle["MainMenuView.exit"], style = TextButtons.DEFAULT.skinKey) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
@@ -81,7 +84,14 @@ class MainMenuView(
                 text = "${model.bundle["MainMenuView.version"]}: ${this@MainMenuView.versionName}",
                 style = Labels.FRAME.skinKey
             ) { cell ->
-                cell.bottom().expand().padTop(5f).padBottom(6f).row()
+                cell.bottom().expand().padTop(5f).padBottom(0f).row()
+                this.setFontScale(0.2f)
+            }
+            label(
+                text = model.bundle["MainMenuView.madeBy"],
+                style = Labels.FRAME.skinKey
+            ) { cell ->
+                cell.bottom().expand().padTop(1f).padBottom(6f).row()
                 this.setFontScale(0.2f)
             }
 
@@ -92,16 +102,15 @@ class MainMenuView(
         btnNewGame.onTouchDown {
             log.debug { "BTN: NEW GAME" }
             model.uiStage.fire(ButtonPressedEvent())
-//            model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.circleOut).then(
-//                        Actions.run(Runnable() {
-//                            kotlin.run {
-//                                model.gameStage.fire(SetGameScreenEvent())
-//                            }
-//                        }),
-//                    )
         }
         btnNewGame.onClick {
-            model.gameStage.fire(SetGameScreenEvent())
+            model.gameStage += Actions.fadeOut(ANIMATION_DURATION, Interpolation.elasticOut).then(
+                Actions.run(Runnable() {
+                    kotlin.run {
+                        model.gameStage.fire(SetGameScreenEvent())
+                    }
+                }),
+            )
         }
 
         btnSettings.onTouchDown {
@@ -113,14 +122,14 @@ class MainMenuView(
             this@MainMenuView.touchable = Touchable.disabled
             model.gameStage.fire(ShowSettingsViewEvent(true))
         }
-//        btnCredits.onTouchDown {
-//            log.debug { "BTN: CREDITS" }
-//            model.uiStage.fire(ButtonPressedEvent())
-//        }
-//        btnCredits.onClick {
-//            this@MainMenuView.touchable  = Touchable.disabled
-//            model.gameStage.fire(ShowCreditsViewEvent())
-//        }
+        btnCredits.onTouchDown {
+            log.debug { "BTN: CREDITS" }
+            model.uiStage.fire(ButtonPressedEvent())
+        }
+        btnCredits.onClick {
+            this@MainMenuView.touchable = Touchable.disabled
+            model.gameStage.fire(ShowCreditsViewEvent())
+        }
         btnExit.onTouchDown {
             log.debug { "BTN: EXIT" }
         }

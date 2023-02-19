@@ -37,6 +37,7 @@ enum class Drawables(
     BTN_UP("btn_up"),
     BTN_DOWN("btn_down"),
     BTN_PAUSE("btn_pause"),
+    SCROLL_VERTICAl("scroll_vertical"),
     BTN_SLIDER_LEFT_UP("btn_slider_left_up"),
     BTN_SLIDER_LEFT_DOWN("btn_slider_left_down"),
     BTN_SLIDER_RIGHT_UP("btn_slider_right_up"),
@@ -131,7 +132,7 @@ fun loadSkin() {
             up = skin[Drawables.BTN_PAUSE]
         }
         scrollPane {
-//            vScrollKnob=skin[Drawables.BTN_PAUSE]
+            vScrollKnob=skin[Drawables.SCROLL_VERTICAl]
         }
     }
 }

@@ -34,8 +34,8 @@ class SkillUpgradeModel(
                 skills = Skills(event.skill0, event.skill1, event.skill2)
                 uiStage.actors.filterIsInstance<GameView>().first().isVisible=false
                 with(uiStage.actors.filterIsInstance<TouchpadView>().first()){
-                    isVisible=false
                     this.model.disableTouchpad=true
+                    isVisible=false
                 }
             }
 

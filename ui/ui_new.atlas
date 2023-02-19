@@ -15,28 +15,28 @@ btn_down
   index: -1
 btn_pause
   rotate: false
-  xy: 1836, 916
+  xy: 1898, 976
   size: 18, 18
   orig: 18, 18
   offset: 0, 0
   index: -1
 btn_slider_left_down
   rotate: false
-  xy: 1746, 711
+  xy: 1946, 998
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
   index: -1
 btn_slider_left_up
   rotate: false
-  xy: 1898, 980
+  xy: 1536, 491
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 btn_slider_right_down
   rotate: false
-  xy: 1536, 492
+  xy: 1746, 711
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
@@ -211,10 +211,8 @@ player_speed
   index: -1
 scroll_vertical
   rotate: false
-  xy: 1568, 535
-  size: 7, 30
-  split: 2, 2, 10, 10
-  pad: 0, 0, 0, 0
-  orig: 7, 30
+  xy: 1836, 904
+  size: 13, 30
+  orig: 13, 30
   offset: 0, 0
   index: -1

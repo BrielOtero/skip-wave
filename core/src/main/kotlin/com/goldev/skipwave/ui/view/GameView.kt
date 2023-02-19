@@ -1,8 +1,12 @@
 package com.goldev.skipwave.ui.view
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.goldev.skipwave.event.ButtonPressedEvent
 import com.goldev.skipwave.event.ShowPauseViewEvent
 import com.goldev.skipwave.event.fire
@@ -21,12 +25,22 @@ class GameView(
     skin: Skin,
 ) : Table(skin), KTable {
     private val playerInfo: PlayerInfo
-    private val btnPause: Button
+    val btnPause: Button
 
     init {
         // UI
-
         setFillParent(true)
+
+        if (!skin.has(PIXMAP_KEY, TextureRegionDrawable::class.java)) {
+            skin.add(PIXMAP_KEY, TextureRegionDrawable(
+                Texture(
+                    Pixmap(1, 1, Pixmap.Format.RGBA8888).apply {
+                        this.drawPixel(0, 0, Color.rgba8888(0.1f, 0.1f, 0.1f, 0.7f))
+                    }
+                )
+            ))
+        }
+
         table {
             it.top().fill().row()
             this@GameView.playerInfo = playerInfo(skin, model.bundle) { cell ->
@@ -96,8 +110,17 @@ class GameView(
     fun playerExperienceBar(percentage: Float) = playerInfo.playerExperienceBar(percentage, 0.25f)
     fun playerLevel(newLevel: Int) = playerInfo.playerLevel(newLevel)
 
+    fun showBackground(show: Boolean) {
+        if (show) {
+            this@GameView.background = skin.get(PIXMAP_KEY, TextureRegionDrawable::class.java)
+        }else{
+            this@GameView.background=null
+        }
+    }
+
     companion object {
         private val log = logger<GameView>()
+        private const val PIXMAP_KEY = "pauseTexture"
     }
 }
 

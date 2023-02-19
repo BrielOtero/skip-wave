@@ -29,21 +29,17 @@ class AudioSystem(
         soundRequests.clear()
     }
 
-    init {
-        log.debug { "INIIIIT" }
-    }
-
-    private fun clearMusic() {
-        musicCache.forEach { musicSong ->
-            musicSong.value.stop()
-        }
-        soundRequests.clear()
-        soundCache.clear()
-        musicCache.clear()
-    }
 
     override fun handle(event: Event): Boolean {
         when (event) {
+            is HideTutorialViewEvent -> {
+                musicCache.values.forEach { music ->
+                    music.stop()
+                }
+                setMainMusic("audio/mars_intro.ogg")
+                return true
+            }
+
             is SavePreferencesEvent -> {
                 log.debug { "CHANGE AUDIO" }
                 musicCache.forEach { musicSong ->
@@ -52,8 +48,6 @@ class AudioSystem(
             }
 
             is ShowMainMenuViewEvent -> {
-//                musicCache.clear()
-//                clearMusic()
                 val path = "audio/main_menu.ogg"
 
                 log.debug { "Changing music to $path" }
@@ -64,32 +58,18 @@ class AudioSystem(
                     }
                 }
                 music.play()
-
                 return true
             }
 
             is MapChangeEvent -> {
-                event.map.propertyOrNull<String>("music")?.let { path ->
-                    log.debug { "Changing music to $path" }
-                    val music = musicCache.getOrPut(path) {
-                        Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
-                            volume = gamePreferences.settings.musicVolume
-
-                            setOnCompletionListener {
-                                val newPath = path.replace("intro", "loop")
-                                val musicLoop = musicCache.getOrPut(newPath){
-                                    Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
-                                        isLooping = true
-                                        volume = gamePreferences.settings.musicVolume
-                                    }
-                                }
-                                musicLoop.play()
-                                log.debug { "Changing music to $newPath" }
-                            }
-                        }
+                if (!gamePreferences.game.tutorialComplete) {
+                    tutorialMusic()
+                } else {
+                    event.map.propertyOrNull<String>("music")?.let { path ->
+                        setMainMusic(path)
                     }
-                    music.play()
                 }
+
                 return true
             }
 
@@ -111,15 +91,17 @@ class AudioSystem(
             }
 
             is ButtonPressedEvent -> queueSound("audio/button.wav")
+
             is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.wav")
             is EntityLevelEvent -> queueSound("audio/level_up.wav")
+            is ShakeEvent -> queueSound("audio/hellou.wav")
         }
 
         return false
     }
 
     private fun queueSound(soundPath: String) {
-//        log.debug { "Queuing sound $soundPath" }
+        log.debug { "Queuing sound $soundPath" }
         if (soundPath in soundRequests) {
             // already queued -> do nothing
             return
@@ -129,6 +111,39 @@ class AudioSystem(
             Gdx.audio.newSound(Gdx.files.internal(soundPath))
         }
         soundRequests[soundPath] = sound
+    }
+
+    private fun tutorialMusic() {
+        val path = "audio/tutorial.ogg"
+        log.debug { "Changing music to $path" }
+        val music = musicCache.getOrPut(path) {
+            Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
+                isLooping = true
+                volume = gamePreferences.settings.musicVolume
+            }
+        }
+        music.play()
+    }
+
+    private fun setMainMusic(path: String) {
+        log.debug { "Changing music to $path" }
+        val music = musicCache.getOrPut(path) {
+            Gdx.audio.newMusic(Gdx.files.internal(path)).apply {
+                volume = gamePreferences.settings.musicVolume
+                setOnCompletionListener {
+                    val newPath = path.replace("intro", "loop")
+                    val musicLoop = musicCache.getOrPut(newPath) {
+                        Gdx.audio.newMusic(Gdx.files.internal(newPath)).apply {
+                            isLooping = true
+                            volume = gamePreferences.settings.musicVolume
+                        }
+                    }
+                    musicLoop.play()
+                    log.debug { "Changing music to $newPath" }
+                }
+            }
+        }
+        music.play()
     }
 
     override fun onDispose() {

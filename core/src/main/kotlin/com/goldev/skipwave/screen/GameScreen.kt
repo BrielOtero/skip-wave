@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn
 import com.goldev.skipwave.SkipWave
 import com.goldev.skipwave.SkipWave.Companion.ANIMATION_DURATION
-import com.goldev.skipwave.input.PlayerKeyboardInputProcessor
 import com.goldev.skipwave.input.PlayerTouchInputProcessor
 import com.goldev.skipwave.preferences.saveGamePreferences
 import com.github.quillraven.fleks.world
@@ -80,6 +79,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             add<RenderSystem>()
             add<VibrateSystem>()
             add<AudioSystem>()
+            add<ShakeSystem>()
             add<DebugSystem>()
         }
     }
@@ -91,12 +91,12 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         uiStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, game.bundle, gameStage, uiStage))
-            tutorialView(TutorialModel(game.bundle,gameStage,uiStage))
             skillUpgradeView(SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage))
-            touchpadView(TouchpadModel(eWorld, uiStage))
             recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
             pauseView(PauseModel(game.bundle, gameStage, uiStage))
             settingsView(SettingsModel(game.bundle, game.gamePreferences, gameStage, uiStage))
+            tutorialView(TutorialModel(game.bundle,game.gamePreferences,gameStage,uiStage))
+            touchpadView(TouchpadModel(eWorld, uiStage))
         }
 
 
@@ -104,8 +104,8 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
 
     override fun show() {
-        this.gameStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
-        this.uiStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.circleIn))
+        this.gameStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
+        this.uiStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
 //        uiStage.isDebugAll = true
 
         log.debug { "GameScreen gets shown" }
@@ -120,7 +120,9 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
 
         if (Gdx.app.type == Application.ApplicationType.Desktop) {
-            PlayerKeyboardInputProcessor(eWorld, uiStage)
+//            PlayerKeyboardInputProcessor(eWorld, uiStage)
+            PlayerTouchInputProcessor(eWorld, uiStage)
+
         } else {
             PlayerTouchInputProcessor(eWorld, uiStage)
         }
@@ -133,6 +135,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             CameraSystem::class,
             RenderSystem::class,
             DebugSystem::class,
+            AudioSystem::class,
         )
 
         eWorld.systems
@@ -192,7 +195,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
 
     override fun pause() {
         if (!uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible &&
-            !uiStage.actors.filterIsInstance<PauseView>().first().isVisible
+            !uiStage.actors.filterIsInstance<PauseView>().first().isVisible && game.gamePreferences.game.tutorialComplete
         ) {
             gameStage.fire(ShowPauseViewEvent())
         }

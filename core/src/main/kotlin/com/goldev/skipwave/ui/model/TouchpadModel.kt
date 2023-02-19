@@ -41,9 +41,11 @@ class TouchpadModel(
 //        log.debug { "Event ${event}" }
         when (event) {
             is StartMovementEvent -> {
+                log.debug { "Start Movement" }
                 if (!isTouch && !disableTouchpad) {
                     touchpadLocation = vec2(event.x, event.y)
                     opacity = 0.4f
+                    log.debug { "Start Movement INSIDE" }
                 }
             }
 

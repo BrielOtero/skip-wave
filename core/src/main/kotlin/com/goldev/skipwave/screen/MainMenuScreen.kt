@@ -50,12 +50,14 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
             settingsView(SettingsModel(game.bundle, game.gamePreferences, gameStage, uiStage))
             creditsView(CreditsModel(game.bundle, gameStage, uiStage))
         }
-        gameStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
-        uiStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
+
     }
 
 
     override fun show() {
+        gameStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
+        uiStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
+
         log.debug { "MainMenuScreen gets shown" }
         eWorld.systems.forEach { system ->
             if (system is EventListener) {

@@ -21,41 +21,41 @@ class CreditsView(
     private var tbCredits = Table().apply {
         for (i in 1..8) {
             this.add(
-                textButton(model.bundle["Credits.t${i}"], TextButtons.TITLE.skinKey) { txtButton ->
-                    label.setFontScale(0.3f)
-                }).width(150f).height(25f).padBottom(10f).row()
+                textButton(model.bundle["CreditsView.t${i}"], TextButtons.TITLE.skinKey) { txtButton ->
+                    label.setFontScale(0.25f)
+                }).width(150f).height(20f).padBottom(10f).padRight(2f).row()
 
             this.add(
                 label(
-                    text = model.bundle["Credits.c${i}"],
+                    text = model.bundle["CreditsView.c${i}"],
                     style = Labels.FRAME.skinKey
                 ) {
-                    setFontScale(0.3f)
+                    setFontScale(0.2f)
                     setAlignment(Align.center)
                     wrap = true
-                }).width(150f).padBottom(10f).row()
+                }).width(140f).padBottom(10f).padRight(5f).row()
         }
     }
 
     private var scrollPane = ScrollPane(tbCredits, skin).apply {
-        width = 200f
+        width = 220f
         height = 800f
-        background = skin[Drawables.FRAME_FGD]
         setScrollBarPositions(false, true)
+        setScrollbarsVisible(false)
     }
     private var tbCreditsView = Table().apply {
         this.add(
             label(
-                text = model.bundle["Credits.title"],
+                text = model.bundle["CreditsView.title"],
                 style = Labels.FRAME.skinKey
             ) { lblCell ->
                 setFontScale(0.4f)
             }).height(30f).padTop(10f).top().row()
-        this.add(scrollPane).row()
+        this.add(scrollPane).width(model.uiStage.width*0.90f).row()
 
         this@CreditsView.btnExit =
-            textButton(text = model.bundle["Credits.mainMenu"], style = TextButtons.DEFAULT.skinKey)
-        this.add(this@CreditsView.btnExit).padTop(5f).padBottom(6f).height(25f).width(110f).row()
+            textButton(text = model.bundle["CreditsView.mainMenu"], style = TextButtons.DEFAULT.skinKey)
+        this.add(this@CreditsView.btnExit).padTop(5f).padBottom(10f).height(25f).width(model.uiStage.width*0.90f).row()
     }
 
     init {
@@ -66,8 +66,6 @@ class CreditsView(
         background = skin[Drawables.FRAME_BGD]
 
         add(tbCreditsView)
-
-//            tableCell.expand().padBottom(10f).fill().center()
 
         //EVENTS
 

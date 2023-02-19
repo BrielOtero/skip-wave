@@ -12,7 +12,7 @@ class AndroidLauncher : AndroidApplication() {
         super.onCreate(savedInstanceState)
         initialize(SkipWave(), AndroidApplicationConfiguration().apply {
             // Configure your application here.
-
+            useImmersiveMode = true
         })
     }
 }

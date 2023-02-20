@@ -76,7 +76,7 @@ class GameModel(
                 val experienceCmp = experienceCmps[event.entity]
                 val levelCmp = levelCmps[event.entity]
                 if (isPlayer) {
-                    playerExperienceToNextLevel = experienceCmp.experienceToNextLevel - experienceCmp.experience
+                    playerExperienceToNextLevel = experienceCmp.experienceToNextWave - experienceCmp.experience
                     playerExperienceTempValue = experienceCmp.experience
                     playerExperience = 0f
                     playerLevel = levelCmp.wave

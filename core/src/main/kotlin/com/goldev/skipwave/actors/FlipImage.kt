@@ -4,9 +4,13 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable
 
-/* It's an image that can be flipped horizontally */
+/**
+ *  It's an image that can be flipped horizontally
+ */
 class FlipImage : Image() {
-    /* A variable that is used to flip the image. */
+    /**
+     *  It's a variable that is used to flip the image.
+     */
     var flipX = false
 
     /**

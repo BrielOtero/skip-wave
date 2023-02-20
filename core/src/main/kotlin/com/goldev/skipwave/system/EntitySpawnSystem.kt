@@ -20,7 +20,6 @@ import com.goldev.skipwave.actors.FlipImage
 import com.goldev.skipwave.ai.DefaultGlobalState
 import com.goldev.skipwave.event.*
 import com.github.quillraven.fleks.*
-import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.EnemyAddEvent
 import com.goldev.skipwave.event.EntityAddEvent
 import com.goldev.skipwave.event.MapChangeEvent
@@ -116,7 +115,7 @@ class EntitySpawnSystem(
                     EntityType.PLAYER -> {
                         add<PlayerComponent>()
                         add<ExperienceComponent>() {
-                            experienceToNextLevel = 50f
+                            experienceToNextWave = 50f
                         }
                         add<WaveComponent>()
                         add<StateComponent>() {

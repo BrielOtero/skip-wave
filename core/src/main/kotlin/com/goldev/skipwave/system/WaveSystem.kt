@@ -21,11 +21,11 @@ class WaveSystem(
     override fun onTickEntity(entity: Entity) {
         with(experienceCmps[entity]) {
 
-            if (experience >= experienceToNextLevel) {
+            if (experience >= experienceToNextWave) {
                 with(waveCmps[entity]) {
 //                    log.debug { "Experience NEXT WAVE before ${experienceToNextLevel}" }
                     wave += 1
-                    experienceToNextLevel = experience + (wave/0.2f).pow(2f)
+                    experienceToNextWave = experience + (wave/0.2f).pow(2f)
 
 //                    log.debug { "Experience NEXT WAVE after ${experienceToNextLevel}" }
                     gameStage.fire(EntityLevelEvent(entity))

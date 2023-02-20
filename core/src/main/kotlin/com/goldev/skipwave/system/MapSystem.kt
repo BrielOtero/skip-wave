@@ -32,7 +32,7 @@ class MapSystem(
                 val waveCmp = waveCmps[event.entity]
                 val experienceCmp = experienceCmps[event.entity]
 
-                if ((waveCmps[event.entity].wave % 5 == 0) && experienceCmp.experience >= (experienceCmp.experienceToNextLevel) / 2) {
+                if ((waveCmps[event.entity].wave % 5 == 0) && experienceCmp.experience >= (experienceCmp.experienceToNextWave) / 2) {
                     if (waveCmp.wave != lastWaveChange) {
                         gameStage.fire(NewMapEvent(maps.shuffled()[0].path))
                         log.debug { "MAP CHANGE ON ${waveCmp.wave} with ${experienceCmp.experience} exp" }

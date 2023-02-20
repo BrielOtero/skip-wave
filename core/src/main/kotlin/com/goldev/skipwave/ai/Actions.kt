@@ -8,15 +8,40 @@ import com.goldev.skipwave.component.AnimationType
 import com.goldev.skipwave.component.AttackState
 import com.goldev.skipwave.event.EntityAggroEvent
 
+/**
+ *  Action is a LeafTask that is used to represent an action that an AiEntity can perform
+ */
 abstract class Action : LeafTask<AiEntity>() {
+
+    /**
+     *  It's a getter for the AiEntity property.
+     *
+     *  @return AiEntity
+     */
     val entity: AiEntity
         get() = `object`
 
+    /**
+     * This function returns a copy of the task, with the same properties as the original task.
+     *
+     * @param task The task that is being copied.
+     */
     override fun copyTo(task: Task<AiEntity>): Task<AiEntity> = task
 }
 
+
+/**
+ *  Perform the task of attacking an entity
+ */
 class AttackTask : Action() {
 
+    /**
+     * If the entity is not running, then set the animation to attack, start the attack, and fire an
+     * event. If the entity is running, then set the animation to run, stop the movement, and return
+     * succeeded
+     *
+     * @return The status of the action.
+     */
     override fun execute(): Status {
 //        println("Attack")
         if (status != Status.RUNNING) {
@@ -37,7 +62,16 @@ class AttackTask : Action() {
     }
 }
 
+/**
+ * Perform the task of attacking an weapon entity
+ */
 class AttackWeaponTask : Action() {
+    /**
+     * If the weapon entity is not attacking, start attacking. If the entity is attacking, stop attacking. If
+     * the entity is done attacking, return to idle
+     *
+     * @return The status of the action.
+     */
     override fun execute(): Status {
 
         if (status != Status.RUNNING) {
@@ -60,11 +94,24 @@ class AttackWeaponTask : Action() {
     }
 }
 
+/**
+ * This task makes the entity move to the target.
+ *
+ * @property range field is the distance from the target that the entity will stop moving
+ */
 class MoveTask(
     @JvmField
     @TaskAttribute(required = true)
     var range: Float = 0f
 ) : Action() {
+
+    /**
+     * If the entity is not running, set the animation to run and return running. If the entity is
+     * running, set the player as the target and move to the target. If the entity is in range of the
+     * target, return succeeded
+     *
+     * @return The status of the action.
+     */
     override fun execute(): Status {
         if (status != Status.RUNNING) {
             entity.animation(AnimationType.RUN)
@@ -80,69 +127,15 @@ class MoveTask(
         return Status.RUNNING
     }
 
+    /**
+     *  The task to copy to
+     *
+     * @param task The task to copy to.
+     * @return A copy of the task.
+     */
     override fun copyTo(task: Task<AiEntity>): Task<AiEntity> {
         (task as MoveTask).range = range
         return task
     }
 }
-
-
-//class IdleTask(
-//    @JvmField
-//    @TaskAttribute(required = true)
-//    var duration: FloatDistribution? = null
-//
-//) : Action() {
-//    private var currentDuration = 0f
-//
-//    override fun execute(): Status {
-//        if (status != Status.RUNNING) {
-//            entity.animation(AnimationType.IDLE)
-//            currentDuration = duration?.nextFloat() ?: 1f
-//            return Status.RUNNING
-//        }
-//
-//        currentDuration -= GdxAI.getTimepiece().deltaTime
-//        if (currentDuration <= 0f) {
-//            return Status.SUCCEEDED
-//        }
-//
-//        return Status.RUNNING
-//    }
-//
-//    override fun copyTo(task: Task<AiEntity>): Task<AiEntity> {
-//        (task as IdleTask).duration = duration
-//        return task
-//    }
-//
-//}
-//
-//class WanderTask : Action() {
-//
-//    private val startPos = vec2()
-//    private val targetPos = vec2()
-//
-//    override fun execute(): Status {
-//        if (status != Status.RUNNING) {
-//            entity.animation(AnimationType.RUN)
-//
-//            if (startPos.isZero) {
-//                startPos.set(entity.position)
-//            }
-//
-//            targetPos.set(startPos)
-//            targetPos.x += MathUtils.random(-3f, 3f)
-//            targetPos.y += MathUtils.random(-3f, 3f)
-//            entity.moveTo(targetPos)
-//            return Status.RUNNING
-//        }
-//
-//        if (entity.inRange(0.5f, targetPos)) {
-//            entity.stopMovement()
-//            return Status.SUCCEEDED
-//        }
-//
-//        return Status.RUNNING
-//    }
-//}
 

@@ -12,6 +12,15 @@ import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.*
 import ktx.log.logger
 
+/**
+ * Skill upgrade system
+ *
+ * @property gameStage
+ * @property lifeCmps
+ * @property moveCmps
+ * @property attackCmps
+ * @constructor Create empty Skill upgrade system
+ */
 class SkillUpgradeSystem(
     @Qualifier("gameStage") private val gameStage: Stage,
     private val lifeCmps: ComponentMapper<LifeComponent>,

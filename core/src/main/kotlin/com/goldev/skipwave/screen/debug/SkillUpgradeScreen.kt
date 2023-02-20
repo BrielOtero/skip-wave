@@ -17,12 +17,41 @@ import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
 
+/**
+ *  It's a screen for test SkillUpgradeView.
+ *
+ *  @property game The property with game data.
+ *  @constructor Creates SkillUpgradeScreen
+ */
 class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
-    private val uiStage: Stage = Stage(ExtendViewport(180f, 320f))
+    /**
+     *  It's a property with stage that the game is being rendered on.
+     */
     private val gameStage: Stage = Stage(ExtendViewport(8f, 16f))
+
+    /**
+     *  It's a property with stage that the UI is being rendered on.
+     */
+    private val uiStage: Stage = Stage(ExtendViewport(180f, 320f))
+
+    /**
+     *  Property with world for entities.
+     */
     private val eWorld = world { }
+
+    /**
+     *  Property with model for the SkillUpgradeModel.
+     */
     private val model = SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage)
+
+    /**
+     *  It's a property that contains a SkillUpgradeView for the game.
+     */
     private lateinit var skillUpgradeView: SkillUpgradeView
+
+    /**
+     *  Property that contains player entity.
+     */
     private val playerEntity: Entity
 
     init {
@@ -39,10 +68,19 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
         }
     }
 
+    /**
+     * When the screen is resized, update the viewport to the new width and height.
+     *
+     * @param width The width of the screen in pixels.
+     * @param height The height of the screen in pixels.
+     */
     override fun resize(width: Int, height: Int) {
         uiStage.viewport.update(width, height, true)
     }
 
+    /**
+     * This function is called when this SkillUpgradeScreen appears.
+     */
     override fun show() {
         uiStage.clear()
         uiStage.addListener(model)
@@ -52,6 +90,11 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
         uiStage.isDebugAll = true
     }
 
+    /**
+     * The render function of the screen. It is called every frame.
+     *
+     * @param delta The time in seconds since the last frame.
+     */
     override fun render(delta: Float) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             hide()
@@ -61,16 +104,21 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             skillUpgradeView.skill(SkillModel(-1, 0, "frame_fgd", "nothing", 0, 0f))
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
-            skillUpgradeView.popupSkills(Skills(Skill.PLAYER_COOLDOWN, Skill.PLAYER_LIFE, Skill.PLAYER_DAMAGE))
+            skillUpgradeView.popupSkills(
+                Skills(
+                    Skill.PLAYER_COOLDOWN,
+                    Skill.PLAYER_LIFE,
+                    Skill.PLAYER_DAMAGE
+                )
+            )
         }
-
-
 
         uiStage.act()
         uiStage.draw()
     }
-
+    /**
+     * It disposes all resources when SkillUpgradeScreen is closed.
+     */
     override fun dispose() {
         uiStage.disposeSafely()
     }

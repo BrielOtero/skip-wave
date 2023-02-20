@@ -25,15 +25,39 @@ import ktx.math.component2
 import ktx.math.vec2
 
 
+/**
+ * System that takes care of the collision spawn of the game.
+ *
+ * @property phWorld The physic world.
+ * @property physicCmps Entities with PhysicComponent in the world.
+ * @constructor Create empty Collision spawn system.
+ */
 @AllOf([PhysicComponent::class, CollisionComponent::class])
 class CollisionSpawnSystem(
     private val phWorld: World,
     private val physicCmps: ComponentMapper<PhysicComponent>,
+
 ) : EventListener, IteratingSystem() {
 
+    /**
+     *  Array of tiled layers.
+     */
     private val tiledLayers = GdxArray<TiledMapTileLayer>()
+
+    /**
+     *  A set of cells that have already been processed.
+     */
     private val processedCells = mutableSetOf<Cell>()
 
+    /**
+     * For each cell in the layer, starting at the given coordinates and going out to the given size,
+     * call the given action with the cell, x, and y.
+     *
+     * @param startX The x coordinate of the center of the circle
+     * @param startY The y coordinate of the cell to start at.
+     * @param size The size of the area to search.
+     * @param action The action to perform on each cell.
+     */
     private fun TiledMapTileLayer.forEachCell(
         startX: Int,
         startY: Int,
@@ -47,6 +71,12 @@ class CollisionSpawnSystem(
         }
     }
 
+    /**
+     * For each cell in the spawn area, if the cell is not already processed, create an entity with a
+     * physic component and a tiled component, and add the entity to the list of nearby entities.
+     *
+     * @param entity The entity that is currently being processed.
+     */
     override fun onTickEntity(entity: Entity) {
         val (entityX, entityY) = physicCmps[entity].body.position
 
@@ -74,6 +104,12 @@ class CollisionSpawnSystem(
         }
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is MapChangeEvent -> {
@@ -111,6 +147,9 @@ class CollisionSpawnSystem(
     }
 
     companion object {
+        /**
+         *  The size of the area to search for collision objects.
+         */
         const val SPAWN_AREA_SIZE = 1
     }
 

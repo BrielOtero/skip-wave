@@ -13,14 +13,35 @@ import ktx.assets.disposeSafely
 import ktx.log.logger
 import ktx.tiled.propertyOrNull
 
+/**
+ * System that takes care of the audio of the game.
+ *
+ * @property gamePreferences The preferences of the game.
+ * @constructor Create empty Audio system.
+ */
 class AudioSystem(
     private val gamePreferences: GamePreferences
+
 ) : EventListener, IntervalSystem() {
 
+    /**
+     *  Mutable map of music cache.
+     */
     private val musicCache = mutableMapOf<String, Music>()
+
+    /**
+     *  Mutable map of sound cache.
+     */
     private val soundCache = mutableMapOf<String, Sound>()
+
+    /**
+     *  Mutable map of sound requests.
+     */
     private val soundRequests = mutableMapOf<String, Sound>()
 
+    /**
+     * If there are any sound requests, play them all at once
+     */
     override fun onTick() {
         if (soundRequests.isEmpty()) {
             return
@@ -29,7 +50,12 @@ class AudioSystem(
         soundRequests.clear()
     }
 
-
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is HideTutorialViewEvent -> {
@@ -100,6 +126,12 @@ class AudioSystem(
         return false
     }
 
+    /**
+     * If the sound is already queued, do nothing. Otherwise, load the sound from the cache or from the
+     * file system and add it to the queue
+     *
+     * @param soundPath The path to the sound file.
+     */
     private fun queueSound(soundPath: String) {
         log.debug { "Queuing sound $soundPath" }
         if (soundPath in soundRequests) {
@@ -113,6 +145,9 @@ class AudioSystem(
         soundRequests[soundPath] = sound
     }
 
+    /**
+     * Play the music of the tutorial.
+     */
     private fun tutorialMusic() {
         val path = "audio/tutorial.ogg"
         log.debug { "Changing music to $path" }
@@ -125,6 +160,12 @@ class AudioSystem(
         music.play()
     }
 
+    /**
+     * It loads a music file from the assets folder, sets the volume to the user's preference, and
+     * plays it
+     *
+     * @param path The path to the music file.
+     */
     private fun setMainMusic(path: String) {
         log.debug { "Changing music to $path" }
         val music = musicCache.getOrPut(path) {
@@ -146,12 +187,18 @@ class AudioSystem(
         music.play()
     }
 
+    /**
+     * Dispose of all the music and sound effects.
+     */
     override fun onDispose() {
         musicCache.values.forEach { it.disposeSafely() }
         soundCache.values.forEach { it.disposeSafely() }
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<AudioSystem>()
     }
 }

@@ -10,8 +10,13 @@ import com.goldev.skipwave.event.EntityLevelEvent
 import com.goldev.skipwave.event.MapChangeEvent
 import ktx.log.logger
 
+/**
+ * Vibrate system
+ *
+ * @property gamePreferences
+ * @constructor Create empty Vibrate system
+ */
 class VibrateSystem(
-
     private val gamePreferences: GamePreferences
 ) : EventListener, IntervalSystem() {
 

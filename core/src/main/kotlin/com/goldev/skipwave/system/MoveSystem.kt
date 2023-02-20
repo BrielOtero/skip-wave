@@ -13,6 +13,16 @@ import ktx.log.logger
 import ktx.math.vec2
 import ktx.tiled.*
 
+/**
+ * System that takes care of the movement in the game.
+ *
+ * @property moveCmps Entities with MoveComponent in the world.
+ * @property physicCmps Entities with PhysicComponent in the world.
+ * @property imageCmps Entities with ImageComponent in the world.
+ * @property weaponCmps Entities with WeaponComponent in the world.
+ * @property playerCmps Entities with PlayerComponent in the world.
+ * @constructor Create empty Move system
+ */
 @AllOf([MoveComponent::class, PhysicComponent::class])
 class MoveSystem(
     private val moveCmps: ComponentMapper<MoveComponent>,
@@ -20,10 +30,20 @@ class MoveSystem(
     private val imageCmps: ComponentMapper<ImageComponent>,
     private val weaponCmps: ComponentMapper<WeaponComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
-) : IteratingSystem() {
-    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
-    var last = vec2(0f, 0f)
 
+    ) : IteratingSystem() {
+
+    /**
+     *  A list of all entities with the WeaponComponent.
+     */
+    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
+
+    /**
+     * If the entity is rooted, stop it immediately. Otherwise, apply an impulse to the entity to
+     * make it move
+     *
+     * @param entity The entity that is being processed.
+     */
     override fun onTickEntity(entity: Entity) {
 
         val moveCmp = moveCmps[entity]
@@ -57,13 +77,13 @@ class MoveSystem(
         }
     }
 
+    /**
+     * It refreshes the position of the weapon entity to be in front of the player entity
+     *
+     * @param entity The entity that has the PhysicComponent
+     * @param physicCmp PhysicComponent - The physic component of the entity
+     */
     private fun refreshWeaponPosition(entity: Entity, physicCmp: PhysicComponent) {
-
-
-//        EntityAddEvent(
-//            vec2((location.x / SkipWave.UNIT_SCALE) - 25, (location.y / SkipWave.UNIT_SCALE) - 5),
-//            AnimationModel.SLASH_LEFT
-//        )
         if (entity in playerCmps) {
             var pos: Vector2
             weaponEntities.forEach { weapon ->
@@ -73,18 +93,17 @@ class MoveSystem(
                     pos = vec2(physicCmp.body.position.x + 1.5f, physicCmp.body.position.y - 0.3f)
                 }
 
-//                imageCmps[weapon].image.setPosition(pos.x, pos.y)
-//                imageCmps[weapon].image.moveBy(pos.x, pos.y)
-                physicCmps[weapon].body.setTransform(pos.x,pos.y, physicCmps[weapon].body.angle)
-//                physicCmps[weapon].body.setLinearVelocity(physicCmps[entity].body.linearVelocity)
+                physicCmps[weapon].body.setTransform(pos.x, pos.y, physicCmps[weapon].body.angle)
             }
         }
     }
 
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<MoveSystem>()
     }
 
-//    }
 }

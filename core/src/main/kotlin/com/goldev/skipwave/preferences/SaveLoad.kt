@@ -8,6 +8,15 @@ import ktx.preferences.set
 import com.goldev.skipwave.SkipWave.Companion.PREF_KEY_SAVE_STATE
 
 
+/**
+ * It's a class with the data of game settings.
+ *
+ * @property musicVolume The volume of the music.
+ * @property effectsVolume The volume of the sound effects.
+ * @property vibrator If true, the vibrator will be used.
+ * @property accelerometer If true, the accelerometer will be used.
+ * @constructor Creates Settings with default values.
+ */
 data class Settings(
     var musicVolume: Float = 0.3f,
     var effectsVolume: Float = 1f,
@@ -15,34 +24,52 @@ data class Settings(
     var accelerometer: Boolean = true,
 )
 
+/**
+ * It's a class with the data of game.
+ *
+ * @property wave The wave record.
+ * @property tutorialComplete This is a boolean that will be used to determine if the player has completed the tutorial.
+ * @constructor Creates Game with default values.
+ */
 data class Game(
     var wave: Int = 0,
     var tutorialComplete: Boolean = false,
 )
 
+
+/**
+ * GamePreferences is a data class that contains the game preferences.
+ *
+ * @property settings The property with game Settings.
+ * @property game The property with the game state.
+ * @constructor Creates Game with default values.
+ */
 data class GamePreferences(
     val settings: Settings = Settings(),
     val game: Game = Game(),
 )
 
-
+/**
+ * This function save the game preferences.
+ *
+ * @param gamePreferences Game preferences to save.
+ */
 fun Preferences.saveGamePreferences(gamePreferences: GamePreferences) {
     this.flush {
-        println("HEy")
-        println(gamePreferences.settings.javaClass.kotlin.simpleName)
         set(PREF_KEY_SAVE_STATE, Json().toJson(gamePreferences))
     }
 }
 
-fun getName(any: Any): String? {
-    return any.javaClass.kotlin.simpleName?.lowercase()
-}
-
+/**
+ * This function load the game preferences.
+ *
+ * @return The load gamePreferences.
+ */
 fun Preferences.loadGamePreferences(): GamePreferences? {
-    try {
-        return Json().fromJson(GamePreferences::class.java, this[PREF_KEY_SAVE_STATE, "{}"])
+    return try {
+        Json().fromJson(GamePreferences::class.java, this[PREF_KEY_SAVE_STATE, "{}"])
     } catch (e: Exception) {
-        return GamePreferences()
+        GamePreferences()
     }
 }
 

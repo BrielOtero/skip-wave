@@ -10,6 +10,14 @@ import com.goldev.skipwave.event.fire
 import ktx.log.logger
 import kotlin.math.pow
 
+/**
+ * Wave system
+ *
+ * @property experienceCmps
+ * @property waveCmps
+ * @property gameStage
+ * @constructor Create empty Wave system
+ */
 @AllOf([WaveComponent::class])
 class WaveSystem(
     private val experienceCmps: ComponentMapper<ExperienceComponent>,

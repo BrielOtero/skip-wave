@@ -17,6 +17,17 @@ import com.github.quillraven.fleks.*
 import com.goldev.skipwave.component.*
 import ktx.assets.disposeSafely
 
+/**
+ * System that takes care of the life in the game.
+ *
+ * @property lifeCmps Entities with LifeComponent in the world.
+ * @property deadCmps Entities with DeadComponent in the world.
+ * @property playerCmps Entities with PlayerComponent in the world.
+ * @property physicCmps Entities with PhysicComponent in the world.
+ * @property animationCmps Entities with AnimationComponent in the world.
+ * @property gameStage The stage that the game is being rendered on.
+ * @constructor Create empty Life system
+ */
 @AllOf([LifeComponent::class])
 @NoneOf([DeadComponent::class])
 class LifeSystem(
@@ -26,11 +37,29 @@ class LifeSystem(
     private val physicCmps: ComponentMapper<PhysicComponent>,
     private val animationCmps: ComponentMapper<AnimationComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
-) : IteratingSystem() {
-    private val damageFont = BitmapFont(Gdx.files.internal("ui/thaleah_fat.fnt")).apply { data.setScale(0.33f) }
+
+    ) : IteratingSystem() {
+    /**
+     *  The font for floating text.
+     */
+    private val damageFont =
+        BitmapFont(Gdx.files.internal("ui/thaleah_fat.fnt")).apply { data.setScale(0.33f) }
+
+    /**
+     *  Label style for the floating text.
+     */
     private val floatingTextStyle = LabelStyle(damageFont, Color.WHITE)
+
+    /**
+     *  Label style for the floating text when is player.
+     */
     private val floatingTextStylePlayer = LabelStyle(damageFont, Color.RED)
 
+    /**
+     * If the entity is dead, then fire a PlayerDeathEvent and set the revive time to 7 seconds
+     *
+     * @param entity The entity that is being updated.
+     */
     override fun onTickEntity(entity: Entity) {
         val lifeCmp = lifeCmps[entity]
         lifeCmp.life = (lifeCmp.life + lifeCmp.regeneration * deltaTime).coerceAtMost(lifeCmp.max)
@@ -40,7 +69,12 @@ class LifeSystem(
             val physicCmp = physicCmps[entity]
             lifeCmp.life -= lifeCmp.takeDamage
             gameStage.fire(EntityDamageEvent(entity))
-            floatingText(entity, lifeCmp.takeDamage.toInt().toString(), physicCmp.body.position, physicCmp.size)
+            floatingText(
+                entity,
+                lifeCmp.takeDamage.toInt().toString(),
+                physicCmp.body.position,
+                physicCmp.size
+            )
             lifeCmp.takeDamage = 0f
         }
 
@@ -63,7 +97,21 @@ class LifeSystem(
         }
     }
 
-    private fun floatingText(entity: Entity, text: String, entityPosition: Vector2, entitySize: Vector2) {
+    /**
+     * Create a new entity with a FloatingTextComponent and a Label component, and set the text and
+     * style of the label.
+     *
+     * @param entity The entity that is being damaged.
+     * @param text The text to display.
+     * @param entityPosition The position of the entity that is being damaged.
+     * @param entitySize The size of the entity that is being damaged.
+     */
+    private fun floatingText(
+        entity: Entity,
+        text: String,
+        entityPosition: Vector2,
+        entitySize: Vector2
+    ) {
         world.entity {
             val style = if (entity in playerCmps) floatingTextStylePlayer else floatingTextStyle
 
@@ -75,6 +123,9 @@ class LifeSystem(
         }
     }
 
+    /**
+     * When the game is closed, dispose LifeSystem resources.
+     */
     override fun onDispose() {
         damageFont.disposeSafely()
     }

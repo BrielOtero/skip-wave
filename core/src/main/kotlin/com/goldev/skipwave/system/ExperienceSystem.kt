@@ -11,16 +11,38 @@ import com.goldev.skipwave.event.fire
 import com.github.quillraven.fleks.*
 import ktx.log.logger
 
+/**
+ * System that takes care of the experience in the game.
+ *
+ * @property experienceCmps Entities with ExperienceComponent in the world.
+ * @property gameStage The stage that the game is being rendered on.
+ * @constructor Create empty Experience system
+ */
 @AllOf([ExperienceComponent::class])
 class ExperienceSystem(
     private val experienceCmps: ComponentMapper<ExperienceComponent>,
     @Qualifier("gameStage") private val gameStage: Stage,
-) : EventListener, IteratingSystem() {
+
+    ) : EventListener, IteratingSystem() {
+    /**
+     *  A family of entities that have the PlayerComponent.
+     */
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
+    /**
+     * This function is called every tick for every entity in the world.
+     *
+     * @param entity The entity that is being ticked.
+     */
     override fun onTickEntity(entity: Entity) {
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is EnemyDeathEvent -> {
@@ -39,6 +61,9 @@ class ExperienceSystem(
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<ExperienceSystem>()
     }
 

@@ -9,6 +9,18 @@ import com.github.quillraven.fleks.*
 import com.goldev.skipwave.component.*
 import ktx.log.logger
 
+/**
+ * System that takes care of the deaths in the game.
+ *
+ * @property deadCmps Entities with DeadComponent in the world.
+ * @property lifeCmps Entities with LifeComponent in the world.
+ * @property animationCmps Entities with AnimationComponent in the world.
+ * @property enemyCmps Entities with EnemyComponent in the world.
+ * @property experienceCmps Entities with ExperienceComponent in the world.
+ * @property playerCmps Entities with PlayerComponent in the world.
+ * @property gameStage The stage that the game is being rendered on.
+ * @constructor Create empty Dead system
+ */
 @AllOf([DeadComponent::class])
 class DeadSystem(
     private val deadCmps: ComponentMapper<DeadComponent>,
@@ -18,8 +30,15 @@ class DeadSystem(
     private val experienceCmps: ComponentMapper<ExperienceComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
     @Qualifier("gameStage") private val gameStage: Stage
+
 ) : IteratingSystem() {
 
+    /**
+     * If the entity is dead, and the death animation is done, remove the entity from the world
+     *
+     * @param entity The entity that is being processed
+     * @return The return value of the last expression in the block.
+     */
     override fun onTickEntity(entity: Entity) {
         val deadCmp = deadCmps[entity]
         if (deadCmp.reviveTime == 0f) {
@@ -63,6 +82,9 @@ class DeadSystem(
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<DeadSystem>()
     }
 }

@@ -23,18 +23,39 @@ import ktx.app.KtxScreen
 import ktx.log.logger
 import ktx.scene2d.actors
 
+/**
+ *  It's a screen that contains the main menu
+ *
+ *  @property game The property with game data.
+ *  @constructor Creates MainMenuScreen
+ */
 class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
+
+    /**
+     *  It's a property with stage that the game is being rendered on.
+     */
     private val gameStage = game.gameStage
+
+    /**
+     *  It's a property with stage that the UI is being rendered on.
+     */
     private val uiStage = game.uiStage
 
+    /**
+     *  It's a property with the entities world.
+     */
     private val eWorld = world {
 
+        /**
+         * Add into the system common variables.
+         */
         injectables {
-//            add("gameStage", gameStage)
-//            add("uiStage", uiStage)
             add(game.gamePreferences)
         }
 
+        /**
+         * Add into the system the listening systems that the game need.
+         */
         systems {
             add<VibrateSystem>()
             add<AudioSystem>()
@@ -54,6 +75,9 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
     }
 
 
+    /**
+     * This function is called when this MainMenuScreen appears.
+     */
     override fun show() {
         gameStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
         uiStage.root.addAction(Actions.fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
@@ -68,6 +92,11 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
 //        uiStage.isDebugAll = true
     }
 
+    /**
+     * Update the timepiece, then update the world.
+     *
+     * @param delta The time in seconds since the last frame.
+     */
     override fun render(delta: Float) {
         uiStage.act()
         uiStage.draw()
@@ -76,12 +105,32 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
         eWorld.update(dt)
     }
 
+    /**
+     * When the screen is resized, update the viewport of the gameStage and uiStage to the new width
+     * and height.
+     *
+     * @param width The new width in pixels of the screen.
+     * @param height The height of the screen in pixels.
+     */
     override fun resize(width: Int, height: Int) {
         gameStage.viewport.update(width, height, true)
         uiStage.viewport.update(width, height, true)
     }
 
+    /**
+     * It disposes all resources when MainMenuScreen is closed.
+     */
+    override fun dispose() {
+        super.dispose()
+        eWorld.dispose()
+    }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
 
         when (event) {
@@ -92,8 +141,6 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
                 uiStage.clear()
                 game.addScreen(GameScreen(game))
 
-//                game.gameStage.root.alpha=0f
-//                game.uiStage.root.alpha=0f
                 game.setScreen<GameScreen>()
                 game.removeScreen<MainMenuScreen>()
                 super.hide()
@@ -116,12 +163,12 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
         return true
     }
 
-    override fun dispose() {
-        super.dispose()
-        eWorld.dispose()
-    }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<MainMenuScreen>()
     }
 }

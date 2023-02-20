@@ -1,7 +1,5 @@
 package com.goldev.skipwave
 
-//import com.goldev.skipwave.screen.GameUiScreen
-//import com.goldev.skipwave.screen.InventoryUiScreen
 import com.badlogic.gdx.Application.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences

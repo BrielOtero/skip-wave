@@ -39,17 +39,17 @@ val TMP_RECT2 = Rectangle()
  * mappers.
  *
  * @property entity The entity that this class is controlling.
- * @property  world The world that the entity belongs to.
- * @property  gameStage The stage that the game is being rendered on.
- * @property animationCmps Store entities with animation component in the world
- * @property  moveCmps Store entities with move component in the world
- * @property  attackCmps Store entities with attack component in the world
- * @property stateCmps Store entities with state component in the world
- * @property lifeCmps Store entities with life component in the world
- * @property  physicCmps Store entities with physic component in the world
- * @property  aiCmps Store entities with ai component in the world
- * @property  playerCmps Store entities with player component in the world
- * @constructor Create an empty AiEntity
+ * @property world The world that the entity belongs to.
+ * @property gameStage The stage that the game is being rendered on.
+ * @property animationCmps Store entities with animation component in the world.
+ * @property moveCmps Store entities with move component in the world.
+ * @property attackCmps Store entities with attack component in the world.
+ * @property stateCmps Store entities with state component in the world.
+ * @property lifeCmps Store entities with life component in the world.
+ * @property physicCmps Store entities with physic component in the world.
+ * @property aiCmps Store entities with ai component in the world.
+ * @property playerCmps Store entities with player component in the world.
+ * @constructor Create an empty AiEntity.
  */
 data class AiEntity(
 

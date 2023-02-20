@@ -17,6 +17,7 @@ import com.goldev.skipwave.preferences.saveGamePreferences
 import com.github.quillraven.fleks.world
 import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.*
+import com.goldev.skipwave.input.PlayerKeyboardInputProcessor
 import com.goldev.skipwave.system.*
 import com.goldev.skipwave.ui.model.*
 import com.goldev.skipwave.ui.view.*
@@ -28,18 +29,49 @@ import ktx.log.logger
 import ktx.math.vec2
 import ktx.scene2d.actors
 
+/**
+ *  It's a screen that contains a game
+ *
+ *  @property game The property with game data.
+ *  @constructor Creates GameScreen
+ */
 class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
+
+    /**
+     *  It's a property with stage that the game is being rendered on.
+     */
     private val gameStage = game.gameStage
+
+    /**
+     *  It's a property with stage that the UI is being rendered on.
+     */
     private val uiStage = game.uiStage
+
+    /**
+     *   It's a property with texture atlas that contains all the game assets.
+     */
     private val textureAtlas = TextureAtlas(Gdx.files.internal("graphics/game_assets.atlas"))
+
+    /**
+     *  It's a property that contains the current map that is being rendered.
+     */
     private var currentMap: TiledMap? = null
 
+    /**
+     *  It's a property with the physics world.
+     */
     private val phWorld = createWorld(gravity = vec2()).apply {
         autoClearForces = false
     }
 
+    /**
+     *  It's a property with the entities world.
+     */
     private val eWorld = world {
 
+        /**
+         * Add into the system common variables.
+         */
         injectables {
             add("gameStage", gameStage)
             add("uiStage", uiStage)
@@ -47,6 +79,10 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             add(phWorld)
             add(game.gamePreferences)
         }
+
+        /**
+         * Add into the system the listening components
+         */
         components {
             add<ImageComponent.Companion.ImageComponentListener>()
             add<PhysicComponent.Companion.PhysicComponentListener>()
@@ -55,12 +91,14 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             add<AiComponent.Companion.AiComponentListener>()
         }
 
+        /**
+         * Add into the system the listening systems that the game need.
+         */
         systems {
             add<EntitySpawnSystem>()
             add<CollisionSpawnSystem>()
             add<CollisionDespawnSystem>()
             add<MoveSystem>()
-            add<WeaponSystem>()
             add<AttackSystem>()
             add<LootSystem>()
             add<ExperienceSystem>()
@@ -95,7 +133,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
             pauseView(PauseModel(game.bundle, gameStage, uiStage))
             settingsView(SettingsModel(game.bundle, game.gamePreferences, gameStage, uiStage))
-            tutorialView(TutorialModel(game.bundle,game.gamePreferences,gameStage,uiStage))
+            tutorialView(TutorialModel(game.bundle, game.gamePreferences, gameStage, uiStage))
             touchpadView(TouchpadModel(eWorld, uiStage))
         }
 
@@ -103,6 +141,9 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     }
 
 
+    /**
+     * This function is called when this GameScreen appears.
+     */
     override fun show() {
         this.gameStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
         this.uiStage.addAction(fadeIn(ANIMATION_DURATION, Interpolation.elasticIn))
@@ -118,17 +159,19 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         currentMap = TmxMapLoader().load(Gdx.files.internal("maps/map_0.tmx").path())
         gameStage.fire(MapChangeEvent(currentMap!!))
 
-
         if (Gdx.app.type == Application.ApplicationType.Desktop) {
-//            PlayerKeyboardInputProcessor(eWorld, uiStage)
-            PlayerTouchInputProcessor(eWorld, uiStage)
-
+            PlayerKeyboardInputProcessor(eWorld, uiStage)
         } else {
-            PlayerTouchInputProcessor(eWorld, uiStage)
+            PlayerTouchInputProcessor(uiStage)
         }
 
     }
 
+    /**
+     * Pause all systems except the mandatory ones.
+     *
+     * @param pause Whether to pause or unpause the world.
+     */
     private fun pauseWorld(pause: Boolean) {
         val mandatorySystems = setOf(
             AnimationSystem::class,
@@ -143,6 +186,47 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             .forEach { it.enabled = !pause }
     }
 
+    /**
+     * This function is called when the user exit the app without close.
+     */
+    override fun pause() {
+        if (!uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible &&
+            !uiStage.actors.filterIsInstance<PauseView>()
+                .first().isVisible && game.gamePreferences.game.tutorialComplete
+        ) {
+            gameStage.fire(ShowPauseViewEvent())
+        }
+
+    }
+
+    /**
+     * Update the timepiece, then update the world.
+     *
+     * @param delta The time in seconds since the last frame.
+     */
+    override fun render(delta: Float) {
+        val dt = delta.coerceAtMost(0.25f)
+        GdxAI.getTimepiece().update(dt)
+        eWorld.update(dt)
+    }
+
+    /**
+     * It disposes all resources when GameScreen is closed.
+     */
+    override fun dispose() {
+        super.dispose()
+        eWorld.dispose()
+        textureAtlas.disposeSafely()
+        currentMap?.disposeSafely()
+        phWorld.disposeSafely()
+    }
+
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is GamePauseEvent -> {
@@ -193,30 +277,11 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         return true
     }
 
-    override fun pause() {
-        if (!uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible &&
-            !uiStage.actors.filterIsInstance<PauseView>().first().isVisible && game.gamePreferences.game.tutorialComplete
-        ) {
-            gameStage.fire(ShowPauseViewEvent())
-        }
-
-    }
-
-    override fun render(delta: Float) {
-        val dt = delta.coerceAtMost(0.25f)
-        GdxAI.getTimepiece().update(dt)
-        eWorld.update(dt)
-    }
-
-    override fun dispose() {
-        super.dispose()
-        eWorld.dispose()
-        textureAtlas.disposeSafely()
-        currentMap?.disposeSafely()
-        phWorld.disposeSafely()
-    }
-
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<GameScreen>()
     }
 }

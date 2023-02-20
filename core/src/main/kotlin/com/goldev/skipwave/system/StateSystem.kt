@@ -6,6 +6,12 @@ import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 
+/**
+ * State system
+ *
+ * @property stateCmps
+ * @constructor Create empty State system
+ */
 @AllOf([StateComponent::class])
 class StateSystem(
     private val stateCmps: ComponentMapper<StateComponent>,

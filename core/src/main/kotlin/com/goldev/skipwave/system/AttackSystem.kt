@@ -15,6 +15,22 @@ import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
 
+
+/**
+ * System that takes care of the attacks in the game.
+ *
+ * @property attackCmps Entities with AttackComponent in the world.
+ * @property physicCmps Entities with PhysicComponent in the world.
+ * @property imgCmps Entities with ImageComponent in the world.
+ * @property lifeCmps Entities with LifeComponent in the world.
+ * @property playerCmps Entities with PlayerComponent in the world.
+ * @property weaponCmps Entities with WeaponComponent in the world.
+ * @property lootCmps Entities with LootComponent in the world.
+ * @property animationCmps Entities with AnimationComponent in the world.
+ * @property phWorld The physics world.
+ * @property gameStage The stage that the game is being rendered on.
+ * @constructor Create empty Attack system
+ */
 @AllOf([AttackComponent::class, PhysicComponent::class, ImageComponent::class])
 class AttackSystem(
     private val attackCmps: ComponentMapper<AttackComponent>,
@@ -27,8 +43,15 @@ class AttackSystem(
     private val animationCmps: ComponentMapper<AnimationComponent>,
     private val phWorld: World,
     @Qualifier("gameStage") private val gameStage: Stage,
+
 ) : IteratingSystem() {
 
+    /**
+     * If the entity is ready to attack, start the attack, otherwise if the attack is in progress, deal
+     * damage to nearby enemies
+     *
+     * @param entity The entity that is being processed.
+     */
     override fun onTickEntity(entity: Entity) {
         val attackCmp = attackCmps[entity]
 
@@ -90,7 +113,7 @@ class AttackSystem(
                     return@query true
                 }
 
-                // turn off firendly fire
+                // turn off friendly fire
                 val isAttackerPlayer = entity in playerCmps
                 val isAttackerWeapon = entity in weaponCmps
                 if (isAttackerPlayer && fixtureEntity in playerCmps) {
@@ -123,7 +146,14 @@ class AttackSystem(
     }
 
     companion object {
-        val AABB_RECT = Rectangle()
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<AttackSystem>()
+
+        /**
+         *  It's a rectangle that is used to check for collisions.
+         */
+        val AABB_RECT = Rectangle()
     }
 }

@@ -28,22 +28,50 @@ import ktx.log.logger
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+/**
+ * System that takes care of the spawn entities in the game.
+ *
+ * @property phWorld The physic world.
+ * @property textureAtlas The atlas with the textures.
+ * @property spawnCmps Entities with SpawnComponent in the world.
+ * @property physicCmps Entities with PhysicComponent in the world.
+ * @property waveCmps Entities with WaveComponent in the world.
+ * @property moveCmps Entities with MoveComponent in the world.
+ * @property gameStage The stage that the game is being rendered on.
+ * @constructor Create empty Entity spawn system
+ */
 @AllOf([SpawnComponent::class])
 class EntitySpawnSystem(
     private val phWorld: World,
-    private val atlas: TextureAtlas,
+    private val textureAtlas: TextureAtlas,
     private val spawnCmps: ComponentMapper<SpawnComponent>,
     private val physicCmps: ComponentMapper<PhysicComponent>,
     private val waveCmps: ComponentMapper<WaveComponent>,
     private val moveCmps: ComponentMapper<MoveComponent>,
-
     @Qualifier("gameStage") private val gameStage: Stage,
 
     ) : EventListener, IteratingSystem() {
+
+    /**
+     *  Mutable map of SpawnCfg that cached.
+     */
     private val cachedCfgs = mutableMapOf<String, SpawnCfg>()
+
+    /**
+     *  Mutable map of AnimationModel with Vector2 that cached sizes.
+     */
     private val cachedSizes = mutableMapOf<AnimationModel, Vector2>()
+
+    /**
+     *  A family of entities that have the PlayerComponent.
+     */
     private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
 
+    /**
+     * It creates an entity with the components needed to make it work
+     *
+     * @param entity The entity that is being processed.
+     */
     override fun onTickEntity(entity: Entity) {
         with(spawnCmps[entity]) {
 //            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
@@ -65,7 +93,11 @@ class EntitySpawnSystem(
                     nextAnimation(cfg.model, AnimationType.IDLE)
                 }
 
-                val physicCmp = physicCmpFromImage(phWorld, imageCmp.image, cfg.bodyType) { phCmp, width, height ->
+                val physicCmp = physicCmpFromImage(
+                    phWorld,
+                    imageCmp.image,
+                    cfg.bodyType
+                ) { phCmp, width, height ->
                     val w = width * cfg.physicScaling.x
                     val h = height * cfg.physicScaling.y
                     phCmp.offset.set(cfg.physicOffset)
@@ -183,6 +215,11 @@ class EntitySpawnSystem(
     }
 
 
+    /**
+     * It takes an AnimationModel and returns a SpawnCfg
+     *
+     * @param model The AnimationModel to load the SpawnCfg
+     */
     private fun spawnCfg(model: AnimationModel): SpawnCfg = cachedCfgs.getOrPut(model.name) {
         log.debug { "Type ${model.name}" }
 
@@ -206,7 +243,7 @@ class EntitySpawnSystem(
             dropExperience = 10f * (wave + 1)
         }
 
-        var attackRange = 3f
+        val attackRange = 3f
 
 
         //SPAWN CONFIG
@@ -558,8 +595,15 @@ class EntitySpawnSystem(
         }
     }
 
+    /**
+     * If the size of the model is not cached, then find the regions for the idle animation of the
+     * model, and if there are no regions, then throw an error, otherwise get the first region and use
+     * its original width and height to create a vector that represents the size of the model
+     *
+     * @param model The model to get the size of
+     */
     private fun size(model: AnimationModel) = cachedSizes.getOrPut(model) {
-        val regions = atlas.findRegions("${model.atlasKey}/${AnimationType.IDLE.atlasKey}")
+        val regions = textureAtlas.findRegions("${model.atlasKey}/${AnimationType.IDLE.atlasKey}")
         if (regions.isEmpty) {
             gdxError("There are no regions for the idle animation of model $model")
         }
@@ -567,6 +611,12 @@ class EntitySpawnSystem(
         vec2(firstFrame.originalWidth * UNIT_SCALE, firstFrame.originalHeight * UNIT_SCALE)
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is MapChangeEvent -> {
@@ -613,13 +663,24 @@ class EntitySpawnSystem(
         return false
     }
 
-    private fun randomExcluded(min: Float, max: Float, minExcluded: Float, maxExcluded: Float): Float {
+    /**
+     *  Generate a random number between two numbers, excluding a range of numbers in between
+     *
+     * @param min The minimum value that can be returned
+     * @param max The maximum value that can be returned
+     * @param minExcluded The minimum value that the random number can be.
+     * @param maxExcluded The maximum value that the random number can be.
+     * @return A random number between min and max, excluding minExcluded and maxExcluded.
+     */
+    private fun randomExcluded(
+        min: Float,
+        max: Float,
+        minExcluded: Float,
+        maxExcluded: Float
+    ): Float {
         var rand = listOf<Float>()
         val maxEx = if (maxExcluded > max) max else maxExcluded
         val minEx = if (minExcluded < min) min else minExcluded
-
-//        log.debug { "MaxEx ${maxEx}" }
-//        log.debug { "MinEx ${minEx}" }
 
         rand += MathUtils.random(min, minEx)
         rand += MathUtils.random(maxEx, max)
@@ -628,9 +689,24 @@ class EntitySpawnSystem(
     }
 
     companion object {
+        /**
+         *  The map size
+         */
         var MAP_SIZE = vec2(0f, 0f)
+
+        /**
+         * A constant with the hit box sensor.
+         */
         const val HIT_BOX_SENSOR = "Hitbox"
+
+        /**
+         * A constant with the AI sensor.
+         */
         const val AI_SENSOR = "AiSensor"
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<EntitySpawnSystem>()
     }
 }

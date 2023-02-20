@@ -35,10 +35,23 @@ data class StateComponent(
             @Qualifier("gameStage") private val gameStage: Stage,
         ) : ComponentListener<StateComponent> {
 
+            /**
+             * When a StateComponent is added to an entity, the StateComponent's state machine's owner
+             * is set to an AiEntity
+             *
+             * @param entity The entity that the component was added to.
+             * @param component The component that was added to the entity
+             */
             override fun onComponentAdded(entity: Entity, component: StateComponent) {
                 component.stateMachine.owner = AiEntity(entity, world, gameStage)
             }
 
+            /**
+             * onComponentRemoved is called when a component is removed from an entity
+             *
+             * @param entity The entity that the component was removed from.
+             * @param component The component that was removed from the entity.
+             */
             override fun onComponentRemoved(entity: Entity, component: StateComponent) = Unit
 
         }

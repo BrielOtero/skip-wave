@@ -10,6 +10,13 @@ import ktx.log.logger
 import kotlin.math.abs
 
 
+/**
+ * Shake system
+ *
+ * @property gameStage
+ * @property gamePreferences
+ * @constructor Create empty Shake system
+ */
 class ShakeSystem(
     @Qualifier("gameStage") private var gameStage: Stage,
     private val gamePreferences: GamePreferences

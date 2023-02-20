@@ -16,20 +16,39 @@ import ktx.assets.disposeSafely
 import ktx.graphics.use
 import ktx.tiled.forEachLayer
 
+/**
+ * System that takes care of the render in the game.
+ *
+ * @property gameStage The stage that the game is being rendered on.
+ * @property uiStage The stage that the UI is being rendered on.
+ * @property imageCmps Entities with ImageComponent in the world.
+ * @constructor Create empty Render system
+ */
 @AllOf([ImageComponent::class])
 class RenderSystem(
     @Qualifier("gameStage") private val gameStage: Stage,
     @Qualifier("uiStage") private val uiStage: Stage,
     private val imageCmps: ComponentMapper<ImageComponent>
+
 ) : EventListener, IteratingSystem(
     comparator = compareEntity { e1, e2 -> imageCmps[e1].compareTo(imageCmps[e2]) }
 ) {
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>()
-    private val fgdLayers = mutableListOf<TiledMapTileLayer>()
+
+    /**
+     *  OrthogonalTiledMapRenderer with the map renderer.
+     */
     private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, gameStage.batch)
+
+    /**
+     *  Camera of the gameStage as an OrthographicCamera.
+     */
     private val orthoCam = gameStage.camera as OrthographicCamera
 
+    /**
+     * For each execution of the system, renders the game stage and the UI stage, and their actors.
+     */
     override fun onTick() {
         super.onTick()
 
@@ -48,11 +67,6 @@ class RenderSystem(
             act(deltaTime)
             draw()
 
-            if (fgdLayers.isNotEmpty()) {
-                gameStage.batch.use(orthoCam.combined) {
-                    fgdLayers.forEach { mapRenderer.renderTileLayer(it) }
-                }
-            }
         }
 
         // render UI
@@ -73,15 +87,9 @@ class RenderSystem(
         when {
             event is MapChangeEvent -> {
                 bgdLayers.clear()
-                fgdLayers.clear()
-
 
                 event.map.forEachLayer<TiledMapTileLayer> { layer ->
-                    if (layer.name.startsWith("fgd_")) {
-                        fgdLayers.add(layer)
-                    } else {
-                        bgdLayers.add(layer)
-                    }
+                    bgdLayers.add(layer)
                 }
                 return true
             }

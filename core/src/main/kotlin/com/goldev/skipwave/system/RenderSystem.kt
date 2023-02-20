@@ -34,7 +34,10 @@ class RenderSystem(
     comparator = compareEntity { e1, e2 -> imageCmps[e1].compareTo(imageCmps[e2]) }
 ) {
 
-    private val bgdLayers = mutableListOf<TiledMapTileLayer>()
+    /**
+     *  A list of the layers of the map.
+     */
+    private val layers = mutableListOf<TiledMapTileLayer>()
 
     /**
      *  OrthogonalTiledMapRenderer with the map renderer.
@@ -58,9 +61,9 @@ class RenderSystem(
 //            orthoCam.zoom = 4.0f
             AnimatedTiledMapTile.updateAnimationBaseTime()
             mapRenderer.setView(orthoCam)
-            if (bgdLayers.isNotEmpty()) {
+            if (layers.isNotEmpty()) {
                 gameStage.batch.use(orthoCam.combined) {
-                    bgdLayers.forEach { mapRenderer.renderTileLayer(it) }
+                    layers.forEach { mapRenderer.renderTileLayer(it) }
                 }
             }
 
@@ -79,17 +82,28 @@ class RenderSystem(
 
     }
 
+    /**
+     * When the entity is ticked, move the image to the front.
+     *
+     * @param entity The entity that the component is attached to.
+     */
     override fun onTickEntity(entity: Entity) {
         imageCmps[entity].image.toFront()
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when {
             event is MapChangeEvent -> {
-                bgdLayers.clear()
+                layers.clear()
 
                 event.map.forEachLayer<TiledMapTileLayer> { layer ->
-                    bgdLayers.add(layer)
+                    layers.add(layer)
                 }
                 return true
             }
@@ -97,6 +111,9 @@ class RenderSystem(
         return false
     }
 
+    /**
+     *  Dispose Render System resources
+     */
     override fun onDispose() {
         mapRenderer.disposeSafely()
     }

@@ -21,18 +21,46 @@ import ktx.log.logger
 import ktx.scene2d.*
 import java.util.jar.Manifest
 
+/**
+ * The view of the MainMenu
+ *
+ * @param model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty MainMenu view
+ */
 class MainMenuView(
     model: MainMenuModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
+    /**
+     *  A variable that is used to store the new game button.
+     */
     private val btnNewGame: TextButton
+
+    /**
+     *  A variable that is used to store the settings button.
+     */
     private val btnSettings: TextButton
 
+    /**
+     *  A variable that is used to store the credits button.
+     */
     private val btnCredits: TextButton
+
+    /**
+     *  A variable that is used to store the exit button.
+     */
     private val btnExit: TextButton
+
+    /**
+     *  A variable that stores the version of the game.
+     */
     private val versionName: String = "1.5"
 
+    /**
+     * Starts the view with its components
+     */
     init {
         //UI
         setFillParent(true)
@@ -51,7 +79,10 @@ class MainMenuView(
             }
 
             this@MainMenuView.btnNewGame =
-                textButton(text = model.bundle["MainMenuView.newGame"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                textButton(
+                    text = model.bundle["MainMenuView.newGame"],
+                    style = TextButtons.DEFAULT.skinKey
+                ) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
                         .height(25f).width(110f)
                         .colspan(2)
@@ -59,7 +90,10 @@ class MainMenuView(
                 }
 
             this@MainMenuView.btnSettings =
-                textButton(text = model.bundle["MainMenuView.settings"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                textButton(
+                    text = model.bundle["MainMenuView.settings"],
+                    style = TextButtons.DEFAULT.skinKey
+                ) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
                         .height(25f).width(110f)
                         .colspan(2)
@@ -67,14 +101,20 @@ class MainMenuView(
                 }
 
             this@MainMenuView.btnCredits =
-                textButton(text = model.bundle["MainMenuView.credits"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                textButton(
+                    text = model.bundle["MainMenuView.credits"],
+                    style = TextButtons.DEFAULT.skinKey
+                ) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
                         .height(25f).width(110f)
                         .colspan(2)
                         .row()
                 }
             this@MainMenuView.btnExit =
-                textButton(text = model.bundle["MainMenuView.exit"], style = TextButtons.DEFAULT.skinKey) { cell ->
+                textButton(
+                    text = model.bundle["MainMenuView.exit"],
+                    style = TextButtons.DEFAULT.skinKey
+                ) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
                         .height(25f).width(110f)
                         .colspan(2)
@@ -140,12 +180,17 @@ class MainMenuView(
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<MainMenuView>()
     }
 
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.mainMenuView(
     model: MainMenuModel,

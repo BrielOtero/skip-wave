@@ -129,7 +129,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         uiStage.addListener(this)
         uiStage.actors {
             gameView(GameModel(eWorld, game.bundle, gameStage, uiStage))
-            skillUpgradeView(SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage))
+            skillUpgradeView(SkillUpgradeModel(game.bundle, gameStage, uiStage))
             recordsView(RecordsModel(eWorld, game.bundle, game.gamePreferences, gameStage, uiStage))
             pauseView(PauseModel(game.bundle, gameStage, uiStage))
             settingsView(SettingsModel(game.bundle, game.gamePreferences, gameStage, uiStage))

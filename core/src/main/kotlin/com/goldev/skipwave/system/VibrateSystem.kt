@@ -11,18 +11,27 @@ import com.goldev.skipwave.event.MapChangeEvent
 import ktx.log.logger
 
 /**
- * Vibrate system
+ * System that takes care of the vibration in the game.
  *
- * @property gamePreferences
- * @constructor Create empty Vibrate system
+ * @property gamePreferences The preferences of the game.
+ * @constructor Create empty Vibrate system.
  */
 class VibrateSystem(
     private val gamePreferences: GamePreferences
 ) : EventListener, IntervalSystem() {
 
+    /**
+     * Called every tick of VibrateSystem
+     */
     override fun onTick() {
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is ButtonPressedEvent -> {
@@ -38,6 +47,11 @@ class VibrateSystem(
     }
 
 
+    /**
+     * If the user has enabled vibration, vibrate the device for the specified number of milliseconds.
+     *
+     * @param milliseconds The number of milliseconds to vibrate.
+     */
     private fun vibrate(milliseconds: Int) {
         if (gamePreferences.settings.vibrator) {
             Gdx.input.vibrate(milliseconds)
@@ -45,6 +59,9 @@ class VibrateSystem(
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<VibrateSystem>()
     }
 }

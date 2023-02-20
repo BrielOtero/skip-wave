@@ -21,15 +21,36 @@ import ktx.scene2d.*
 import java.util.*
 
 
+/**
+ * The change value widget.
+ *
+ * @property defaultValue The default value of change.
+ * @property gameStage The stage that the game is being rendered on.
+ * @property skin The skin of the view.
+ * @property bundle The bundle with text to show in the UI.
+ * @constructor Create empty Change value.
+ */
 class ChangeValue(
     private val defaultValue: Int,
     private val gameStage: Stage,
     private val skin: Skin,
     private val bundle: I18NBundle,
-) : WidgetGroup(), KGroup, KtxInputAdapter {
 
+    ) : WidgetGroup(), KGroup, KtxInputAdapter {
+
+    /**
+     *  A variable that is used to store the left button.
+     */
     private val btnLeft: Button = button(style = Buttons.LEFT.skinKey)
+
+    /**
+     *  A variable that is used to store the right button.
+     */
     private val btnRight: Button = button(style = Buttons.RIGHT.skinKey)
+
+    /**
+     *  A variable that is used to store the value label.
+     */
     private val lblValue: Label = label(defaultValue.toString(), style = Labels.FRAME.skinKey)
     private lateinit var timerLeft: java.util.Timer
     private lateinit var timerRight: java.util.Timer

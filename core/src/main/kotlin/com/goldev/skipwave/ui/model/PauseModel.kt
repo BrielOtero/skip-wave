@@ -12,6 +12,14 @@ import com.goldev.skipwave.event.*
 import com.goldev.skipwave.ui.view.TouchpadView
 import ktx.log.logger
 
+/**
+ * The model of the Pause
+ *
+ * @property bundle The bundle with text to show in the UI.
+ * @property gameStage The stage that the game is being rendered on.
+ * @property uiStage The stage that the UI is being rendered on.
+ * @constructor Create empty Pause model
+ */
 class PauseModel(
     val bundle: I18NBundle,
     @Qualifier("gameStage") val gameStage: Stage,
@@ -22,6 +30,12 @@ class PauseModel(
         gameStage.addListener(this)
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is ShowPauseViewEvent -> {
@@ -50,6 +64,9 @@ class PauseModel(
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<PauseModel>()
     }
 }

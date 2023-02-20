@@ -17,24 +17,76 @@ import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * The view of the Tutorial
+ *
+ * @property model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Tutorial view
+ */
 class TutorialView(
     private val model: TutorialModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
+    /**
+     *  A variable that is used to store the continue button.
+     */
     private val btnContinue: TextButton
+
+    /**
+     *  A variable that is used to store the life label.
+     */
     private val lblLife: Label
+
+    /**
+     *  A variable that is used to store the experience label.
+     */
     private val lblExperience: Label
+
+    /**
+     *  A variable that is used to store the wave label.
+     */
     private val lblWave: Label
+
+    /**
+     *  A variable that is used to store the touchpad label.
+     */
     private val lblTouchpad: Label
+
+    /**
+     *  A variable that is used to store the skills label.
+     */
     private val lblSkills: Label
+
+    /**
+     *  A variable that is used to store the target label.
+     */
     private val lblTarget: Label
+
+    /**
+     *  A variable that is used to store the step of the tutorial.
+     */
     private var stepTutorial: Int = 0
+
+    /**
+     *  A variable that is used to store the touchpad table.
+     */
     private val tbTouchpad: Table
+
+    /**
+     *  A variable that is used to store the skills table.
+     */
     private val tbSkills: Table
+
+    /**
+     *  A variable that is used to store the target table.
+     */
     private val tbTarget: Table
 
-
+    /**
+     * Starts the view with its components
+     */
     init {
         //UI
         isVisible = false
@@ -51,7 +103,10 @@ class TutorialView(
                 wrap = true
                 isVisible = false
             }
-            this@TutorialView.lblExperience = label( this@TutorialView.model.bundle["TutorialView.experience"], Labels.FRAME.skinKey) { lblCell ->
+            this@TutorialView.lblExperience = label(
+                this@TutorialView.model.bundle["TutorialView.experience"],
+                Labels.FRAME.skinKey
+            ) { lblCell ->
                 lblCell.padLeft(80f).padBottom(-7f).width(95f).row()
                 setAlignment(Align.left)
                 setFontScale(0.2f)
@@ -59,7 +114,10 @@ class TutorialView(
                 isVisible = false
 
             }
-            this@TutorialView.lblWave = label( this@TutorialView.model.bundle["TutorialView.wave"], Labels.FRAME.skinKey) { lblCell ->
+            this@TutorialView.lblWave = label(
+                this@TutorialView.model.bundle["TutorialView.wave"],
+                Labels.FRAME.skinKey
+            ) { lblCell ->
                 lblCell.padLeft(80f).width(95f).row()
                 setAlignment(Align.left)
                 setFontScale(0.2f)
@@ -156,7 +214,8 @@ class TutorialView(
                 4 -> {
                     lblWave.isVisible = false
                     tbTouchpad.isVisible = true
-                    model.uiStage.actors.filterIsInstance<TouchpadView>().first().touchable = Touchable.disabled
+                    model.uiStage.actors.filterIsInstance<TouchpadView>().first().touchable =
+                        Touchable.disabled
                     with(model.uiStage.actors.filterIsInstance<TouchpadView>().first()) {
                         this.model.disableTouchpad = false
                         isVisible = true
@@ -203,12 +262,18 @@ class TutorialView(
 
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<TutorialView>()
     }
 
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.tutorialView(
     model: TutorialModel,

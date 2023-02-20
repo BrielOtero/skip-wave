@@ -15,18 +15,35 @@ import com.goldev.skipwave.ui.model.GameModel
 import com.goldev.skipwave.ui.widget.PlayerInfo
 import com.goldev.skipwave.ui.widget.playerInfo
 import ktx.actors.onClick
-import ktx.actors.onExit
 import ktx.actors.onTouchDown
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * The bundle with text to show in the UI.
+ *
+ * @param model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Game view
+ */
 class GameView(
     model: GameModel,
     skin: Skin,
 ) : Table(skin), KTable {
+
+    /**
+     *  A variable that is used to store the player info widget.
+     */
     private val playerInfo: PlayerInfo
+
+    /**
+     *  A variable that is used to store the pause button.
+     */
     val btnPause: Button
 
+    /**
+     * Starts the view with its components
+     */
     init {
         // UI
         setFillParent(true)
@@ -85,8 +102,8 @@ class GameView(
             playerExperience(playerExperience)
         }
 
-        model.onPropertyChange(GameModel::playerExperienceToNextLevel) { playerExperienceToNextLevel ->
-            playerExperienceToNextLevel(playerExperienceToNextLevel)
+        model.onPropertyChange(GameModel::playerExperienceToNextWave) { playerExperienceToNextLevel ->
+            playerExperienceToNextWave(playerExperienceToNextLevel)
         }
 
         model.onPropertyChange(GameModel::playerExperienceBar) { playerExperienceBar ->
@@ -94,36 +111,91 @@ class GameView(
         }
 
         //Level
-        model.onPropertyChange(GameModel::playerLevel) { playerLevel ->
-            playerLevel(playerLevel)
+        model.onPropertyChange(GameModel::playerWave) { playerLevel ->
+            playerWave(playerLevel)
         }
 
     }
 
+    /**
+     * It sets the player's life to the value of newLife.
+     *
+     * @param newLife The new life of the player.
+     */
     fun playerLife(newLife: Float) = playerInfo.playerLife(newLife)
+
+    /**
+     * Sets the player's maximum life to the value passed in.
+     *
+     * @param newLifeMax The new maximum life of the player.
+     */
     fun playerLifeMax(newLifeMax: Float) = playerInfo.playerLifeMax(newLifeMax)
+
+    /**
+     * Sets the player's life bar to the value passed in.
+     *
+     * @param percentage The percentage of the player's life.
+     */
     fun playerLifeBar(percentage: Float) = playerInfo.playerLifeBar(percentage)
+
+    /**
+     * Sets the player's experience to the value passed in.
+     *
+     * @param newExperience The new experience of the player.
+     */
     fun playerExperience(newExperience: Float) = playerInfo.playerExperience(newExperience)
-    fun playerExperienceToNextLevel(newExperienceToNextLevel: Float) =
-        playerInfo.playerExperienceToNextLevel(newExperienceToNextLevel)
 
+    /**
+     * Sets the player's experience to next wave to the value passed in.
+     *
+     * @param newExperienceToNextWave The new experience to next wave.
+     */
+    fun playerExperienceToNextWave(newExperienceToNextWave: Float) =
+        playerInfo.playerExperienceToNextLevel(newExperienceToNextWave)
+
+    /**
+     * Sets the player's experience bar to the value passed in.
+     *
+     * @param percentage The percentage of the bar to fill.
+     */
     fun playerExperienceBar(percentage: Float) = playerInfo.playerExperienceBar(percentage, 0.25f)
-    fun playerLevel(newLevel: Int) = playerInfo.playerLevel(newLevel)
 
+    /**
+     * Sets the player's wave to the value passed in.
+     *
+     * @param newWave The new wave of the player.
+     */
+    fun playerWave(newWave: Int) = playerInfo.playerLevel(newWave)
+
+    /**
+     * If the show parameter is true, then set the background of the GameView to the pixmap
+     *
+     * @param show Whether to show the background or not
+     */
     fun showBackground(show: Boolean) {
         if (show) {
             this@GameView.background = skin.get(PIXMAP_KEY, TextureRegionDrawable::class.java)
-        }else{
-            this@GameView.background=null
+        } else {
+            this@GameView.background = null
         }
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<GameView>()
+
+        /**
+         *  It's a constant that is used to store the key of the pixmap.
+         */
         private const val PIXMAP_KEY = "pauseTexture"
     }
 }
 
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.gameView(
     model: GameModel,

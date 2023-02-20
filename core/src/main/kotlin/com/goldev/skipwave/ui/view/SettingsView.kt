@@ -19,18 +19,46 @@ import ktx.actors.onTouchUp
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * The view of the Settings
+ *
+ * @property model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Settings view
+ */
 class SettingsView(
     private val model: SettingsModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
+    /**
+     *  A variable that is used to store the value of the change value in music.
+     */
     private var cvMusic: ChangeValue
+
+    /**
+     *  A variable that is used to store the value of the change value in effects.
+     */
     private var cvEffects: ChangeValue
+
+    /**
+     *  A variable that is used to store the value of the TextButton apply changes.
+     */
     private var btnApplyChanges: TextButton
+
+    /**
+     *  A variable that is used to store the value of the TextButton cancel changes.
+     */
     private var btnCancelChanges: TextButton
+
+    /**
+     *  A variable that is used to store the value of the internal table.
+     */
     private val internalTable: Table
 
-
+    /**
+     * Starts the view with its components
+     */
     init {
         isVisible = false
 
@@ -43,7 +71,8 @@ class SettingsView(
                 text = this@SettingsView.model.bundle["SettingsView.title"],
                 style = Labels.FRAME.skinKey
             ) { lblCell ->
-                lblCell.height(this@SettingsView.model.uiStage.height * 0.1f).padTop(10f).top().row()
+                lblCell.height(this@SettingsView.model.uiStage.height * 0.1f).padTop(10f).top()
+                    .row()
                 setFontScale(0.4f)
             }
 
@@ -120,20 +149,9 @@ class SettingsView(
                 .height(this@SettingsView.model.uiStage.height * 0.85f)
                 .center()
 
-//            tableCell.expand().fill().maxWidth(this@SettingsView.model.uiStage.width * 0.9f)
-//                .maxHeight(this@SettingsView.model.uiStage.height * 0.95f)
-//                .center()
         }
 
         //EVENTS
-//        cvMusic.onTouchDown {
-//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
-//        }
-//
-//        cvEffects.onTouchDown {
-//            this@SettingsView.model.gameStage.fire(ButtonPressedEvent())
-//        }
-
         btnApplyChanges.onTouchDown {
             model.gameStage.fire(ButtonPressedEvent())
         }
@@ -143,7 +161,8 @@ class SettingsView(
             this@SettingsView.model.saveSettings()
             this@SettingsView.isVisible = false
             if (model.isMainMenuCall) {
-                model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
+                model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable =
+                    Touchable.enabled
             }
         }
         btnCancelChanges.onTouchDown {
@@ -152,7 +171,8 @@ class SettingsView(
         btnCancelChanges.onClick {
             this@SettingsView.isVisible = false
             if (model.isMainMenuCall) {
-                model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable = Touchable.enabled
+                model.uiStage.actors.filterIsInstance<MainMenuView>().first().touchable =
+                    Touchable.enabled
             }
         }
 
@@ -168,6 +188,12 @@ class SettingsView(
         }
     }
 
+    /**
+     * If the main menu is being called, set the background of the frame to the skin's frame
+     * background, otherwise set the background of the internal table to the skin's frame background
+     *
+     * @param isMainMenuCall If true, the background will be set to the frame background.
+     */
     private fun changeBackground(isMainMenuCall: Boolean) {
         if (isMainMenuCall) {
             this.background = skin[Drawables.FRAME_BGD]
@@ -178,20 +204,37 @@ class SettingsView(
         }
     }
 
+    /**
+     * This function sets the music volume to the value passed in
+     *
+     * @param musicVolume The volume of the music.
+     */
     private fun setMusicVolume(musicVolume: Int) {
         cvMusic.setValue(musicVolume)
     }
 
+    /**
+     * This function sets the effects volume to the value passed in
+     *
+     * @param effectsVolume The volume of the effects.
+     */
     private fun setEffectsVolume(effectsVolume: Int) {
         cvEffects.setValue(effectsVolume)
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private var log = logger<SettingsView>()
     }
 
 }
 
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.settingsView(
     model: SettingsModel,

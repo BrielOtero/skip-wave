@@ -103,11 +103,6 @@ fun loadSkin() {
 
         label(Labels.FRAME.skinKey) {
             font = skin[Fonts.DEFAULT_WHITE]
-//            background = skin[Drawables.FRAME_FGD].apply {
-//                leftWidth = 2f
-//                rightWidth = 2f
-//                topHeight = 1f
-//            }
         }
 
         textButton(TextButtons.DEFAULT.skinKey){

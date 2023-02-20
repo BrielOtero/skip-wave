@@ -21,6 +21,17 @@ import com.goldev.skipwave.event.SavePreferencesEvent
 import com.goldev.skipwave.event.fire
 import ktx.log.logger
 
+/**
+ * The model of the Records
+ *
+ * @param world The entities world.
+ * @property bundle The bundle with text to show in the UI.
+ * @property gamePreferences The preferences of the game.
+ * @property gameStage The stage that the game is being rendered on.
+ * @property uiStage The stage that the UI is being rendered on.
+ * @constructor
+ *
+ */
 class RecordsModel(
     world: World,
     val bundle: I18NBundle,
@@ -29,16 +40,36 @@ class RecordsModel(
     @Qualifier("uiStage") val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
+    /**
+     *  Component mapper with the entities with WaveComponent
+     */
     private val waveCmps: ComponentMapper<WaveComponent> = world.mapper()
 
+    /**
+     *  Notifiable property with new record.
+     */
     var isNewRecord by propertyNotify(false)
+
+    /**
+     *  Notifiable property with the reach wave.
+     */
     var reachWave by propertyNotify(0)
+
+    /**
+     *  Notifiable property with the record wave.
+     */
     var recordWave by propertyNotify(gamePreferences.game.wave)
 
     init {
         gameStage.addListener(this)
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
 
         when (event) {
@@ -59,9 +90,9 @@ class RecordsModel(
                 gameStage.fire(GamePauseEvent())
                 uiStage.actors.filterIsInstance<SkillUpgradeView>().first().isVisible = false
                 uiStage.actors.filterIsInstance<GameView>().first().isVisible = false
-                with(uiStage.actors.filterIsInstance<TouchpadView>().first()){
-                    isVisible=false
-                    this.model.disableTouchpad=true
+                with(uiStage.actors.filterIsInstance<TouchpadView>().first()) {
+                    isVisible = false
+                    this.model.disableTouchpad = true
                 }
 
                 uiStage.actors.filterIsInstance<RecordsView>().first().isVisible = true
@@ -79,6 +110,9 @@ class RecordsModel(
     }
 
     companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<SkillUpgradeModel>()
     }
 }

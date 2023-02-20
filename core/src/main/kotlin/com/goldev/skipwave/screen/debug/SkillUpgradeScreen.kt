@@ -42,7 +42,7 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
     /**
      *  Property with model for the SkillUpgradeModel.
      */
-    private val model = SkillUpgradeModel(eWorld, game.bundle, gameStage, uiStage)
+    private val model = SkillUpgradeModel( game.bundle, gameStage, uiStage)
 
     /**
      *  It's a property that contains a SkillUpgradeView for the game.

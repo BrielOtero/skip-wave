@@ -15,6 +15,13 @@ import ktx.actors.plusAssign
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * Player info
+ *
+ * @property skin
+ * @property bundle
+ * @constructor Create empty Player info
+ */
 class PlayerInfo(
     private val skin: Skin,
     val bundle: I18NBundle,

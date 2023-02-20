@@ -19,6 +19,16 @@ import com.goldev.skipwave.event.EntityLevelEvent
 import com.goldev.skipwave.event.EntityLootEvent
 import ktx.log.logger
 
+/**
+ * The model of the Game
+ *
+ * @param world The entities world.
+ * @property bundle The bundle with text to show in the UI.
+ * @property gameStage The stage that the game is being rendered on.
+ * @property uiStage The stage that the UI is being rendered on.
+ * @constructor Create empty Game model.
+ *
+ */
 class GameModel(
     world: World,
     val bundle: I18NBundle,
@@ -26,30 +36,82 @@ class GameModel(
     @Qualifier("uiStage") val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
+    /**
+     *  Component mapper with the entities with PlayerComponent
+     */
     private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper()
-    private val lifeCmps: ComponentMapper<LifeComponent> = world.mapper()
-    private val experienceCmps: ComponentMapper<ExperienceComponent> = world.mapper()
-    private val levelCmps: ComponentMapper<WaveComponent> = world.mapper()
 
+    /**
+     *  Component mapper with the entities with lifeComponent
+     */
+    private val lifeCmps: ComponentMapper<LifeComponent> = world.mapper()
+
+    /**
+     *  Component mapper with the entities with ExperienceComponent
+     */
+    private val experienceCmps: ComponentMapper<ExperienceComponent> = world.mapper()
+
+    /**
+     *  Component mapper with the entities with WaveComponent
+     */
+    private val waveCmps: ComponentMapper<WaveComponent> = world.mapper()
+
+    /**
+     *  Notifiable property with the player life.
+     */
     var playerLife by propertyNotify(0f)
+
+    /**
+     *  Notifiable property with the player life max.
+     */
     var playerLifeMax by propertyNotify(0f)
+
+    /**
+     *  Notifiable property with the player life bar.
+     */
     var playerLifeBar by propertyNotify(0f)
 
+    /**
+     *  Notifiable property with the player experience.
+     */
     var playerExperience by propertyNotify(0f)
-    var playerExperienceToNextLevel by propertyNotify(50f)
+
+    /**
+     *  Notifiable property with the player experience to next wave.
+     */
+    var playerExperienceToNextWave by propertyNotify(50f)
+
+    /**
+     *  Notifiable property with the player experience bar.
+     */
     var playerExperienceBar by propertyNotify(0f)
+
+    /**
+     * Property used to calculate the experience bar.
+     */
     private var playerExperienceTempValue = 0f
 
-    var playerLevel by propertyNotify(1)
+    /**
+     *  Notifiable property with the player wave.
+     */
+    var playerWave by propertyNotify(1)
 
-    var lootText by propertyNotify("")
+    /**
+     *  Notifiable property with the loot text
+     */
+    private var lootText by propertyNotify("")
 
 
     init {
         gameStage.addListener(this)
     }
 
-
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is EntityDamageEvent -> {
@@ -67,20 +129,21 @@ class GameModel(
                 val experienceCmp = experienceCmps[event.entity]
                 if (isPlayer) {
                     playerExperience = experienceCmp.experience - playerExperienceTempValue
-                    playerExperienceBar = playerExperience / playerExperienceToNextLevel
+                    playerExperienceBar = playerExperience / playerExperienceToNextWave
                 }
             }
 
             is EntityLevelEvent -> {
                 val isPlayer = event.entity in playerCmps
                 val experienceCmp = experienceCmps[event.entity]
-                val levelCmp = levelCmps[event.entity]
+                val levelCmp = waveCmps[event.entity]
                 if (isPlayer) {
-                    playerExperienceToNextLevel = experienceCmp.experienceToNextWave - experienceCmp.experience
+                    playerExperienceToNextWave =
+                        experienceCmp.experienceToNextWave - experienceCmp.experience
                     playerExperienceTempValue = experienceCmp.experience
                     playerExperience = 0f
-                    playerLevel = levelCmp.wave
-                    playerExperienceBar = playerExperience / playerExperienceToNextLevel
+                    playerWave = levelCmp.wave
+                    playerExperienceBar = playerExperience / playerExperienceToNextWave
                 }
 
             }
@@ -93,7 +156,11 @@ class GameModel(
         }
         return true
     }
-    companion object{
+
+    companion object {
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<GameModel>()
     }
 }

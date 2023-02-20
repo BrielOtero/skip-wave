@@ -18,6 +18,14 @@ import ktx.app.KtxInputAdapter
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * Skill slot
+ *
+ * @property skin
+ * @property uiStage
+ * @property bundle
+ * @constructor Create empty Skill slot
+ */
 class SkillSlot(
     private val skin: Skin,
     private val uiStage: Stage,

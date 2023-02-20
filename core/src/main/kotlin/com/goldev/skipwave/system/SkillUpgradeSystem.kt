@@ -13,23 +13,40 @@ import com.goldev.skipwave.event.*
 import ktx.log.logger
 
 /**
- * Skill upgrade system
+ * System that takes care of the skills upgrade in the game.
  *
- * @property gameStage
- * @property lifeCmps
- * @property moveCmps
- * @property attackCmps
- * @constructor Create empty Skill upgrade system
+ * @property gameStage The stage that the game is being rendered on.
+ * @property lifeCmps Entities with LifeComponent in the world.
+ * @property moveCmps Entities with MoveComponent in the world.
+ * @property attackCmps Entities with AttackComponent in the world.
+ * @constructor Create empty Skill upgrade system.
  */
 class SkillUpgradeSystem(
     @Qualifier("gameStage") private val gameStage: Stage,
     private val lifeCmps: ComponentMapper<LifeComponent>,
     private val moveCmps: ComponentMapper<MoveComponent>,
     private val attackCmps: ComponentMapper<AttackComponent>,
-) : IntervalSystem(), EventListener {
+
+    ) : IntervalSystem(), EventListener {
+
+    /**
+     *  A family of entities that have the PlayerComponent.
+     */
     private var playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+
+    /**
+     *  A family of entities that have the WeaponComponent.
+     */
     private var weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
+
+    /**
+     *  All the skills.
+     */
     private var skillsModel = Skill.values()
+
+    /**
+     *  The number of skills that are displayed on the screen.
+     */
     private val numSkill: Int = 3
 
     init {
@@ -38,9 +55,18 @@ class SkillUpgradeSystem(
         }
     }
 
+    /**
+     * Called every tick of SkillUpgradeSystem
+     */
     override fun onTick() {
     }
 
+    /**
+     * It handles events
+     *
+     * @param event The event to handle.
+     * @return If true, the event is consumed by the method and not sent to the next one.
+     */
     override fun handle(event: Event): Boolean {
         when (event) {
             is EntityLevelEvent -> {
@@ -105,6 +131,10 @@ class SkillUpgradeSystem(
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<SkillUpgradeSystem>()
     }
 }

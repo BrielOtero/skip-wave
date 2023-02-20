@@ -15,15 +15,36 @@ import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * The view of the Pause
+ *
+ * @param model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Pause view
+ */
 class PauseView(
     model: PauseModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
+    /**
+     *  A variable that is used to store the resume TextButton.
+     */
     private val btnResume: TextButton
+
+    /**
+     *  A variable that is used to store the settings TextButton.
+     */
     private val btnSettings: TextButton
+
+    /**
+     *  A variable that is used to store the main menu TextButton.
+     */
     private val btnMainMenu: TextButton
 
+    /**
+     * Starts the view with its components
+     */
     init {
         //UI
         isVisible = false
@@ -94,12 +115,18 @@ class PauseView(
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<PauseView>()
     }
 
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.pauseView(
     model: PauseModel,

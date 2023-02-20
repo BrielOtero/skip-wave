@@ -20,13 +20,26 @@ import ktx.actors.then
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * The view of the SkillUpgrade
+ *
+ * @param model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Skill Upgrade view
+ */
 class SkillUpgradeView(
     model: SkillUpgradeModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
+    /**
+     *  It's a list of skill slots.
+     */
     private val skillSlots = mutableListOf<SkillSlot>()
 
+    /**
+     * Starts the view with its components
+     */
     init {
         //UI
         this.alpha = 0f
@@ -36,7 +49,10 @@ class SkillUpgradeView(
 
         table { tableCell ->
             background = skin[Drawables.FRAME_BGD]
-            label(text = model.bundle["SkillUpgradeView.title"], style = Labels.FRAME.skinKey) { lblCell ->
+            label(
+                text = model.bundle["SkillUpgradeView.title"],
+                style = Labels.FRAME.skinKey
+            ) { lblCell ->
                 lblCell.padTop(10f).padBottom(8f).row()
                 this.setFontScale(0.4f)
             }
@@ -45,7 +61,8 @@ class SkillUpgradeView(
                 this@SkillUpgradeView.skillSlots += skillSlot(
                     skin = skin, uiStage = model.uiStage, bundle = model.bundle
                 ) { skillCell ->
-                    skillCell.expand().width(model.uiStage.width * 0.8f).height(model.uiStage.height * 0.25f).center()
+                    skillCell.expand().width(model.uiStage.width * 0.8f)
+                        .height(model.uiStage.height * 0.25f).center()
                         .row()
                     skillCell.pad(0f, 10f, 4f, 10f)
 
@@ -65,7 +82,8 @@ class SkillUpgradeView(
                 }
             }
             padBottom(10f)
-            tableCell.expand().maxWidth(model.uiStage.width * 0.9f).maxHeight(model.uiStage.height * 0.98f).center()
+            tableCell.expand().maxWidth(model.uiStage.width * 0.9f)
+                .maxHeight(model.uiStage.height * 0.98f).center()
         }
 
         // DATA BINDING
@@ -75,6 +93,11 @@ class SkillUpgradeView(
 
     }
 
+    /**
+     * It populates the skill upgrade view with the skills of the player.
+     *
+     * @param skills The skills object that contains the skills to be displayed
+     */
     fun popupSkills(skills: Skills) {
 
         with(skills.skill1) {
@@ -95,16 +118,27 @@ class SkillUpgradeView(
         }
     }
 
+    /**
+     * Creates new skill
+     *
+     * @param skillModel The skill model that you want to use.
+     */
     fun skill(skillModel: SkillModel) {
         skillSlots[skillModel.slotIdx].skill(skillModel)
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<SkillUpgradeView>()
     }
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.skillUpgradeView(
     model: SkillUpgradeModel,

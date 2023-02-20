@@ -16,10 +16,10 @@ import ktx.math.vec2
 
 /**
  *  It listens for keyboard input and updates the player's movement and attack components
- *  @property world The world of the game.
+ *  @param world The world of the game.
  *  @property uiStage The stage that the UI is being rendered on.
  *  @property moveCmps Store entities with move component in the world
- *  @constructor Creates a empty PlayerKeyboardInputProcessor
+ *  @constructor Creates an empty PlayerKeyboardInputProcessor
  */
 class PlayerKeyboardInputProcessor(
     world: World,

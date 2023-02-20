@@ -11,16 +11,36 @@ import ktx.math.vec2
 import ktx.scene2d.*
 
 
+/**
+ * The view of the Touchpad
+ *
+ * @property model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Touchpad view
+ */
 class TouchpadView(
     val model: TouchpadModel,
     skin: Skin,
 ) : Table(skin), KTable {
+    /**
+     *  A variable that is used to store the position of the touchpad on the x axis.
+     */
     private var positionX: Float = 0f
+
+    /**
+     * A variable that is used to store the position of the touchpad on the y axis.
+     */
     private var positionY: Float = 0f
+
+    /**
+     *  Used to scale the touchpad to the screen size.
+     */
     private var scale: Float = 0f
         get() = (this@TouchpadView.stage.width / this@TouchpadView.stage.viewport.screenWidth)
 
-
+    /**
+     * Starts the view with its components
+     */
     init {
         // UI
         alpha = 0f
@@ -52,23 +72,39 @@ class TouchpadView(
         }
     }
 
+    /**
+     * It sets the position of the touchpad.
+     *
+     * @param touchpadLocation The location of the touchpad.
+     */
     private fun setTouchpad(touchpadLocation: Vector2) {
         positionX = touchpadLocation.x * scale
         positionY = touchpadLocation.y * scale
         setPosition(positionX, this@TouchpadView.stage.height - positionY)
     }
 
+    /**
+     * This function sets the alpha value of the touchpad to the value of the opacity parameter
+     *
+     * @param opacity The opacity of the touchpad.
+     */
     private fun setTouchpadVisible(opacity: Float) {
         this.alpha = opacity
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<TouchpadModel>()
     }
 
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.touchpadView(
     model: TouchpadModel,

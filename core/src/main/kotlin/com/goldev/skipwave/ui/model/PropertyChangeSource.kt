@@ -43,8 +43,8 @@ abstract class PropertyChangeSource {
     /**
      * Notify on property change
      *
-     * @param property
-     * @param value
+     * @param property Property to notify.
+     * @param value Any.
      *///*
     fun notify(property: KProperty<*>, value: Any) {
         listenersMap[property]?.forEach { it(value) }
@@ -56,7 +56,7 @@ abstract class PropertyChangeSource {
  * Property notifier Delegation Class
  *
  * @param T
- * @constructor
+ * @constructor Create empty Property Notifier
  *
  * @param initialValue
  */

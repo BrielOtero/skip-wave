@@ -17,16 +17,41 @@ import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
 
+/**
+ * The view of the Records
+ *
+ * @property model The model of the view
+ * @param skin The skin of the view
+ * @constructor Creates a empty Records view
+ */
 class RecordsView(
     private val model: RecordsModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
+    /**
+     *  A variable that is used to store the label that is used to show the new record or reach wave info.
+     */
     private val lblNewRecordOrReachWaveInfo: Label
+
+    /**
+     *  A variable that is used to store the label that is used to show the reach wave info.
+     */
     private val lblReachWave: Label
+
+    /**
+     *  A variable that is used to store the label that is used to show the record wave.
+     */
     private val lblRecordWave: Label
+
+    /**
+     *  A variable that is used to store the button that is used to go to the main menu.
+     */
     private val btnMainMenu: TextButton
 
+    /**
+     * Starts the view with its components
+     */
     init {
         //UI
         isVisible = false
@@ -34,7 +59,10 @@ class RecordsView(
 
         table { tableCell ->
             background = skin[Drawables.FRAME_BGD]
-            label(text = this@RecordsView.model.bundle["RecordsView.title"], style = Labels.FRAME.skinKey) { lblCell ->
+            label(
+                text = this@RecordsView.model.bundle["RecordsView.title"],
+                style = Labels.FRAME.skinKey
+            ) { lblCell ->
                 lblCell.height(this@RecordsView.model.uiStage.height * 0.1f).top().row()
                 setColor(255f, 0f, 0f, 255f)
                 setFontScale(0.4f)
@@ -132,6 +160,11 @@ class RecordsView(
         }
     }
 
+    /**
+     * Set's the content of label depending on if is new record.
+     *
+     * @param isNewRecord True if is new record.
+     */
     private fun showNewRecord(isNewRecord: Boolean) {
         if (isNewRecord) {
             lblNewRecordOrReachWaveInfo.setColor(0f, 255f, 0f, 255f)
@@ -141,20 +174,38 @@ class RecordsView(
             lblNewRecordOrReachWaveInfo.setText(model.bundle["RecordsView.reachWaveInfo"])
         }
     }
-    private fun setReachWave(reachWave:Int){
+
+    /**
+     * Sets the reach wave to the value passed in.
+     *
+     * @param reachWave The reach wave to set.
+     */
+    private fun setReachWave(reachWave: Int) {
         lblReachWave.setText(reachWave)
     }
-    private fun setRecordWave(recordWave:Int){
+
+    /**
+     * Sets the record wave to the value passed in.
+     *
+     * @param recordWave The reach record to set.
+     */
+    private fun setRecordWave(recordWave: Int) {
         lblRecordWave.setText(recordWave)
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private val log = logger<SkillUpgradeView>()
     }
 
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.recordsView(
     model: RecordsModel,

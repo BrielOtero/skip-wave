@@ -1,20 +1,24 @@
 package com.goldev.skipwave.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import ktx.assets.disposeSafely
-import ktx.collections.defaultSetSize
+import ktx.freetype.generateFont
 import ktx.scene2d.Scene2DSkin
 import ktx.style.*
 
+/**
+ * Enumeration with all the UI images
+ *
+ * @property atlasKey Texture atlas key value
+ * @constructor Create empty Drawables
+ */
 enum class Drawables(
     val atlasKey: String,
 ) {
-//    CHAR_INFO_BGD("char_info"),
-
     //UI
     PLAYER("player"),
 
@@ -44,7 +48,6 @@ enum class Drawables(
     BTN_SLIDER_RIGHT_DOWN("btn_slider_right_down"),
 
 
-
     //SKILLS
     PLAYER_LIFE("player_life"),
     PLAYER_REGENERATION("player_regeneration"),
@@ -53,85 +56,117 @@ enum class Drawables(
     PLAYER_DAMAGE("player_damage"),
 }
 
+/**
+ * Get the texture atlas of the drawable.
+ *
+ * @param drawable The drawable to transform.
+ * @return The texture atlas of the drawable.
+ */
 operator fun Skin.get(drawable: Drawables): Drawable = this.getDrawable(drawable.atlasKey)
 
+/**
+ * Enumeration with all the Labels
+ *
+ * @constructor Create empty Labels
+ */
 enum class Labels {
     FRAME;
 
-    val skinKey = this.name.lowercase()
-}
-enum class TextButtons{
-    DEFAULT,TITLE;
-
-    val skinKey = this.name.lowercase()
-}
-enum class Buttons{
-    LEFT,RIGHT,PAUSE;
-
+    /**
+     *  It's a property with the key of texture atlas
+     *
+     *  @return The key of the texture atlas.
+     */
     val skinKey = this.name.lowercase()
 }
 
-enum class Fonts(
-    val atlasRegionKey: String,
-    val scaling: Float,
-) {
-    DEFAULT_BLACK("font_black", 0.25f),
-    DEFAULT_WHITE("font_white", 0.25f);
+/**
+ * Enumeration with all the TextButtons
+ *
+ * @constructor Create empty Text buttons
+ */
+enum class TextButtons {
+    DEFAULT, TITLE;
 
-    val skinKey = "Font_${this.name.lowercase()}"
-    val fontPath = "ui/${this.atlasRegionKey}.fnt"
+    /**
+     *  It's a property with the key of texture atlas
+     *
+     *  @return The key of the texture atlas.
+     */
+    val skinKey = this.name.lowercase()
 }
 
-operator fun Skin.get(font: Fonts): BitmapFont = this.getFont(font.skinKey)
+/**
+ * Enumeration with all the Buttons
+ *
+ * @constructor Create empty Buttons
+ */
+enum class Buttons {
+    LEFT, RIGHT, PAUSE;
 
+    /**
+     *  It's a property with the key of texture atlas
+     *
+     *  @return The key of the texture atlas.
+     */
+    val skinKey = this.name.lowercase()
+}
 
+/**
+ * Load the skin
+ */
 fun loadSkin() {
     Scene2DSkin.defaultSkin = skin(TextureAtlas("ui/ui_new.atlas")) { skin ->
-        Fonts.values().forEach { fnt ->
-            skin[fnt.skinKey] = BitmapFont(Gdx.files.internal(fnt.fontPath), skin.getRegion(fnt.atlasRegionKey)).apply {
-                data.setScale(fnt.scaling)
-                data.markupEnabled = true
-            }
+        val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("ui/clarity.ttf"))
+        val loadedFont = fontGenerator.generateFont {
+            size = 32
+            characters = FreeTypeFontGenerator.DEFAULT_CHARS
         }
+        fontGenerator.disposeSafely()
+
+        val defaultFont = loadedFont.apply { data.setScale(0.28f) }
 
         touchpad {
             knob = skin[Drawables.JOY_INT]
-            knob.minWidth=30f
-            knob.minHeight=30f
+            knob.minWidth = 30f
+            knob.minHeight = 30f
             background = skin[Drawables.JOY_EXT]
         }
 
         label(Labels.FRAME.skinKey) {
-            font = skin[Fonts.DEFAULT_WHITE]
+            font = defaultFont
         }
 
-        textButton(TextButtons.DEFAULT.skinKey){
-            font = skin[Fonts.DEFAULT_WHITE]
+        textButton(TextButtons.DEFAULT.skinKey) {
+            font = defaultFont
             up = skin[Drawables.BTN_UP]
             down = skin[Drawables.BTN_DOWN]
         }
-        textButton(TextButtons.TITLE.skinKey){
-            font = skin[Fonts.DEFAULT_WHITE]
+        textButton(TextButtons.TITLE.skinKey) {
+            font = defaultFont
             up = skin[Drawables.FRAME_FGD_LIGHT]
         }
 
-        button(Buttons.LEFT.skinKey){
+        button(Buttons.LEFT.skinKey) {
             up = skin[Drawables.BTN_SLIDER_LEFT_UP]
             down = skin[Drawables.BTN_SLIDER_LEFT_DOWN]
         }
-        button(Buttons.RIGHT.skinKey){
+        button(Buttons.RIGHT.skinKey) {
             up = skin[Drawables.BTN_SLIDER_RIGHT_UP]
             down = skin[Drawables.BTN_SLIDER_RIGHT_DOWN]
         }
-        button(Buttons.PAUSE.skinKey){
+        button(Buttons.PAUSE.skinKey) {
             up = skin[Drawables.BTN_PAUSE]
         }
         scrollPane {
-            vScrollKnob=skin[Drawables.SCROLL_VERTICAl]
+            vScrollKnob = skin[Drawables.SCROLL_VERTICAl]
         }
     }
 }
 
+/**
+ * Dispose the skin
+ */
 fun disposeSkin() {
     Scene2DSkin.defaultSkin.disposeSafely()
 }

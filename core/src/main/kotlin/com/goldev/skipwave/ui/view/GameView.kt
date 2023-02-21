@@ -24,7 +24,7 @@ import ktx.scene2d.*
  *
  * @param model The model of the view
  * @param skin The skin of the view
- * @constructor Creates a empty Game view
+ * @constructor Creates an empty Game view
  */
 class GameView(
     model: GameModel,
@@ -165,7 +165,7 @@ class GameView(
      *
      * @param newWave The new wave of the player.
      */
-    fun playerWave(newWave: Int) = playerInfo.playerLevel(newWave)
+    fun playerWave(newWave: Int) = playerInfo.playerWave(newWave)
 
     /**
      * If the show parameter is true, then set the background of the GameView to the pixmap

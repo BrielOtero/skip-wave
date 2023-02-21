@@ -78,6 +78,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
             add(textureAtlas)
             add(phWorld)
             add(game.gamePreferences)
+            add(game.bundle)
         }
 
         /**

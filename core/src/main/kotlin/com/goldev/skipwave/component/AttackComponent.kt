@@ -1,7 +1,9 @@
 package com.goldev.skipwave.component
 
 /**
- *  AttackState is an enum class that contains all states of an attack
+ * AttackState is an enum class that contains all states of an attack
+ *
+ * @constructor Create empty Attack state
  */
 enum class AttackState {
     READY, PREPARE, ATTACKING, DEAL_DAMAGE

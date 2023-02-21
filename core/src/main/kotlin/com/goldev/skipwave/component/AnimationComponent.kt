@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 /**
- *  It's an enum class that contains all the possible animation models that can be used in the game
+ * It's an enum class that contains all the possible animation models that can be used in the game
+ *
+ * @constructor Create empty Animation model
  */
 enum class AnimationModel {
     UNDEFINED,
@@ -48,7 +50,9 @@ enum class AnimationModel {
 }
 
 /**
- *  It's an enum class that contains all the possible animation types that can be used in the game
+ * It's an enum class that contains all the possible animation types that can be used in the game
+ *
+ * @constructor Create empty Animation type
  */
 enum class AnimationType {
     IDLE, RUN, ATTACK, DEATH, OPEN;

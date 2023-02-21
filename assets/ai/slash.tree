@@ -12,7 +12,3 @@ subtree name:"attack"
 root
   selector
     $attack
-
-
-
-#wait seconds:"uniform,0.25"

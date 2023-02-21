@@ -44,7 +44,7 @@ class PhysicSystem(
     private val weaponCmps: ComponentMapper<WeaponComponent>,
     private val playerCmps: ComponentMapper<PlayerComponent>,
     private val moveCmps: ComponentMapper<MoveComponent>,
-) : ContactListener, IteratingSystem(interval = Fixed(1 / 30f)) {
+) : ContactListener, IteratingSystem(interval = Fixed(1 / 10f)) {
 
     init {
         phWorld.setContactListener(this)

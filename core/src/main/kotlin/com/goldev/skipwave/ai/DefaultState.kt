@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.goldev.skipwave.component.AnimationType
 
 /**
- *  It's a state machine that handles the different states of the AI entity
+ * It's a state machine that handles the different states of the AI entity
+ *
+ * @constructor Create empty Default state
  */
 enum class DefaultState : EntityState {
     /**
@@ -162,7 +164,13 @@ enum class DefaultState : EntityState {
     },
 }
 
+/**
+ * Default global state
+ *
+ * @constructor Create empty Default global state
+ */
 enum class DefaultGlobalState : EntityState {
+
     /**
      * Represents that AiEntity is on check alive state
      */

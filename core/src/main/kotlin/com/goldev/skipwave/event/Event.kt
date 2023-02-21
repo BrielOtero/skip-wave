@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.AnimationModel
 import com.goldev.skipwave.component.ExperienceComponent
-import com.goldev.skipwave.component.Skill
+import com.goldev.skipwave.system.SkillUpgradeSystem.*
 import com.goldev.skipwave.ui.model.SkillModel
 import com.github.quillraven.fleks.Entity
 

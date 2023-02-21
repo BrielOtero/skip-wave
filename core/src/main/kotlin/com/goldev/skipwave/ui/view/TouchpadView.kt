@@ -16,7 +16,7 @@ import ktx.scene2d.*
  *
  * @property model The model of the view
  * @param skin The skin of the view
- * @constructor Creates a empty Touchpad view
+ * @constructor Creates an empty Touchpad view
  */
 class TouchpadView(
     val model: TouchpadModel,

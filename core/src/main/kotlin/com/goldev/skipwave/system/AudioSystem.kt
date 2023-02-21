@@ -46,7 +46,10 @@ class AudioSystem(
         if (soundRequests.isEmpty()) {
             return
         }
-        soundRequests.values.forEach { it.play(gamePreferences.settings.effectsVolume) }
+        soundRequests.values.forEach {
+            it.play(gamePreferences.settings.effectsVolume)
+//            it.disposeSafely()
+        }
         soundRequests.clear()
     }
 
@@ -101,26 +104,24 @@ class AudioSystem(
 
             is EntityAttackEvent -> {
                 if (event.model != AnimationModel.PLAYER && event.model != AnimationModel.SLASH_LEFT && event.model != AnimationModel.SLASH_RIGHT) {
-                    queueSound("audio/enemy_attack.wav")
+                    queueSound("audio/enemy_attack.ogg")
                 } else {
-                    queueSound("audio/${event.model.atlasKey}_attack.wav")
+                    queueSound("audio/${event.model.atlasKey}_attack.ogg")
                 }
             }
 
             is EntityDeathEvent -> {
                 if (event.model != AnimationModel.PLAYER && event.model != AnimationModel.SLASH_LEFT && event.model != AnimationModel.SLASH_RIGHT) {
-                    queueSound("audio/enemy_death.wav")
+                    queueSound("audio/enemy_death.ogg")
                 } else {
-                    queueSound("audio/${event.model.atlasKey}_death.wav")
-
+                    queueSound("audio/${event.model.atlasKey}_death.ogg")
                 }
             }
 
-            is ButtonPressedEvent -> queueSound("audio/button.wav")
-
-            is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.wav")
-            is EntityLevelEvent -> queueSound("audio/level_up.wav")
-            is ShakeEvent -> queueSound("audio/hellou.wav")
+            is ButtonPressedEvent -> queueSound("audio/button.ogg")
+            is EntityLootEvent -> queueSound("audio/${event.model.atlasKey}_open.ogg")
+            is EntityLevelEvent -> queueSound("audio/level_up.ogg")
+            is ShakeEvent -> queueSound("audio/shake.ogg")
         }
 
         return false

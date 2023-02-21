@@ -1,17 +1,14 @@
 # Actions
-import idle:"com.goldev.skipwave.ai.IdleTask"
 import move:"com.goldev.skipwave.ai.MoveTask"
-import wander:"com.goldev.skipwave.ai.WanderTask"
 import attack:"com.goldev.skipwave.ai.AttackTask"
 
 # Conditions
-import isEnemyNearby?:"com.goldev.skipwave.ai.IsEnemyNearby"
 import canAttack?:"com.goldev.skipwave.ai.CanAttack"
 
 subtree name:"attack"
     sequence
         (canAttack?) attack
-        wait seconds:"uniform,2"
+        wait seconds:"uniform,1"
 
 subtree name:"move"
   sequence
@@ -23,6 +20,3 @@ root
     $move
 
 
-
-# (random success:0.25) idle duration:"uniform,2.0,3.5"
-# wander

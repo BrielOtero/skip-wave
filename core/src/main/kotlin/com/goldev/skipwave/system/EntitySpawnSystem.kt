@@ -310,7 +310,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -322,7 +322,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -334,7 +334,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -346,7 +346,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -358,7 +358,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -370,7 +370,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -382,7 +382,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -394,7 +394,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -406,7 +406,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -418,7 +418,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -430,7 +430,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -442,7 +442,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -454,7 +454,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -466,7 +466,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -478,7 +478,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack * 0.7f,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -490,7 +490,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack * 0.8f,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -502,7 +502,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -514,7 +514,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -526,7 +526,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -538,7 +538,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -550,7 +550,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -562,7 +562,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -574,7 +574,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -586,7 +586,7 @@ class EntitySpawnSystem(
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.5f, 0.5f),
+                physicScaling = vec2(0.8f, 0.8f),
                 aiTreePath = "ai/enemy.tree"
             )
 

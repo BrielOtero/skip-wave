@@ -6,7 +6,7 @@ filter: Nearest, Nearest
 repeat: none
 btn_down
   rotate: false
-  xy: 1946, 1011
+  xy: 1434, 1011
   size: 30, 13
   split: 10, 10, 4, 4
   pad: 0, 0, 0, 0
@@ -15,42 +15,42 @@ btn_down
   index: -1
 btn_pause
   rotate: false
-  xy: 1836, 916
+  xy: 1324, 916
   size: 18, 18
   orig: 18, 18
   offset: 0, 0
   index: -1
 btn_slider_left_down
   rotate: false
-  xy: 1746, 711
+  xy: 1234, 711
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
   index: -1
 btn_slider_left_up
   rotate: false
-  xy: 1898, 980
+  xy: 1386, 980
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 btn_slider_right_down
   rotate: false
-  xy: 1536, 492
+  xy: 1024, 492
   size: 14, 13
   orig: 14, 13
   offset: 0, 0
   index: -1
 btn_slider_right_up
   rotate: false
-  xy: 1616, 610
+  xy: 1104, 610
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 btn_up
   rotate: false
-  xy: 1716, 710
+  xy: 1204, 710
   size: 30, 14
   split: 10, 10, 4, 5
   pad: 0, 0, 0, 0
@@ -59,35 +59,21 @@ btn_up
   index: -1
 experience_progress
   rotate: false
-  xy: 1536, 609
+  xy: 1024, 609
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
   index: -1
 experience_under
   rotate: false
-  xy: 1636, 709
+  xy: 1124, 709
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
   index: -1
-font_black
-  rotate: false
-  xy: 1024, 0
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-font_white
-  rotate: false
-  xy: 1024, 512
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
 frame_bgd
   rotate: false
-  xy: 1636, 665
+  xy: 1124, 665
   size: 44, 44
   split: 15, 15, 15, 15
   pad: 0, 0, 0, 0
@@ -96,7 +82,7 @@ frame_bgd
   index: -1
 frame_bgd_light
   rotate: false
-  xy: 1536, 565
+  xy: 1024, 565
   size: 44, 44
   split: 15, 15, 15, 15
   pad: 0, 0, 0, 0
@@ -105,7 +91,7 @@ frame_bgd_light
   index: -1
 frame_fgd
   rotate: false
-  xy: 1868, 966
+  xy: 1356, 966
   size: 30, 28
   split: 4, 23, 12, 12
   pad: 0, 0, 0, 0
@@ -114,7 +100,7 @@ frame_fgd
   index: -1
 frame_fgd_dark
   rotate: false
-  xy: 1536, 505
+  xy: 1024, 505
   size: 30, 28
   split: 4, 23, 12, 12
   pad: 0, 0, 0, 0
@@ -123,7 +109,7 @@ frame_fgd_dark
   index: -1
 frame_fgd_light
   rotate: false
-  xy: 1836, 934
+  xy: 1324, 934
   size: 30, 28
   split: 4, 23, 12, 12
   pad: 0, 0, 0, 0
@@ -132,7 +118,7 @@ frame_fgd_light
   index: -1
 frame_purple
   rotate: false
-  xy: 1916, 994
+  xy: 1404, 994
   size: 30, 30
   split: 7, 7, 7, 7
   pad: 0, 0, 0, 0
@@ -141,28 +127,28 @@ frame_purple
   index: -1
 joy_ext
   rotate: false
-  xy: 1536, 724
+  xy: 1024, 724
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 joy_int
   rotate: false
-  xy: 1536, 624
+  xy: 1024, 624
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 life_progress
   rotate: false
-  xy: 1836, 994
+  xy: 1324, 994
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
   index: -1
 life_under
   rotate: false
-  xy: 1836, 1009
+  xy: 1324, 1009
   size: 80, 15
   orig: 80, 15
   offset: 0, 0
@@ -176,42 +162,42 @@ player
   index: -1
 player_cooldown
   rotate: false
-  xy: 1536, 533
+  xy: 1024, 533
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_damage
   rotate: false
-  xy: 1636, 633
+  xy: 1124, 633
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_life
   rotate: false
-  xy: 1680, 677
+  xy: 1168, 677
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_regeneration
   rotate: false
-  xy: 1836, 962
+  xy: 1324, 962
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player_speed
   rotate: false
-  xy: 1580, 577
+  xy: 1068, 577
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 scroll_vertical
   rotate: false
-  xy: 1568, 535
+  xy: 1056, 535
   size: 7, 30
   split: 2, 2, 10, 10
   pad: 0, 0, 0, 0

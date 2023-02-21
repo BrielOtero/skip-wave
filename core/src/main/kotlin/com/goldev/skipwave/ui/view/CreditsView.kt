@@ -43,6 +43,7 @@ class CreditsView(
                     label.setFontScale(0.25f)
                 }).width(150f).height(20f).padBottom(10f).padRight(2f).row()
 
+                println(model.bundle["CreditsView.c${i}"])
             this.add(
                 label(
                     text = model.bundle["CreditsView.c${i}"],
@@ -62,7 +63,7 @@ class CreditsView(
         width = 220f
         height = 800f
         setScrollBarPositions(false, true)
-        setScrollbarsVisible(false)
+        setScrollbarsVisible(true)
     }
 
     /**

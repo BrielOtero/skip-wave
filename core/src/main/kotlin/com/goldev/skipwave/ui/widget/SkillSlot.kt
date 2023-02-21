@@ -19,11 +19,11 @@ import ktx.log.logger
 import ktx.scene2d.*
 
 /**
- * Skill slot
+ * The SkillSlot widget.
  *
- * @property skin
- * @property uiStage
- * @property bundle
+ * @property skin The skin of the widget.
+ * @property uiStage The stage that the UI is being rendered on.
+ * @property bundle The bundle with text to show in the UI.
  * @constructor Create empty Skill slot
  */
 class SkillSlot(
@@ -32,16 +32,54 @@ class SkillSlot(
     private val bundle: I18NBundle,
 ) : WidgetGroup(), KGroup, KtxInputAdapter {
 
+    /**
+     *  A variable that is used to store the background image.
+     */
     private val background = Image(skin[Drawables.FRAME_FGD])
+
+    /**
+     *  A variable that is used to store the skill image.
+     */
     private val skillImage = Image()
+
+    /**
+     *  A variable that is used to store the skill label.
+     */
     private val skillName: Label = label("", style = Labels.FRAME.skinKey)
+
+    /**
+     *  A variable that is used to store the skill level label.
+     */
     private val skillLevel: Label = label("", style = Labels.FRAME.skinKey)
+
+    /**
+     *  A variable that is used to store the skill value after label.
+     */
     private val skillValueAfter: Label = label("", style = Labels.FRAME.skinKey)
+
+    /**
+     *  A variable that is used to store the slot width.
+     */
     private var slotWidth = uiStage.width * 0.8f
+
+    /**
+     *  A variable that is used to store the slot height.
+     */
     private var slotHeight = uiStage.height * 0.25f
+
+    /**
+     *  A variable that is used to store the margin outer.
+     */
     private var marginOuter = 6f
+
+    /**
+     *  A variable that is used to store the skill model.
+     */
     var skillModel: SkillModel = SkillModel(-1, -1, "", "", 0, 0f)
 
+    /**
+     * Starts the view with its components
+     */
     init {
 
         this += background.apply {
@@ -77,13 +115,23 @@ class SkillSlot(
             toFront()
             setAlignment(Align.center)
         }
-
     }
 
+    /**
+     * Gets the preferred width.
+     */
     override fun getPrefWidth(): Float = background.drawable.minWidth
 
+    /**
+     * Gets the preferred height.
+     */
     override fun getPrefHeight(): Float = background.drawable.minHeight
 
+    /**
+     * It sets new skill model of the SkillSlot.
+     *
+     * @param model The new skill model.
+     */
     fun skill(model: SkillModel) {
         skillModel = model
         skillImage.drawable = skin.getDrawable(model.atlasKey)
@@ -97,10 +145,17 @@ class SkillSlot(
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private var log = logger<SkillSlot>()
     }
 }
 
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.skillSlot(
     skin: Skin = Scene2DSkin.defaultSkin,

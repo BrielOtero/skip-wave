@@ -107,11 +107,11 @@ class TouchpadModel(
 
 
     /**
-     * If the knob is moved more than 25% in any direction, set the player's movement to that
+     * If the knob is moved more than 45% in any direction, set the player's movement to that
      * direction. Otherwise, set the player's movement to 0
      */
     private fun updatePlayerMovement() {
-        val death = 0.25f
+        val death = 0.45f
 
         playerCos = when {
             knobPercentX > death -> 1f

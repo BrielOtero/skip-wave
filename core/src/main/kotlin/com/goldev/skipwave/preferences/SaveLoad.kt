@@ -36,7 +36,6 @@ data class Game(
     var tutorialComplete: Boolean = false,
 )
 
-
 /**
  * GamePreferences is a data class that contains the game preferences.
  *

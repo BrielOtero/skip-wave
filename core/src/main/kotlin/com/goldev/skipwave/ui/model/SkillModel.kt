@@ -1,6 +1,6 @@
 package com.goldev.skipwave.ui.model
 
-import com.goldev.skipwave.component.Skill
+import com.goldev.skipwave.system.SkillUpgradeSystem.*
 
 /**
  *  A SkillModel is a data class that has the information about an skill.

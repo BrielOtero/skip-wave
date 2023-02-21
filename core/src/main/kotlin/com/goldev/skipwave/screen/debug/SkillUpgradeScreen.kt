@@ -10,6 +10,7 @@ import com.goldev.skipwave.ui.model.SkillUpgradeModel
 import com.goldev.skipwave.ui.model.Skills
 import com.goldev.skipwave.ui.view.SkillUpgradeView
 import com.goldev.skipwave.ui.view.skillUpgradeView
+import com.goldev.skipwave.system.SkillUpgradeSystem.*
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.world
 import com.goldev.skipwave.component.*

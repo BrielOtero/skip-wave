@@ -19,4 +19,5 @@ dependencies {
     api "io.github.libktx:ktx-preferences:$ktxVersion"
     api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     api "io.github.quillraven.fleks:Fleks:$fleksVersion"
+    api "io.github.libktx:ktx-freetype:$ktxVersion"
 }

@@ -26,7 +26,7 @@ import java.util.*
  *
  * @property defaultValue The default value of change.
  * @property gameStage The stage that the game is being rendered on.
- * @property skin The skin of the view.
+ * @property skin The skin of the widget.
  * @property bundle The bundle with text to show in the UI.
  * @constructor Create empty Change value.
  */
@@ -52,15 +52,40 @@ class ChangeValue(
      *  A variable that is used to store the value label.
      */
     private val lblValue: Label = label(defaultValue.toString(), style = Labels.FRAME.skinKey)
+
+    /**
+     *  A variable that is used to store the value of left timer.
+     */
     private lateinit var timerLeft: java.util.Timer
+
+    /**
+     *  A variable that is used to store the value of right timer.
+     */
     private lateinit var timerRight: java.util.Timer
 
+    /**
+     *  A variable that is used to store if button left is touch down.
+     */
     private var btnLeftTouchDown = false
+
+    /**
+     *  A variable that is used to store if button left is touch up.
+     */
     private var btnLeftTouchUp = false
+
+    /**
+     *  A variable that is used to store if button right is touch down.
+     */
     private var btnRightTouchDown = false
+
+    /**
+     *  A variable that is used to store if button right is touch up.
+     */
     private var btnRightTouchUp = false
 
-
+    /**
+     * Starts the view with its components
+     */
     init {
 
         this += btnLeft.apply {
@@ -165,20 +190,34 @@ class ChangeValue(
             btnRightTouchDown = false
             btnLeft.isDisabled = false
         }
-
     }
 
+    /**
+     * Gets the value of the change value.
+     */
     fun getValue() = lblValue.text.toString().toInt()
+
+    /**
+     * It sets the value of the change value.
+     *
+     * @param value The value to set in change value.
+     */
     fun setValue(value: Int) {
         lblValue.setText(value.toString())
     }
 
     companion object {
+
+        /**
+         *  It's a logger that logs the class.
+         */
         private var log = logger<ChangeValue>()
     }
 }
 
-
+/**
+ * Acts as a view builder by creating it directly in an actor in stages
+ */
 @Scene2dDsl
 fun <S> KWidget<S>.changeValue(
     defaultValue: Int,

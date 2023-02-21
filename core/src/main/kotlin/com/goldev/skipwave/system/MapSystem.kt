@@ -85,7 +85,9 @@ class MapSystem(
 }
 
 /**
- *  It's an enum class that contains the names of the maps in the game
+ * It's an enum class that contains the names of the maps in the game
+ *
+ * @constructor Create empty Maps
  */
 enum class MAPS(
 ) {

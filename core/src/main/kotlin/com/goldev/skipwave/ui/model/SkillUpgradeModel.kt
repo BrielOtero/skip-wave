@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
-import com.goldev.skipwave.component.Skill
+import com.goldev.skipwave.system.SkillUpgradeSystem.*
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.ui.view.GameView
 import com.goldev.skipwave.ui.view.TouchpadView

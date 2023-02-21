@@ -23,12 +23,12 @@ import ktx.scene2d.*
 /**
  * The view of the SkillUpgrade
  *
- * @param model The model of the view
+ * @property model The model of the view
  * @param skin The skin of the view
- * @constructor Creates a empty Skill Upgrade view
+ * @constructor Creates an empty Skill Upgrade view
  */
 class SkillUpgradeView(
-    model: SkillUpgradeModel,
+    val model: SkillUpgradeModel,
     skin: Skin
 ) : KTable, Table(skin) {
 
@@ -50,7 +50,7 @@ class SkillUpgradeView(
         table { tableCell ->
             background = skin[Drawables.FRAME_BGD]
             label(
-                text = model.bundle["SkillUpgradeView.title"],
+                text = this@SkillUpgradeView.model.bundle["SkillUpgradeView.title"],
                 style = Labels.FRAME.skinKey
             ) { lblCell ->
                 lblCell.padTop(10f).padBottom(8f).row()
@@ -59,10 +59,12 @@ class SkillUpgradeView(
 
             for (i in 1..3) {
                 this@SkillUpgradeView.skillSlots += skillSlot(
-                    skin = skin, uiStage = model.uiStage, bundle = model.bundle
+                    skin = skin,
+                    uiStage = this@SkillUpgradeView.model.uiStage,
+                    bundle = this@SkillUpgradeView.model.bundle
                 ) { skillCell ->
-                    skillCell.expand().width(model.uiStage.width * 0.8f)
-                        .height(model.uiStage.height * 0.25f).center()
+                    skillCell.expand().width(this@SkillUpgradeView.model.uiStage.width * 0.8f)
+                        .height(this@SkillUpgradeView.model.uiStage.height * 0.25f).center()
                         .row()
                     skillCell.pad(0f, 10f, 4f, 10f)
 
@@ -75,15 +77,15 @@ class SkillUpgradeView(
                                 }
                             }),
                         )
-                        model.gameStage.fire(SkillApplyEvent(skillModel))
+                        this@SkillUpgradeView.model.gameStage.fire(SkillApplyEvent(skillModel))
 
                     }
 
                 }
             }
             padBottom(10f)
-            tableCell.expand().maxWidth(model.uiStage.width * 0.9f)
-                .maxHeight(model.uiStage.height * 0.98f).center()
+            tableCell.expand().maxWidth(this@SkillUpgradeView.model.uiStage.width * 0.9f)
+                .maxHeight(this@SkillUpgradeView.model.uiStage.height * 0.98f).center()
         }
 
         // DATA BINDING
@@ -94,6 +96,24 @@ class SkillUpgradeView(
     }
 
     /**
+     * Translate the skills
+     *
+     * @param skillEntityId The skillEntity to translate.
+     * @return The text.
+     */
+    fun translateSkill(skillEntityId: Int): String {
+        when (skillEntityId) {
+            0 -> return model.bundle["Skills.life"]
+            1 -> return model.bundle["Skills.regeneration"]
+            2 -> return model.bundle["Skills.speed"]
+            3 -> return model.bundle["Skills.cooldown"]
+            4 -> return model.bundle["Skills.damage"]
+        }
+
+        return ""
+    }
+
+    /**
      * It populates the skill upgrade view with the skills of the player.
      *
      * @param skills The skills object that contains the skills to be displayed
@@ -101,13 +121,13 @@ class SkillUpgradeView(
     fun popupSkills(skills: Skills) {
 
         with(skills.skill1) {
-            skill(SkillModel(0, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
+            skill(SkillModel(0, skillEntityId, atlasKey, translateSkill(skillEntityId), skillLevel, onLevelUP))
         }
         with(skills.skill2) {
-            skill(SkillModel(1, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
+            skill(SkillModel(1, skillEntityId, atlasKey, translateSkill(skillEntityId), skillLevel, onLevelUP))
         }
         with(skills.skill3) {
-            skill(SkillModel(2, skillEntityId, atlasKey, skillName, skillLevel, onLevelUP))
+            skill(SkillModel(2, skillEntityId, atlasKey, translateSkill(skillEntityId), skillLevel, onLevelUP))
         }
 
         if (this.alpha == 0f) {

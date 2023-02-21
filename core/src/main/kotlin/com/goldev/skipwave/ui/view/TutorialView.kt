@@ -97,7 +97,7 @@ class TutorialView(
             this@TutorialView.lblLife = label(
                 this@TutorialView.model.bundle["TutorialView.life"], Labels.FRAME.skinKey
             ) { lblCell ->
-                lblCell.pad(10f, 80f, 0f, 0f).width(95f).row()
+                lblCell.pad(12f, 80f, 2f, 0f).width(95f).row()
                 setAlignment(Align.left)
                 setFontScale(0.2f)
                 wrap = true
@@ -107,7 +107,7 @@ class TutorialView(
                 this@TutorialView.model.bundle["TutorialView.experience"],
                 Labels.FRAME.skinKey
             ) { lblCell ->
-                lblCell.padLeft(80f).padBottom(-7f).width(95f).row()
+                lblCell.padLeft(80f).padBottom(1f).width(95f).row()
                 setAlignment(Align.left)
                 setFontScale(0.2f)
                 wrap = true
@@ -118,7 +118,7 @@ class TutorialView(
                 this@TutorialView.model.bundle["TutorialView.wave"],
                 Labels.FRAME.skinKey
             ) { lblCell ->
-                lblCell.padLeft(80f).width(95f).row()
+                lblCell.padLeft(80f).padBottom(20f).width(95f).row()
                 setAlignment(Align.left)
                 setFontScale(0.2f)
                 wrap = true

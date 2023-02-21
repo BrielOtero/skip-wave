@@ -21,7 +21,9 @@ const val DEFAULT_LIFE = 15
 
 
 /**
- *  It's a class that has a bunch of constants that are used to identify the type of an entity
+ * It's a class that has a bunch of constants that are used to identify the type of entity
+ *
+ * @constructor Create empty Entity type
  */
 enum class EntityType {
     PLAYER, ENEMY, WEAPON, SPAWN, NOTHING

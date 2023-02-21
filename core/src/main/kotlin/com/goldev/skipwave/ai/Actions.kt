@@ -63,7 +63,7 @@ class AttackTask : Action() {
 }
 
 /**
- * Perform the task of attacking an weapon entity
+ * Perform the task of attacking a weapon entity
  */
 class AttackWeaponTask : Action() {
     /**
@@ -76,17 +76,17 @@ class AttackWeaponTask : Action() {
 
         if (status != Status.RUNNING) {
             entity.doAndStartAttack()
-            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
+//            entity.animation(AnimationType.ATTACK)
             return Status.RUNNING
         }
 
         if (entity.attackState == AttackState.ATTACKING) {
-            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, false)
+            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
             return Status.RUNNING;
         }
 
         if (entity.isAnimationDone) {
-            entity.animation(AnimationType.IDLE)
+//            entity.animation(AnimationType.ATTACK)
             return Status.SUCCEEDED
         }
 

@@ -111,7 +111,7 @@ class EnemySystem(
         /**
          *  The amount of enemies that will be spawned.
          */
-        private var ENEMY_AMOUNT: Int = 30
+        private var ENEMY_AMOUNT: Int = 300
 
         /**
          *  It's a logger that logs the class.

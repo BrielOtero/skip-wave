@@ -19,6 +19,7 @@ import com.goldev.skipwave.ui.get
 import ktx.actors.*
 import ktx.log.logger
 import ktx.scene2d.*
+import java.util.*
 import java.util.jar.Manifest
 
 /**
@@ -26,7 +27,7 @@ import java.util.jar.Manifest
  *
  * @param model The model of the view
  * @param skin The skin of the view
- * @constructor Creates a empty MainMenu view
+ * @constructor Creates an empty MainMenu view
  */
 class MainMenuView(
     model: MainMenuModel,
@@ -56,7 +57,7 @@ class MainMenuView(
     /**
      *  A variable that stores the version of the game.
      */
-    private val versionName: String = "1.5"
+    private val versionName: String = "1.6"
 
     /**
      * Starts the view with its components
@@ -68,19 +69,20 @@ class MainMenuView(
         table { tableCell ->
 
             label(text = "SKIP WAVE", style = Labels.FRAME.skinKey) { lblCell ->
-                lblCell.height(50f).width(150f).padBottom(10f).padTop(70f).row()
+                lblCell.top().height(50f).width(150f).padBottom(10f).padTop(30f).row()
                 setAlignment(Align.center)
-                this.setFontScale(0.4f)
+                this.setFontScale(0.6f)
             }
 
             image(skin[Drawables.PLAYER]) { imageCell ->
                 setScaling(Scaling.stretch)
-                imageCell.height(50f).width(50f).padBottom(10f).row()
+                imageCell.height(50f).width(50f).padBottom(20f).row()
             }
 
+            println(model.bundle["MainMenuView.newGame"])
             this@MainMenuView.btnNewGame =
                 textButton(
-                    text = model.bundle["MainMenuView.newGame"],
+                    text = model.bundle["MainMenuView.newGame"].format(),
                     style = TextButtons.DEFAULT.skinKey
                 ) { cell ->
                     cell.top().padTop(5f).padBottom(6f)
@@ -124,14 +126,14 @@ class MainMenuView(
                 text = "${model.bundle["MainMenuView.version"]}: ${this@MainMenuView.versionName}",
                 style = Labels.FRAME.skinKey
             ) { cell ->
-                cell.bottom().expand().padTop(5f).padBottom(0f).row()
+                cell.bottom().padTop(15f).padBottom(0f).row()
                 this.setFontScale(0.2f)
             }
             label(
                 text = model.bundle["MainMenuView.madeBy"],
                 style = Labels.FRAME.skinKey
             ) { cell ->
-                cell.bottom().expand().padTop(1f).padBottom(6f).row()
+                cell.bottom().padTop(2f).padBottom(6f).row()
                 this.setFontScale(0.2f)
             }
 

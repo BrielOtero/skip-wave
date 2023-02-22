@@ -8,11 +8,10 @@ import canAttack?:"com.goldev.skipwave.ai.CanAttack"
 subtree name:"attack"
     sequence
         (canAttack?) attack
-        wait seconds:"uniform,1"
 
 subtree name:"move"
   sequence
-    move range:0
+    move range:0.4
 
 root
   selector

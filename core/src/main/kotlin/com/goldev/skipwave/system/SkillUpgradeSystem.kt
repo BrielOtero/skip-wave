@@ -91,6 +91,7 @@ class SkillUpgradeSystem(
                     0 -> {
                         log.debug { "Life before ${lifeCmps[playerEntities.first()].max}" }
                         lifeCmps[playerEntities.first()].max += event.skill.onLevelUP
+                        lifeCmps[playerEntities.first()].life = lifeCmps[playerEntities.first()].max
                         log.debug { "Life after ${lifeCmps[playerEntities.first()].max}" }
                     }
 
@@ -148,7 +149,7 @@ class SkillUpgradeSystem(
         var skillLevel: Int = 0,
         var onLevelUP: Float = 0f,
     ) {
-        PLAYER_LIFE(0, 0, 100f),
+        PLAYER_LIFE(0, 0, 250f),
         PLAYER_REGENERATION(1, 0, 2f),
         PLAYER_SPEED(2, 0, 1f),
         PLAYER_COOLDOWN(3, 0, -1f),

@@ -7,17 +7,17 @@ import ktx.math.vec2
 /**
  *  It's a constant value with the default entity speed.
  */
-const val DEFAULT_SPEED = 3f
+const val DEFAULT_SPEED = 1f
 
 /**
  *  It's a constant value with the default entity attack damage.
  */
-const val DEFAULT_ATTACK_DAMAGE = 5
+const val DEFAULT_ATTACK_DAMAGE = 1
 
 /**
  *  It's a constant value with the default entity life.
  */
-const val DEFAULT_LIFE = 15
+const val DEFAULT_LIFE = 1
 
 
 /**

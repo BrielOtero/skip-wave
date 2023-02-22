@@ -81,7 +81,7 @@ class ShakeSystem(
         /**
          *  This is the threshold for the shake.
          */
-        private var SHAKE_THRESHOLD = 6000
+        private var SHAKE_THRESHOLD = 3000
 
         /**
          *  It's a logger that logs the class.

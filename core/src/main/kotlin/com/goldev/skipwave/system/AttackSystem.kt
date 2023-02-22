@@ -89,7 +89,7 @@ class AttackSystem(
             if (attackLeft) {
                 AABB_RECT.set(
                     x + offX - halfW - attackCmp.extraRange,
-                    y + offY - halfH,
+                    y + offY - halfH - attackCmp.extraRange,
                     x + offX + halfW,
                     y + offY + halfH,
                 )
@@ -98,7 +98,7 @@ class AttackSystem(
                     x + offX - halfW,
                     y + offY - halfH,
                     x + offX + halfW + attackCmp.extraRange,
-                    y + offY + halfH,
+                    y + offY + halfH + attackCmp.extraRange,
                 )
             }
 
@@ -126,7 +126,7 @@ class AttackSystem(
 
                 configureEntity(fixtureEntity) {
                     lifeCmps.getOrNull(it)?.let { lifeCmp ->
-                        lifeCmp.takeDamage += attackCmp.damage * MathUtils.random(0.9f, 1.1f)
+                        lifeCmp.takeDamage += attackCmp.damage * MathUtils.random(0.7f, 1.1f)
                     }
                     if (isAttackerPlayer) {
                         lootCmps.getOrNull(it)?.let { lootCmp ->

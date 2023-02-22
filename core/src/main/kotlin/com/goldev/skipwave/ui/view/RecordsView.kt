@@ -133,7 +133,7 @@ class RecordsView(
             }
 
             tableCell.expand().fill().maxWidth(this@RecordsView.model.uiStage.width * 0.9f)
-                .maxHeight(this@RecordsView.model.uiStage.height * 0.95f)
+                .maxHeight(this@RecordsView.model.uiStage.height * 0.65f)
                 .center()
         }
 

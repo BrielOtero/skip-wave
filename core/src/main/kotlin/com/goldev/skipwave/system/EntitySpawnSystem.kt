@@ -73,11 +73,11 @@ class EntitySpawnSystem(
      * @param entity The entity that is being processed.
      */
     override fun onTickEntity(entity: Entity) {
+        cachedCfgs.clear()
         with(spawnCmps[entity]) {
 //            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
             val cfg = spawnCfg(model)
             var relativeSize = size(cfg.model)
-
 
             world.entity {
                 val imageCmp = add<ImageComponent> {
@@ -230,20 +230,22 @@ class EntitySpawnSystem(
         val playerMoveSpeed: Float
         if (playerEntities.isEmpty) {
             dropExperience = 10f
-            attack = 10f
-            life = 0.75f
-            playerMoveSpeed = 1f
-            log.debug { "NO" }
+            attack = 5f
+            life = 12f
+            playerMoveSpeed = 3.6f
         } else {
-            log.debug { "SCALING" }
-            val wave = waveCmps[playerEntities.first()].wave
-            attack = (wave.toFloat() + 1f / 0.3f).pow(2)
-            life = 0.75f + (wave + 1 / 20)
+            val wave = waveCmps[playerEntities.first()].wave.toFloat() + 1f
+            attack = (wave / 0.3f).pow(1.1f)
+            life = (wave / 0.3f).pow(1.1f)
+            dropExperience = (wave / 0.3f).pow(1.1f)
             playerMoveSpeed = moveCmps[playerEntities.first()].speed
-            dropExperience = 10f * (wave + 1)
         }
 
         val attackRange = 3f
+        val enemySpeed = 1.8f
+        val fastestEnemiesIncrease = 0.8f
+        val enemyPhysicScaling=vec2(0.8f, 0.8f)
+
 
 
         //SPAWN CONFIG
@@ -253,8 +255,8 @@ class EntitySpawnSystem(
                 entityType = EntityType.PLAYER,
                 attackExtraRange = 0.6f,
                 attackScaling = 0f,
-                speedScaling = 1.2f,
-                lifeScaling = 100f,
+                speedScaling = 3.6f,
+                lifeScaling = 1000f,
                 physicScaling = vec2(0.6f, 0.5f),
                 physicOffset = vec2(0f, -8f * UNIT_SCALE),
             )
@@ -277,8 +279,8 @@ class EntitySpawnSystem(
                 speedScaling = 0f,
                 isFlip = true,
                 attackExtraRange = 0f,
-                attackScaling = 5f,
-                attackDelay = 1f,
+                attackScaling = 25f,
+                attackDelay = 1.5f,
                 lifeScaling = 0f,
                 physicScaling = vec2(1f, 1f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
@@ -292,8 +294,8 @@ class EntitySpawnSystem(
                 bodyType = KinematicBody,
                 speedScaling = 0f,
                 attackExtraRange = 0f,
-                attackScaling = 5f,
-                attackDelay = 1f,
+                attackScaling = 25f,
+                attackDelay = 1.5f,
                 lifeScaling = 0f,
                 physicScaling = vec2(1f, 1f),
                 physicOffset = vec2(0f, -5f * UNIT_SCALE),
@@ -306,11 +308,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -318,11 +320,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = playerMoveSpeed * 0.3f,
+                speedScaling = playerMoveSpeed * fastestEnemiesIncrease ,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -330,11 +332,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -342,11 +344,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -354,11 +356,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -366,11 +368,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = playerMoveSpeed * 0.3f,
+                speedScaling = playerMoveSpeed * fastestEnemiesIncrease ,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -378,11 +380,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -390,11 +392,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -402,11 +404,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -414,11 +416,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -426,11 +428,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -438,11 +440,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -450,11 +452,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -462,11 +464,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -474,11 +476,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = playerMoveSpeed * 0.3f,
+                speedScaling = playerMoveSpeed * fastestEnemiesIncrease ,
                 attackExtraRange = attackRange,
                 attackScaling = attack * 0.7f,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -486,11 +488,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = playerMoveSpeed * 0.3f,
+                speedScaling = playerMoveSpeed * fastestEnemiesIncrease ,
                 attackExtraRange = attackRange,
                 attackScaling = attack * 0.8f,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -498,11 +500,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -510,11 +512,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -522,11 +524,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -534,11 +536,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -546,11 +548,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -558,11 +560,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -570,11 +572,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 
@@ -582,11 +584,11 @@ class EntitySpawnSystem(
                 model,
                 EntityType.ENEMY,
                 lifeScaling = life,
-                speedScaling = 0.4f,
+                speedScaling = enemySpeed,
                 attackExtraRange = attackRange,
                 attackScaling = attack,
                 dropExperience = dropExperience,
-                physicScaling = vec2(0.8f, 0.8f),
+                physicScaling = enemyPhysicScaling,
                 aiTreePath = "ai/enemy.tree"
             )
 

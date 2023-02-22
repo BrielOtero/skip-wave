@@ -39,7 +39,7 @@ class WaveSystem(
                 with(waveCmps[entity]) {
 //                    log.debug { "Experience NEXT WAVE before ${experienceToNextLevel}" }
                     wave += 1
-                    experienceToNextWave = experience + (wave / 0.2f).pow(2f)
+                    experienceToNextWave = experience + (wave + 2 / 0.2f).pow(2.04f)
 
 //                    log.debug { "Experience NEXT WAVE after ${experienceToNextLevel}" }
                     gameStage.fire(EntityLevelEvent(entity))

@@ -70,14 +70,14 @@ class EnemySystem(
 
         //AMOUNT ENEMIES
         if (currentWave > 1 && currentWave != lastLevel) {
-            if (ENEMY_AMOUNT <= 500) {
+            if (ENEMY_AMOUNT <= 300) {
                 ENEMY_AMOUNT += 5
                 lastLevel = currentWave
             }
         }
 
         //ACTUAL ENEMIES
-        if (currentWave <= enemies.size && currentWave != lastLevelChangeEnemy) {
+        if (currentWave < enemies.size && currentWave != lastLevelChangeEnemy) {
             actualEnemy = enemies[currentWave]
             log.debug { "ENEMY ADDED ${enemies[currentWave].name}" }
             lastLevelChangeEnemy = currentWave
@@ -111,7 +111,7 @@ class EnemySystem(
         /**
          *  The amount of enemies that will be spawned.
          */
-        private var ENEMY_AMOUNT: Int = 300
+        private var ENEMY_AMOUNT: Int = 30
 
         /**
          *  It's a logger that logs the class.

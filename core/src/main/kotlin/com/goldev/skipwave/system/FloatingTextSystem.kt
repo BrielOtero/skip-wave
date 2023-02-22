@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.FloatingTextComponent
 import com.goldev.skipwave.event.SkillEvent
 import com.github.quillraven.fleks.*
+import com.goldev.skipwave.event.PlayerDeathEvent
+import com.goldev.skipwave.event.ShowCreditsViewEvent
 import com.goldev.skipwave.event.ShowPauseViewEvent
 import ktx.math.vec2
 
@@ -105,6 +107,8 @@ class FloatingTextSystem(
             is SkillEvent -> clearText()
 
             is ShowPauseViewEvent -> clearText()
+
+            is PlayerDeathEvent ->clearText()
 
             else -> return false
         }

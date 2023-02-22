@@ -30,6 +30,40 @@ abstract class Action : LeafTask<AiEntity>() {
 }
 
 
+
+/**
+ * Perform the task of attacking a weapon entity
+ */
+class AttackWeaponTask : Action() {
+    /**
+     * If the weapon entity is not attacking, start attacking. If the entity is attacking, stop attacking. If
+     * the entity is done attacking, return to idle
+     *
+     * @return The status of the action.
+     */
+    override fun execute(): Status {
+
+        if (status != Status.RUNNING) {
+            entity.doAndStartAttack()
+            entity.animation(AnimationType.ATTACK)
+            return Status.RUNNING
+        }
+
+        if (entity.attackState == AttackState.ATTACKING) {
+            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
+            return Status.RUNNING;
+        }
+
+        if (entity.isAnimationDone) {
+//            entity.animation(AnimationType.IDLE)
+            return Status.SUCCEEDED
+        }
+
+        return Status.RUNNING
+    }
+}
+
+
 /**
  *  Perform the task of attacking an entity
  */
@@ -54,39 +88,6 @@ class AttackTask : Action() {
         if (entity.isAnimationDone) {
             entity.animation(AnimationType.RUN)
             entity.stopMovement()
-
-            return Status.SUCCEEDED
-        }
-
-        return Status.RUNNING
-    }
-}
-
-/**
- * Perform the task of attacking a weapon entity
- */
-class AttackWeaponTask : Action() {
-    /**
-     * If the weapon entity is not attacking, start attacking. If the entity is attacking, stop attacking. If
-     * the entity is done attacking, return to idle
-     *
-     * @return The status of the action.
-     */
-    override fun execute(): Status {
-
-        if (status != Status.RUNNING) {
-            entity.doAndStartAttack()
-//            entity.animation(AnimationType.ATTACK)
-            return Status.RUNNING
-        }
-
-        if (entity.attackState == AttackState.ATTACKING) {
-            entity.animation(AnimationType.ATTACK, Animation.PlayMode.NORMAL, true)
-            return Status.RUNNING;
-        }
-
-        if (entity.isAnimationDone) {
-//            entity.animation(AnimationType.ATTACK)
             return Status.SUCCEEDED
         }
 
@@ -117,7 +118,6 @@ class MoveTask(
             entity.animation(AnimationType.RUN)
             return Status.RUNNING
         }
-
         entity.setPlayerForTarget()
         entity.moveToTarget()
         if (entity.inTargetRange(range)) {

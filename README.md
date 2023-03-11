@@ -6,8 +6,16 @@ It has 5 maps and 23 different enemies.
 
 [Download at Google Play Store](https://play.google.com/store/apps/details?id=com.goldev.skipwave)
 
-<img title="" src="assets_raw/marketing/screenshot-1.png" alt="Screenshot1" width="50%" align="left">
-<img title="" src="assets_raw/marketing/screenshot-2.png" alt="Screenshot2" align="right" width="50%">
+<table>
+  <tr>
+    <td>
+      <img title="" src="assets_raw/marketing/screenshot-1.png" alt="Screenshot1"  align="left" >
+    </td>
+    <td>
+      <img title="" src="assets_raw/marketing/screenshot-2.png" alt="Screenshot2"  align="right" >
+    </td>
+  </tr>
+</table>
 
 &nbsp;
 

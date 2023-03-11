@@ -29,6 +29,7 @@ class EnemySystem(
     private val gamePreferences: GamePreferences
 
 ) : IntervalSystem() {
+
     /**
      *  Variable with all the entities with the EnemyComponent.
      */
@@ -62,11 +63,16 @@ class EnemySystem(
             it != AnimationModel.UNDEFINED && it != AnimationModel.PLAYER && it != AnimationModel.CHEST && it != AnimationModel.SLASH_LEFT && it != AnimationModel.SLASH_RIGHT
         }
 
+    init {
+        ENEMY_AMOUNT = 30
+    }
+
     /**
      * Spawn new enemies when they dead.
      */
     override fun onTick() {
         val currentWave = waveCmps[playerEntities.first()].wave
+        log.debug { " ENEMY AMOUNT ${ENEMY_AMOUNT}" }
 
         //AMOUNT ENEMIES
         if (currentWave > 1 && currentWave != lastLevel) {

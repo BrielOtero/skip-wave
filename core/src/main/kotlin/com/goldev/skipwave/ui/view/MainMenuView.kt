@@ -57,7 +57,7 @@ class MainMenuView(
     /**
      *  A variable that stores the version of the game.
      */
-    private val versionName: String = "1.7"
+    private val versionName: String = "1.8"
 
     /**
      * Starts the view with its components

@@ -32,6 +32,10 @@ class SkillSlot(
     private val bundle: I18NBundle,
 ) : WidgetGroup(), KGroup, KtxInputAdapter {
 
+    override fun touchCancelled(pointer: Int, x: Int, y: Int, button: Int): Boolean {
+        return false
+    }
+
     /**
      *  A variable that is used to store the background image.
      */

@@ -1,7 +1,17 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+	kotlinOptions.jvmTarget = '1.8'
+}
+
 dependencies {
+    api(platform("org.jetbrains.kotlin:kotlin-bom:$kotlinVersion"))
     api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -17,7 +27,7 @@ dependencies {
     api "io.github.libktx:ktx-style:$ktxVersion"
     api "io.github.libktx:ktx-tiled:$ktxVersion"
     api "io.github.libktx:ktx-preferences:$ktxVersion"
-    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     api "io.github.quillraven.fleks:Fleks:$fleksVersion"
     api "io.github.libktx:ktx-freetype:$ktxVersion"
 }

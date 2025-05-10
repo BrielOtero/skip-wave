@@ -1,8 +1,11 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.JavaVersion
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-	compileSdk 34
+	compileSdk 36
 	sourceSets {
 		main {
 			manifest.srcFile 'AndroidManifest.xml'
@@ -31,18 +34,23 @@ android {
 	}
 	defaultConfig {
 		applicationId 'com.goldev.skipwave'
+		namespace 'com.goldev.skipwave'
 		minSdkVersion 19
-		targetSdkVersion 34
-		versionCode 10
-		versionName "1.8"
+		targetSdkVersion 36
+		versionCode 11
+		versionName "1.9"
 		multiDexEnabled true
 	}
 	compileOptions {
-		sourceCompatibility "1.8"
-		targetCompatibility "1.8"
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
 		coreLibraryDesugaringEnabled true
 	}
-	kotlinOptions.jvmTarget = "1.8"
+	kotlin {
+		compilerOptions {
+			jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+		}
+	}
 	buildTypes {
 		release {
 			minifyEnabled false
@@ -60,9 +68,11 @@ repositories {
 configurations { natives }
 
 dependencies {
-	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 	implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
 	implementation project(':core')
+
+	implementation 'org.apache.commons:commons-compress:1.25.0'
 
 	natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
 	natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"

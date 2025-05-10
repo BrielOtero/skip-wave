@@ -26,6 +26,10 @@ class PlayerKeyboardInputProcessor(
     @Qualifier("uiStage") private val uiStage: Stage,
     private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
 ) : KtxInputAdapter {
+    
+    override fun touchCancelled(pointer: Int, x: Int, y: Int, button: Int): Boolean {
+        return false
+    }
 
     /**
      *  The property sine of the player with the angle of the direction of movement.

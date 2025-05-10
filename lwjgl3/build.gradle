@@ -1,3 +1,6 @@
+import org.gradle.api.JavaVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
 	repositories {
 		gradlePluginPortal()
@@ -20,7 +23,14 @@ else {
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 mainClassName = 'com.goldev.skipwave.lwjgl3.Lwjgl3Launcher'
 eclipse.project.name = appName + '-lwjgl3'
-sourceCompatibility = 1.8
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+	kotlinOptions.jvmTarget = '1.8'
+}
 
 dependencies {
 	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"

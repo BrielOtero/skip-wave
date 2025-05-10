@@ -25,6 +25,10 @@ class PlayerTouchInputProcessor(
     @Qualifier("uiStage") private val uiStage: Stage,
 ) : KtxInputAdapter {
 
+    override fun touchCancelled(pointer: Int, x: Int, y: Int, button: Int): Boolean {
+        return false
+    }
+
     init {
         val multiplexer = InputMultiplexer()
         multiplexer.addProcessor(uiStage) // set your game input processor as second

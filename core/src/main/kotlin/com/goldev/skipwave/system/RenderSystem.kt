@@ -10,7 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.SkipWave.Companion.UNIT_SCALE
 import com.goldev.skipwave.component.ImageComponent
 import com.goldev.skipwave.event.MapChangeEvent
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.compareEntity
 import ktx.assets.disposeSafely
 import ktx.graphics.use
@@ -21,17 +24,14 @@ import ktx.tiled.forEachLayer
  *
  * @property gameStage The stage that the game is being rendered on.
  * @property uiStage The stage that the UI is being rendered on.
- * @property imageCmps Entities with ImageComponent in the world.
  * @constructor Create empty Render system
  */
-@AllOf([ImageComponent::class])
 class RenderSystem(
-    @Qualifier("gameStage") private val gameStage: Stage,
-    @Qualifier("uiStage") private val uiStage: Stage,
-    private val imageCmps: ComponentMapper<ImageComponent>
-
+    private val gameStage: Stage = inject("gameStage"),
+    private val uiStage: Stage = inject("uiStage"),
 ) : EventListener, IteratingSystem(
-    comparator = compareEntity { e1, e2 -> imageCmps[e1].compareTo(imageCmps[e2]) }
+    family = family { all(ImageComponent) },
+    comparator = compareEntity { e1, e2 -> e1[ImageComponent].compareTo(e2[ImageComponent]) }
 ) {
 
     /**
@@ -88,7 +88,7 @@ class RenderSystem(
      * @param entity The entity that the component is attached to.
      */
     override fun onTickEntity(entity: Entity) {
-        imageCmps[entity].image.toFront()
+        entity[ImageComponent].image.toFront()
     }
 
     /**

@@ -7,7 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.FloatingTextComponent
 import com.goldev.skipwave.event.SkillEvent
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.PlayerDeathEvent
 import com.goldev.skipwave.event.ShowCreditsViewEvent
 import com.goldev.skipwave.event.ShowPauseViewEvent
@@ -18,21 +21,19 @@ import ktx.math.vec2
  *
  * @property gameStage The stage that the game is being rendered on.
  * @property uiStage The stage that the UI is being rendered on.
- * @property textCmps Entities with TextComponent in the world.
  * @constructor Create empty Floating text system
  */
-@AllOf([FloatingTextComponent::class])
 class FloatingTextSystem(
-    @Qualifier("gameStage") private val gameStage: Stage,
-    @Qualifier("uiStage") private val uiStage: Stage,
-    private val textCmps: ComponentMapper<FloatingTextComponent>,
-
-    ) : IteratingSystem(), EventListener {
+    private val gameStage: Stage = inject("gameStage"),
+    private val uiStage: Stage = inject("uiStage"),
+) : IteratingSystem(
+    family = family { all(FloatingTextComponent) }
+), EventListener {
 
     /**
      *  A family of entities that have the FloatingTextComponent.
      */
-    private val textEntities = world.family(allOf = arrayOf(FloatingTextComponent::class))
+    private val textEntities = world.family { all(FloatingTextComponent) }
 
     /**
      *  The ui location for text
@@ -62,9 +63,9 @@ class FloatingTextSystem(
      * @param entity The entity that is being processed.
      */
     override fun onTickEntity(entity: Entity) {
-        with(textCmps[entity]) {
+        with(entity[FloatingTextComponent]) {
             if (time >= lifeSpan) {
-                world.remove(entity)
+                world -= entity
                 return
             }
 
@@ -91,7 +92,7 @@ class FloatingTextSystem(
      */
     private fun clearText() {
         textEntities.forEach { entity ->
-            world.remove(entity)
+            world -= entity
         }
     }
 

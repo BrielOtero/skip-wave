@@ -4,7 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.ExperienceComponent
 import com.goldev.skipwave.component.WaveComponent
 import com.goldev.skipwave.event.*
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.EntityLevelEvent
 import com.goldev.skipwave.event.fire
 import ktx.log.logger
@@ -13,18 +16,14 @@ import kotlin.math.pow
 /**
  * System that takes care of the waves in the game.
  *
- * @property experienceCmps Entities with ExperienceComponent in the world.
- * @property waveCmps Entities with WaveComponent in the world.
  * @property gameStage The stage that the game is being rendered on.
  * @constructor Create empty Wave system.
  */
-@AllOf([WaveComponent::class])
 class WaveSystem(
-    private val experienceCmps: ComponentMapper<ExperienceComponent>,
-    private val waveCmps: ComponentMapper<WaveComponent>,
-    @Qualifier("gameStage") private val gameStage: Stage,
-
-    ) : IteratingSystem() {
+    private val gameStage: Stage = inject("gameStage"),
+) : IteratingSystem(
+    family = family { all(WaveComponent) }
+) {
 
     /**
      * If the entity has enough experience to level up, then increase the wave number and set the
@@ -33,10 +32,10 @@ class WaveSystem(
      * @param entity Entity - The entity that is being ticked
      */
     override fun onTickEntity(entity: Entity) {
-        with(experienceCmps[entity]) {
+        with(entity[ExperienceComponent]) {
 
             if (experience >= experienceToNextWave) {
-                with(waveCmps[entity]) {
+                with(entity[WaveComponent]) {
 //                    log.debug { "Experience NEXT WAVE before ${experienceToNextLevel}" }
                     wave += 1
                     experienceToNextWave = experience + (wave + 2 / 0.2f).pow(2.04f)

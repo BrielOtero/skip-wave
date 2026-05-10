@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.goldev.skipwave.component.AnimationModel
 import com.goldev.skipwave.preferences.GamePreferences
 import com.github.quillraven.fleks.IntervalSystem
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.*
 import ktx.assets.disposeSafely
 import ktx.log.logger
@@ -20,8 +21,7 @@ import ktx.tiled.propertyOrNull
  * @constructor Create empty Audio system.
  */
 class AudioSystem(
-    private val gamePreferences: GamePreferences
-
+    private val gamePreferences: GamePreferences = inject(),
 ) : EventListener, IntervalSystem() {
 
     /**

@@ -6,8 +6,6 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.github.quillraven.fleks.Qualifier
-import com.github.quillraven.fleks.World
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.ui.view.TouchpadView
 import com.goldev.skipwave.ui.view.TutorialView
@@ -22,7 +20,7 @@ import ktx.log.logger
  *  @constructor Creates a empty PlayerTouchInputProcessor
  */
 class PlayerTouchInputProcessor(
-    @Qualifier("uiStage") private val uiStage: Stage,
+    private val uiStage: Stage,
 ) : KtxInputAdapter {
 
     override fun touchCancelled(pointer: Int, x: Int, y: Int, button: Int): Boolean {

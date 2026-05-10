@@ -13,32 +13,23 @@ import com.goldev.skipwave.event.EntityDamageEvent
 import com.goldev.skipwave.event.EntityDeathEvent
 import com.goldev.skipwave.event.PlayerDeathEvent
 import com.goldev.skipwave.event.fire
-import com.github.quillraven.fleks.*
-import com.goldev.skipwave.component.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import ktx.assets.disposeSafely
 
 /**
  * System that takes care of the life in the game.
  *
- * @property lifeCmps Entities with LifeComponent in the world.
- * @property deadCmps Entities with DeadComponent in the world.
- * @property playerCmps Entities with PlayerComponent in the world.
- * @property physicCmps Entities with PhysicComponent in the world.
- * @property animationCmps Entities with AnimationComponent in the world.
  * @property gameStage The stage that the game is being rendered on.
  * @constructor Create empty Life system
  */
-@AllOf([LifeComponent::class])
-@NoneOf([DeadComponent::class])
 class LifeSystem(
-    private val lifeCmps: ComponentMapper<LifeComponent>,
-    private val deadCmps: ComponentMapper<DeadComponent>,
-    private val playerCmps: ComponentMapper<PlayerComponent>,
-    private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val animationCmps: ComponentMapper<AnimationComponent>,
-    @Qualifier("gameStage") private val gameStage: Stage,
-
-    ) : IteratingSystem() {
+    private val gameStage: Stage = inject("gameStage"),
+) : IteratingSystem(
+    family = family { all(LifeComponent).none(DeadComponent) }
+) {
     /**
      *  The font for floating text.
      */
@@ -61,12 +52,12 @@ class LifeSystem(
      * @param entity The entity that is being updated.
      */
     override fun onTickEntity(entity: Entity) {
-        val lifeCmp = lifeCmps[entity]
+        val lifeCmp = entity[LifeComponent]
         lifeCmp.life = (lifeCmp.life + lifeCmp.regeneration * deltaTime).coerceAtMost(lifeCmp.max)
         gameStage.fire(EntityDamageEvent(entity))
 
         if (lifeCmp.takeDamage > 0f) {
-            val physicCmp = physicCmps[entity]
+            val physicCmp = entity[PhysicComponent]
             lifeCmp.life -= lifeCmp.takeDamage
             gameStage.fire(EntityDamageEvent(entity))
             floatingText(
@@ -79,15 +70,15 @@ class LifeSystem(
         }
 
         if (lifeCmp.isDead) {
-            gameStage.fire(EntityDeathEvent(animationCmps[entity].model))
-            animationCmps.getOrNull(entity)?.let { aniCmp ->
+            gameStage.fire(EntityDeathEvent(entity[AnimationComponent].model))
+            entity.getOrNull(AnimationComponent)?.let { aniCmp ->
                 aniCmp.nextAnimation(AnimationType.DEATH)
                 aniCmp.playMode = Animation.PlayMode.NORMAL
             }
 
-            configureEntity(entity) {
-                deadCmps.add(it) {
-                    if (it in playerCmps) {
+            entity.configure {
+                it += DeadComponent().apply {
+                    if (entity has PlayerComponent) {
                         // revive player after 7 seconds
                         reviveTime = 700f
                         gameStage.fire(PlayerDeathEvent(entity))
@@ -112,10 +103,10 @@ class LifeSystem(
         entityPosition: Vector2,
         entitySize: Vector2
     ) {
-        world.entity {
-            val style = if (entity in playerCmps) floatingTextStylePlayer else floatingTextStyle
+        world.entity { newEntity ->
+            val style = if (entity has PlayerComponent) floatingTextStylePlayer else floatingTextStyle
 
-            add<FloatingTextComponent> {
+            newEntity += FloatingTextComponent().apply {
                 txtLocation.set(entityPosition.x, entityPosition.y - entitySize.y * 0.5f)
                 lifeSpan = 1.5f
                 label = Label(text, style)

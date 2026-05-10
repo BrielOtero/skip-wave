@@ -6,7 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.ImageComponent
 import com.goldev.skipwave.component.PlayerComponent
 import com.goldev.skipwave.event.MapChangeEvent
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import ktx.tiled.height
 import ktx.tiled.width
 import kotlin.math.max
@@ -15,16 +18,14 @@ import kotlin.math.min
 /**
  * System that takes care of the camera of the game.
  *
- * @property imageCmps Entities with ImageComponent in the world.
  * @property gameStage The stage that the game is being rendered on.
  * @constructor Create empty Camera system.
  */
-@AllOf([PlayerComponent::class, ImageComponent::class])
 class CameraSystem(
-    private val imageCmps: ComponentMapper<ImageComponent>,
-    @Qualifier("gameStage") gameStage: Stage,
-
-) : EventListener, IteratingSystem() {
+    gameStage: Stage = inject("gameStage"),
+) : EventListener, IteratingSystem(
+    family = family { all(PlayerComponent, ImageComponent) }
+) {
 
     /**
      * Variable  that set the max width of the camera.
@@ -52,7 +53,7 @@ class CameraSystem(
         // interpolated position for rendering which makes
         // the game smoother
 
-        with(imageCmps[entity]) {
+        with(entity[ImageComponent]) {
             val viewW = camera.viewportWidth * 0.5f
             val viewH = camera.viewportHeight * 0.5f
             val camMinW = min(viewW, maxW - viewW)

@@ -1,5 +1,8 @@
 package com.goldev.skipwave.component
 
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+
 /**
  * A MoveComponent is a data class that contains the move data of entity.
  *
@@ -14,5 +17,8 @@ data class MoveComponent(
     var cos: Float = 0f,
     var sin: Float = 0f,
     var root: Boolean = false,
-) {
+) : Component<MoveComponent> {
+    override fun type() = MoveComponent
+
+    companion object : ComponentType<MoveComponent>()
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.goldev.skipwave.preferences.GamePreferences
 import com.github.quillraven.fleks.IntervalSystem
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.ButtonPressedEvent
 import com.goldev.skipwave.event.EntityLevelEvent
 import com.goldev.skipwave.event.MapChangeEvent
@@ -17,7 +18,7 @@ import ktx.log.logger
  * @constructor Create empty Vibrate system.
  */
 class VibrateSystem(
-    private val gamePreferences: GamePreferences
+    private val gamePreferences: GamePreferences = inject(),
 ) : EventListener, IntervalSystem() {
 
     /**

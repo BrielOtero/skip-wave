@@ -6,10 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.goldev.skipwave.component.AnimationComponent
 import com.goldev.skipwave.component.AnimationComponent.Companion.NO_ANIMATION
 import com.goldev.skipwave.component.ImageComponent
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import ktx.app.gdxError
 import ktx.collections.map
 import ktx.log.logger
@@ -18,17 +18,13 @@ import ktx.log.logger
  * System that takes care of the animations in the game.
  *
  * @property textureAtlas The texture atlas with the animation.
- * @property animationCmps Entities with AnimationComponent in the world.
- * @property imageCmps Entities with ImageComponent in the world.
  * @constructor Create empty Animation system
  */
-@AllOf([AnimationComponent::class, ImageComponent::class])
 class AnimationSystem(
-    private val textureAtlas: TextureAtlas,
-    private val animationCmps: ComponentMapper<AnimationComponent>,
-    private val imageCmps: ComponentMapper<ImageComponent>,
-
-) : IteratingSystem() {
+    private val textureAtlas: TextureAtlas = inject(),
+) : IteratingSystem(
+    family = family { all(AnimationComponent, ImageComponent) }
+) {
 
     /**
      *  A map variable with the animations.
@@ -42,7 +38,7 @@ class AnimationSystem(
      * @param entity The entity that the component is attached to.
      */
     override fun onTickEntity(entity: Entity) {
-        val aniCmp = animationCmps[entity]
+        val aniCmp = entity[AnimationComponent]
 
         if (aniCmp.nextAnimation == NO_ANIMATION) {
             aniCmp.stateTime += deltaTime
@@ -54,7 +50,7 @@ class AnimationSystem(
         }
 
         aniCmp.animation.playMode = aniCmp.playMode
-        imageCmps[entity].image.drawable = aniCmp.animation.getKeyFrame(aniCmp.stateTime)
+        entity[ImageComponent].image.drawable = aniCmp.animation.getKeyFrame(aniCmp.stateTime)
     }
 
     /**

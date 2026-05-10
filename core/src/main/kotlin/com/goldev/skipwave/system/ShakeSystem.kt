@@ -3,7 +3,7 @@ package com.goldev.skipwave.system
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.github.quillraven.fleks.IntervalSystem
-import com.github.quillraven.fleks.Qualifier
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.preferences.GamePreferences
 import ktx.log.logger
@@ -18,10 +18,9 @@ import kotlin.math.abs
  * @constructor Create empty Shake system.
  */
 class ShakeSystem(
-    @Qualifier("gameStage") private var gameStage: Stage,
-    private val gamePreferences: GamePreferences,
-
-    ) : IntervalSystem() {
+    private var gameStage: Stage = inject("gameStage"),
+    private val gamePreferences: GamePreferences = inject(),
+) : IntervalSystem() {
 
     /**
      *  A variable that is used to keep track of the last time the accelerometer was checked.

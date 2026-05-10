@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.utils.I18NBundle
-import com.github.quillraven.fleks.Qualifier
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.preferences.GamePreferences
 import com.goldev.skipwave.ui.view.*
@@ -25,8 +24,8 @@ import ktx.log.logger
 class TutorialModel(
     val bundle: I18NBundle,
     val gamePreferences: GamePreferences,
-    @Qualifier("gameStage") val gameStage: Stage,
-    @Qualifier("uiStage") val uiStage: Stage,
+    val gameStage: Stage,
+    val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
     init {

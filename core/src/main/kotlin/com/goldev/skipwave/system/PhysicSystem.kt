@@ -3,7 +3,11 @@ package com.goldev.skipwave.system
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.World
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.Fixed
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
@@ -21,30 +25,14 @@ val Fixture.entity: Entity
  * System that takes care of the physic in the game.
  *
  * @property phWorld The physic world.
- * @property imageCmps Entities with ImageComponent in the world.
- * @property physicCmps Entities with PhysicComponent in the world.
- * @property tiledCmps Entities with TiledComponent in the world.
- * @property collisionCmps Entities with CollisionComponent in the world.
- * @property aiCmps Entities with AIComponent in the world.
- * @property enemyCmps Entities with EnemyComponent in the world.
- * @property weaponCmps Entities with WeaponComponent in the world.
- * @property playerCmps Entities with PlayerComponent in the world.
- * @property moveCmps Entities with MoveComponent in the world.
  * @constructor Create empty Physic system.
  */
-@AllOf([PhysicComponent::class, ImageComponent::class])
 class PhysicSystem(
-    private val phWorld: World,
-    private val imageCmps: ComponentMapper<ImageComponent>,
-    private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val tiledCmps: ComponentMapper<TiledComponent>,
-    private val collisionCmps: ComponentMapper<CollisionComponent>,
-    private val aiCmps: ComponentMapper<AiComponent>,
-    private val enemyCmps: ComponentMapper<EnemyComponent>,
-    private val weaponCmps: ComponentMapper<WeaponComponent>,
-    private val playerCmps: ComponentMapper<PlayerComponent>,
-    private val moveCmps: ComponentMapper<MoveComponent>,
-) : ContactListener, IteratingSystem(interval = Fixed(1 / 30f)) {
+    private val phWorld: World = inject(),
+) : ContactListener, IteratingSystem(
+    family = family { all(PhysicComponent, ImageComponent) },
+    interval = Fixed(1 / 30f)
+) {
 
     init {
         phWorld.setContactListener(this)
@@ -77,7 +65,7 @@ class PhysicSystem(
      */
     override fun onTickEntity(entity: Entity) {
 
-        val physicCmp = physicCmps[entity]
+        val physicCmp = entity[PhysicComponent]
 
         physicCmp.prevPos.set(physicCmp.body.position)
 
@@ -97,8 +85,8 @@ class PhysicSystem(
      */
     override fun onAlphaEntity(entity: Entity, alpha: Float) {
 
-        val physicCmp = physicCmps[entity]
-        val imageCmp = imageCmps[entity]
+        val physicCmp = entity[PhysicComponent]
+        val imageCmp = entity[ImageComponent]
 
         val (prevX, prevY) = physicCmp.prevPos
         val (bodyX, bodyY) = physicCmp.body.position
@@ -118,33 +106,35 @@ class PhysicSystem(
      * @param contact  The contact object that contains information about the collision.
      */
     override fun beginContact(contact: Contact) {
-        val entityA: Entity = contact.fixtureA.entity
-        val entityB: Entity = contact.fixtureB.entity
-        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
-        val isEntityBCollisionFixture = entityB in collisionCmps && !contact.fixtureB.isSensor
-        val isEntityACollisionFixture = entityA in collisionCmps && !contact.fixtureA.isSensor
-        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
-        val isEntityAAiSensor =
-            entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
-        val isEntityBAiSensor =
-            entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
+        with(world) {
+            val entityA: Entity = contact.fixtureA.entity
+            val entityB: Entity = contact.fixtureB.entity
+            val isEntityATiledCollisionSensor = entityA has TiledComponent && contact.fixtureA.isSensor
+            val isEntityBCollisionFixture = entityB has CollisionComponent && !contact.fixtureB.isSensor
+            val isEntityACollisionFixture = entityA has CollisionComponent && !contact.fixtureA.isSensor
+            val isEntityBTiledCollisionSensor = entityB has TiledComponent && contact.fixtureB.isSensor
+            val isEntityAAiSensor =
+                entityA has AiComponent && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
+            val isEntityBAiSensor =
+                entityB has AiComponent && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
 
 
-        when {
-            isEntityATiledCollisionSensor && isEntityBCollisionFixture -> {
-                tiledCmps[entityA].nearbyEntities += entityB
-            }
+            when {
+                isEntityATiledCollisionSensor && isEntityBCollisionFixture -> {
+                    entityA[TiledComponent].nearbyEntities += entityB
+                }
 
-            isEntityBTiledCollisionSensor && isEntityACollisionFixture -> {
-                tiledCmps[entityB].nearbyEntities += entityA
-            }
+                isEntityBTiledCollisionSensor && isEntityACollisionFixture -> {
+                    entityB[TiledComponent].nearbyEntities += entityA
+                }
 
-            isEntityAAiSensor && isEntityBCollisionFixture -> {
-                aiCmps[entityA].nearbyEntitites += entityB
-            }
+                isEntityAAiSensor && isEntityBCollisionFixture -> {
+                    entityA[AiComponent].nearbyEntitites += entityB
+                }
 
-            isEntityBAiSensor && isEntityACollisionFixture -> {
-                aiCmps[entityB].nearbyEntitites += entityA
+                isEntityBAiSensor && isEntityACollisionFixture -> {
+                    entityB[AiComponent].nearbyEntitites += entityA
+                }
             }
         }
     }
@@ -156,30 +146,32 @@ class PhysicSystem(
      * @param contact The contact object that contains the two fixtures that are colliding.
      */
     override fun endContact(contact: Contact) {
-        val entityA: Entity = contact.fixtureA.entity
-        val entityB: Entity = contact.fixtureB.entity
-        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
-        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
-        val isEntityAAiSensor =
-            entityA in aiCmps && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
-        val isEntityBAiSensor =
-            entityB in aiCmps && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
+        with(world) {
+            val entityA: Entity = contact.fixtureA.entity
+            val entityB: Entity = contact.fixtureB.entity
+            val isEntityATiledCollisionSensor = entityA has TiledComponent && contact.fixtureA.isSensor
+            val isEntityBTiledCollisionSensor = entityB has TiledComponent && contact.fixtureB.isSensor
+            val isEntityAAiSensor =
+                entityA has AiComponent && contact.fixtureA.isSensor && contact.fixtureA.userData == AI_SENSOR
+            val isEntityBAiSensor =
+                entityB has AiComponent && contact.fixtureB.isSensor && contact.fixtureB.userData == AI_SENSOR
 
-        when {
-            isEntityATiledCollisionSensor && !contact.fixtureB.isSensor -> {
-                tiledCmps[entityA].nearbyEntities -= entityB
-            }
+            when {
+                isEntityATiledCollisionSensor && !contact.fixtureB.isSensor -> {
+                    entityA[TiledComponent].nearbyEntities -= entityB
+                }
 
-            isEntityBTiledCollisionSensor && !contact.fixtureA.isSensor -> {
-                tiledCmps[entityB].nearbyEntities -= entityA
-            }
+                isEntityBTiledCollisionSensor && !contact.fixtureA.isSensor -> {
+                    entityB[TiledComponent].nearbyEntities -= entityA
+                }
 
-            isEntityAAiSensor && !contact.fixtureB.isSensor -> {
-                aiCmps[entityA].nearbyEntitites -= entityB
-            }
+                isEntityAAiSensor && !contact.fixtureB.isSensor -> {
+                    entityA[AiComponent].nearbyEntitites -= entityB
+                }
 
-            isEntityBAiSensor && !contact.fixtureA.isSensor -> {
-                aiCmps[entityB].nearbyEntitites -= entityA
+                isEntityBAiSensor && !contact.fixtureA.isSensor -> {
+                    entityB[AiComponent].nearbyEntitites -= entityA
+                }
             }
         }
     }
@@ -203,11 +195,13 @@ class PhysicSystem(
      * @param oldManifold The contact manifold from the previous time step.
      */
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
-        if (contact.fixtureA.isStaticBody() && contact.fixtureB.isDynamicBody() || contact.fixtureB.isStaticBody() && contact.fixtureA.isDynamicBody()) {
-            contact.isEnabled = true
-        } else {
-            contact.isEnabled =
-                (contact.fixtureA.entity in enemyCmps && contact.fixtureB.entity in enemyCmps)
+        with(world) {
+            if (contact.fixtureA.isStaticBody() && contact.fixtureB.isDynamicBody() || contact.fixtureB.isStaticBody() && contact.fixtureA.isDynamicBody()) {
+                contact.isEnabled = true
+            } else {
+                contact.isEnabled =
+                    (contact.fixtureA.entity has EnemyComponent && contact.fixtureB.entity has EnemyComponent)
+            }
         }
     }
 

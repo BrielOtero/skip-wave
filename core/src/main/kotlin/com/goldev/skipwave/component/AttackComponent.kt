@@ -1,5 +1,8 @@
 package com.goldev.skipwave.component
 
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+
 /**
  * AttackState is an enum class that contains all states of an attack
  *
@@ -28,7 +31,7 @@ class AttackComponent(
     var cooldown: Float = 0f,
     var maxCooldown: Float = 0f,
     var extraRange: Float = 0f,
-) {
+) : Component<AttackComponent> {
     /**
      *  It's a getter for the property isReady.
      *  @return If the state is ready.
@@ -64,4 +67,8 @@ class AttackComponent(
     fun startAttack() {
         state = AttackState.PREPARE
     }
+
+    override fun type() = AttackComponent
+
+    companion object : ComponentType<AttackComponent>()
 }

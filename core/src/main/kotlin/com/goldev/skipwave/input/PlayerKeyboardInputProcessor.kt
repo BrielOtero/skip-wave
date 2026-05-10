@@ -8,25 +8,21 @@ import com.goldev.skipwave.component.AttackComponent
 import com.goldev.skipwave.component.MoveComponent
 import com.goldev.skipwave.component.PlayerComponent
 import com.goldev.skipwave.component.WeaponComponent
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import ktx.app.KtxInputAdapter
 import ktx.math.vec2
 
 /**
  *  It listens for keyboard input and updates the player's movement and attack components
- *  @param world The world of the game.
+ *  @property world The world of the game.
  *  @property uiStage The stage that the UI is being rendered on.
- *  @property moveCmps Store entities with move component in the world
  *  @constructor Creates an empty PlayerKeyboardInputProcessor
  */
 class PlayerKeyboardInputProcessor(
-    world: World,
-    @Qualifier("uiStage") private val uiStage: Stage,
-    private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
+    private val world: World,
+    private val uiStage: Stage,
 ) : KtxInputAdapter {
-    
+
     override fun touchCancelled(pointer: Int, x: Int, y: Int, button: Int): Boolean {
         return false
     }
@@ -49,7 +45,7 @@ class PlayerKeyboardInputProcessor(
     /**
      *  Property with all the entities with the PlayerComponent.
      */
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val playerEntities = world.family { all(PlayerComponent) }
 
 
     init {
@@ -75,10 +71,12 @@ class PlayerKeyboardInputProcessor(
      */
     private fun updatePlayerMovement() {
         tmpVec.set(playerCos, playerSin).nor()
-        playerEntities.forEach { player ->
-            with(moveCmps[player]) {
-                cos = tmpVec.x
-                sin = tmpVec.y
+        with(world) {
+            playerEntities.forEach { player ->
+                with(player[MoveComponent]) {
+                    cos = tmpVec.x
+                    sin = tmpVec.y
+                }
             }
         }
     }

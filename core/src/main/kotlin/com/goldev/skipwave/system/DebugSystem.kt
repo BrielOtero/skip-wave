@@ -10,7 +10,7 @@ import com.goldev.skipwave.ai.TMP_RECT1
 import com.goldev.skipwave.ai.TMP_RECT2
 import com.goldev.skipwave.system.AttackSystem.Companion.AABB_RECT
 import com.github.quillraven.fleks.IntervalSystem
-import com.github.quillraven.fleks.Qualifier
+import com.github.quillraven.fleks.World.Companion.inject
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
@@ -22,9 +22,8 @@ import ktx.graphics.use
  * @constructor Create empty Debug system
  */
 class DebugSystem(
-    private val phWorld: World,
-    @Qualifier("gameStage") private val gameStage: Stage
-
+    private val phWorld: World = inject(),
+    private val gameStage: Stage = inject("gameStage"),
 ) : IntervalSystem(enabled = false) {
     /**
      *  The physic renderer.

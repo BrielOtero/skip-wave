@@ -25,13 +25,16 @@ configure(subprojects - project(':android')) {
 	apply plugin: 'java-library'
 	apply plugin: 'kotlin'
 	apply plugin: "org.jetbrains.dokka"
-	sourceCompatibility = JavaVersion.VERSION_11
+	java {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	}
 	compileJava {
 		options.incremental = true
 		options.encoding = 'UTF-8'
 	}
 	tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-		kotlinOptions.jvmTarget = '11'
+		kotlinOptions.jvmTarget = '17'
 	}
 }
 

@@ -11,7 +11,7 @@ import com.goldev.skipwave.SkipWave.Companion.ANIMATION_DURATION
 import com.goldev.skipwave.preferences.saveGamePreferences
 import com.goldev.skipwave.ui.model.MainMenuModel
 import com.goldev.skipwave.ui.model.SettingsModel
-import com.github.quillraven.fleks.world
+import com.github.quillraven.fleks.configureWorld
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.system.AudioSystem
 import com.goldev.skipwave.system.VibrateSystem
@@ -44,21 +44,23 @@ class MainMenuScreen(private val game: SkipWave) : KtxScreen, EventListener {
     /**
      *  It's a property with the entities world.
      */
-    private val eWorld = world {
+    private val eWorld = configureWorld {
 
         /**
          * Add into the system common variables.
          */
         injectables {
             add(game.gamePreferences)
+            add("gameStage", gameStage)
+            add("uiStage", uiStage)
         }
 
         /**
          * Add into the system the listening systems that the game need.
          */
         systems {
-            add<VibrateSystem>()
-            add<AudioSystem>()
+            add(VibrateSystem())
+            add(AudioSystem())
         }
     }
 

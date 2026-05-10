@@ -11,7 +11,7 @@ import com.goldev.skipwave.ui.model.RecordsModel
 import com.goldev.skipwave.ui.view.RecordsView
 import com.goldev.skipwave.ui.view.recordsView
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.world
+import com.github.quillraven.fleks.configureWorld
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
@@ -31,7 +31,7 @@ class RecordsScreen(private val game: SkipWave) : KtxScreen {
     /**
      *  Property with world for entities.
      */
-    private val eWorld = world { }
+    private val eWorld = configureWorld { }
 
     /**
      *  Property that contains player entity.
@@ -49,9 +49,9 @@ class RecordsScreen(private val game: SkipWave) : KtxScreen {
     private lateinit var recordView: RecordsView
 
     init {
-        playerEntity = eWorld.entity {
-            add<PlayerComponent>()
-            add<LifeComponent> {
+        playerEntity = eWorld.entity { newEntity ->
+            newEntity += PlayerComponent()
+            newEntity += LifeComponent().apply {
                 max = 5f
                 life = 3f
             }

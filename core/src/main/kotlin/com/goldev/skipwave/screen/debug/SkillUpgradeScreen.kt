@@ -12,7 +12,7 @@ import com.goldev.skipwave.ui.view.SkillUpgradeView
 import com.goldev.skipwave.ui.view.skillUpgradeView
 import com.goldev.skipwave.system.SkillUpgradeSystem.*
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.world
+import com.github.quillraven.fleks.configureWorld
 import com.goldev.skipwave.component.*
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
@@ -38,7 +38,7 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
     /**
      *  Property with world for entities.
      */
-    private val eWorld = world { }
+    private val eWorld = configureWorld { }
 
     /**
      *  Property with model for the SkillUpgradeModel.
@@ -56,16 +56,16 @@ class SkillUpgradeScreen(private val game: SkipWave) : KtxScreen {
     private val playerEntity: Entity
 
     init {
-        playerEntity = eWorld.entity {
-            add<PlayerComponent>()
-            add<LifeComponent> {
+        playerEntity = eWorld.entity { newEntity ->
+            newEntity += PlayerComponent()
+            newEntity += LifeComponent().apply {
                 max = 5f
                 life = 3f
             }
-            add<ExperienceComponent>()
-            add<WaveComponent>()
-            add<AttackComponent>()
-            add<MoveComponent>()
+            newEntity += ExperienceComponent()
+            newEntity += WaveComponent()
+            newEntity += AttackComponent()
+            newEntity += MoveComponent()
         }
     }
 

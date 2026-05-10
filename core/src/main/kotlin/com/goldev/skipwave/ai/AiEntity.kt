@@ -9,11 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.*
 import com.goldev.skipwave.component.AiComponent.Companion.NO_TARGET
 import com.goldev.skipwave.event.fire
-import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
-import com.goldev.skipwave.component.*
+import com.github.quillraven.fleks.World.Companion.family
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.vec2
@@ -35,40 +33,23 @@ val TMP_RECT2 = Rectangle()
 
 
 /**
- * It's a data class that holds a reference to an entity and a world, and it has a bunch of component
- * mappers.
+ * It's a data class that holds a reference to an entity and a world.
  *
  * @property entity The entity that this class is controlling.
  * @property world The world that the entity belongs to.
  * @property gameStage The stage that the game is being rendered on.
- * @property animationCmps Store entities with animation component in the world.
- * @property moveCmps Store entities with move component in the world.
- * @property attackCmps Store entities with attack component in the world.
- * @property stateCmps Store entities with state component in the world.
- * @property lifeCmps Store entities with life component in the world.
- * @property physicCmps Store entities with physic component in the world.
- * @property aiCmps Store entities with ai component in the world.
- * @property playerCmps Store entities with player component in the world.
  * @constructor Create an empty AiEntity.
  */
 data class AiEntity(
 
     val entity: Entity,
     private val world: World,
-    @Qualifier("gameStage") private val gameStage: Stage,
-    private val animationCmps: ComponentMapper<AnimationComponent> = world.mapper(),
-    private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
-    private val attackCmps: ComponentMapper<AttackComponent> = world.mapper(),
-    private val stateCmps: ComponentMapper<StateComponent> = world.mapper(),
-    private val lifeCmps: ComponentMapper<LifeComponent> = world.mapper(),
-    private val physicCmps: ComponentMapper<PhysicComponent> = world.mapper(),
-    private val aiCmps: ComponentMapper<AiComponent> = world.mapper(),
-    private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper(),
+    private val gameStage: Stage,
 ) {
     /**
      *  It's a family that contains all the entities that have a player component.
      */
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val playerEntities = world.family { all(PlayerComponent) }
 
     /**
      * It's a getter for the position of entity.
@@ -76,7 +57,7 @@ data class AiEntity(
      * @return The position of the entity.
      */
     val position: Vector2
-        get() = physicCmps[entity].body.position
+        get() = with(world) { entity[PhysicComponent].body.position }
 
     /**
      *  It's a getter for the target of entity
@@ -84,7 +65,7 @@ data class AiEntity(
      *  @return The target of the entity.
      */
     val target: Entity
-        get() = aiCmps[entity].target
+        get() = with(world) { entity[AiComponent].target }
 
     /**
      *  It's a getter that check if entity wants run
@@ -92,9 +73,9 @@ data class AiEntity(
      *  @return True if the entity wants to run.
      */
     val wantsToRun: Boolean
-        get() {
-            val moveCmp = moveCmps[entity]
-            return moveCmp.cos != 0f || moveCmp.sin != 0f
+        get() = with(world) {
+            val moveCmp = entity[MoveComponent]
+            moveCmp.cos != 0f || moveCmp.sin != 0f
         }
 
     /**
@@ -103,7 +84,7 @@ data class AiEntity(
      *  @return True if entity wants attack
      */
     val wantsToAttack: Boolean
-        get() = attackCmps.getOrNull(entity)?.doAttack ?: false
+        get() = with(world) { entity.getOrNull(AttackComponent)?.doAttack ?: false }
 
     /**
      *  It's a getter for attack component
@@ -111,7 +92,7 @@ data class AiEntity(
      *  @return The attack component of the entity.
      */
     val attackCmp: AttackComponent
-        get() = attackCmps[entity]
+        get() = with(world) { entity[AttackComponent] }
 
     /**
      *  It's a getter that check if the animation is done
@@ -119,7 +100,7 @@ data class AiEntity(
      *  @return True if the animation is done.
      */
     val isAnimationDone: Boolean
-        get() = animationCmps[entity].isAnimationDone
+        get() = with(world) { entity[AnimationComponent].isAnimationDone }
 
     /**
      *  It's a getter for attack state
@@ -127,7 +108,7 @@ data class AiEntity(
      *  @return The attack state of the entity.
      */
     val attackState: AttackState
-        get() = attackCmps[entity].state
+        get() = with(world) { entity[AttackComponent].state }
 
     /**
      *  It's a getter that check entity is dead
@@ -135,14 +116,14 @@ data class AiEntity(
      *  @return True if the entity is dead.
      */
     val isDead: Boolean
-        get() = lifeCmps[entity].isDead
+        get() = with(world) { entity[LifeComponent].isDead }
 
     /**
      *  It's a getter that check entity can attack
      *  @return True if the entity can attack.
      */
     val canAttack: Boolean
-        get() = attackCmps[entity].state == AttackState.READY
+        get() = with(world) { entity[AttackComponent].state == AttackState.READY }
 
 
     /**
@@ -157,11 +138,13 @@ data class AiEntity(
         mode: PlayMode = PlayMode.LOOP,
         resetAnimation: Boolean = false
     ) {
-        with(animationCmps[entity]) {
-            nextAnimation(type)
-            playMode = mode
-            if (resetAnimation) {
-                stateTime = 0f
+        with(world) {
+            with(entity[AnimationComponent]) {
+                nextAnimation(type)
+                playMode = mode
+                if (resetAnimation) {
+                    stateTime = 0f
+                }
             }
         }
     }
@@ -174,10 +157,12 @@ data class AiEntity(
      * be changed at the end of the current frame.
      */
     fun state(next: EntityState, inmediateChange: Boolean = false) {
-        with(stateCmps[entity]) {
-            nextState = next
-            if (inmediateChange) {
-                stateMachine.changeState(nextState)
+        with(world) {
+            with(entity[StateComponent]) {
+                nextState = next
+                if (inmediateChange) {
+                    stateMachine.changeState(nextState)
+                }
             }
         }
     }
@@ -189,11 +174,13 @@ data class AiEntity(
      * @param enable Whether to enable the global state.
      */
     fun enableGlobalState(enable: Boolean) {
-        with(stateCmps[entity]) {
-            if (enable) {
-                stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
-            } else {
-                stateMachine.globalState = null
+        with(world) {
+            with(entity[StateComponent]) {
+                if (enable) {
+                    stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
+                } else {
+                    stateMachine.globalState = null
+                }
             }
         }
     }
@@ -202,7 +189,7 @@ data class AiEntity(
      * If the entity has a state component, set the next state to the previous state.
      */
     fun changeToPreviousState() {
-        with(stateCmps[entity]) { nextState = stateMachine.previousState }
+        with(world) { with(entity[StateComponent]) { nextState = stateMachine.previousState } }
     }
 
     /**
@@ -212,23 +199,25 @@ data class AiEntity(
      * @param enable Whether or not to enable or disable the root.
      */
     fun root(enable: Boolean) {
-        with(moveCmps[entity]) { root = enable }
+        with(world) { with(entity[MoveComponent]) { root = enable } }
     }
 
     /**
      * If the entity has an attack component, start the attack.
      */
     fun startAttack() {
-        with(attackCmps[entity]) { startAttack() }
+        with(world) { with(entity[AttackComponent]) { startAttack() } }
     }
 
     /**
      * If the entity has an attack component, set the doAttack flag to true and start the attack.
      */
     fun doAndStartAttack() {
-        with(attackCmps[entity]) {
-            doAttack = true
-            startAttack()
+        with(world) {
+            with(entity[AttackComponent]) {
+                doAttack = true
+                startAttack()
+            }
         }
     }
 
@@ -238,9 +227,11 @@ data class AiEntity(
      * @return A boolean value.
      */
     fun setPlayerForTarget(): Boolean {
-        with(aiCmps[entity]) {
-            target = playerEntities.first()
-            return true
+        with(world) {
+            with(entity[AiComponent]) {
+                target = playerEntities.first()
+                return true
+            }
         }
     }
 
@@ -252,13 +243,15 @@ data class AiEntity(
      * @param targetPos The position to move to.
      */
     fun moveTo(targetPos: Vector2) {
-        val (targetX, targetY) = targetPos
-        val physicCmp = physicCmps[entity]
-        val (sourceX, sourceY) = physicCmp.body.position
-        with(moveCmps[entity]) {
-            val angleRad = MathUtils.atan2(targetY - sourceY, targetX - sourceX)
-            cos = MathUtils.cos(angleRad)
-            sin = MathUtils.sin(angleRad)
+        with(world) {
+            val (targetX, targetY) = targetPos
+            val physicCmp = entity[PhysicComponent]
+            val (sourceX, sourceY) = physicCmp.body.position
+            with(entity[MoveComponent]) {
+                val angleRad = MathUtils.atan2(targetY - sourceY, targetX - sourceX)
+                cos = MathUtils.cos(angleRad)
+                sin = MathUtils.sin(angleRad)
+            }
         }
     }
 
@@ -266,9 +259,11 @@ data class AiEntity(
      * Move to the target's position.
      */
     fun moveToTarget() {
-        val aiCmp = aiCmps[entity]
-        val targetPhysicCmp = physicCmps[aiCmp.target]
-        moveTo(targetPhysicCmp.body.position)
+        with(world) {
+            val aiCmp = entity[AiComponent]
+            val targetPhysicCmp = aiCmp.target[PhysicComponent]
+            moveTo(targetPhysicCmp.body.position)
+        }
     }
 
 
@@ -281,36 +276,38 @@ data class AiEntity(
      * @return A boolean value.
      */
     fun inTargetRange(range: Float): Boolean {
-        val aiCmp = aiCmps[entity]
-        if (aiCmp.target == NO_TARGET) {
-            println("NO TARGET")
-            return true
+        with(world) {
+            val aiCmp = entity[AiComponent]
+            if (aiCmp.target == NO_TARGET) {
+                println("NO TARGET")
+                return true
+            }
+
+            val physicCmp = entity[PhysicComponent]
+            val targetPhysicCmp = aiCmp.target[PhysicComponent]
+            val (sourceX, sourceY) = physicCmp.body.position
+            val (sourceOffX, sourceOffY) = physicCmp.offset
+            var (sourceSizeX, sourceSizeY) = physicCmp.size
+            sourceSizeX += range
+            sourceSizeY += range
+            val (targetX, targetY) = targetPhysicCmp.body.position
+            val (targetOffX, targetOffY) = targetPhysicCmp.offset
+            val (targetSizeX, targetSizeY) = targetPhysicCmp.size
+
+            TMP_RECT1.set(
+                sourceOffX + sourceX - sourceSizeX * 0.5f,
+                sourceOffY + sourceY - sourceSizeY * 0.5f,
+                sourceSizeX,
+                sourceSizeY
+            )
+            TMP_RECT2.set(
+                targetOffX + targetX - targetSizeX * 0.5f,
+                targetOffY + targetY - targetSizeY * 0.5f,
+                targetSizeX,
+                targetSizeY
+            )
+            return TMP_RECT1.overlaps(TMP_RECT2)
         }
-
-        val physicCmp = physicCmps[entity]
-        val targetPhysicCmp = physicCmps[aiCmp.target]
-        val (sourceX, sourceY) = physicCmp.body.position
-        val (sourceOffX, sourceOffY) = physicCmp.offset
-        var (sourceSizeX, sourceSizeY) = physicCmp.size
-        sourceSizeX += range
-        sourceSizeY += range
-        val (targetX, targetY) = targetPhysicCmp.body.position
-        val (targetOffX, targetOffY) = targetPhysicCmp.offset
-        val (targetSizeX, targetSizeY) = targetPhysicCmp.size
-
-        TMP_RECT1.set(
-            sourceOffX + sourceX - sourceSizeX * 0.5f,
-            sourceOffY + sourceY - sourceSizeY * 0.5f,
-            sourceSizeX,
-            sourceSizeY
-        )
-        TMP_RECT2.set(
-            targetOffX + targetX - targetSizeX * 0.5f,
-            targetOffY + targetY - targetSizeY * 0.5f,
-            targetSizeX,
-            targetSizeY
-        )
-        return TMP_RECT1.overlaps(TMP_RECT2)
     }
 
     /**
@@ -321,30 +318,34 @@ data class AiEntity(
      * @return True if in range.
      */
     fun inRange(range: Float, targetPos: Vector2): Boolean {
-        val physicCmp = physicCmps[entity]
-        val (sourceX, sourceY) = physicCmp.body.position
-        val (offX, offY) = physicCmp.offset
-        var (sizeX, sizeY) = physicCmp.size
-        sizeX += range
-        sizeY += range
+        with(world) {
+            val physicCmp = entity[PhysicComponent]
+            val (sourceX, sourceY) = physicCmp.body.position
+            val (offX, offY) = physicCmp.offset
+            var (sizeX, sizeY) = physicCmp.size
+            sizeX += range
+            sizeY += range
 
-        TMP_RECT.set(
-            sourceX + offX - sizeX * 0.5f,
-            sourceY + offY - sizeY * 0.5f,
-            sizeX,
-            sizeY,
-        )
+            TMP_RECT.set(
+                sourceX + offX - sizeX * 0.5f,
+                sourceY + offY - sizeY * 0.5f,
+                sizeX,
+                sizeY,
+            )
 
-        return TMP_RECT.contains(targetPos)
+            return TMP_RECT.contains(targetPos)
+        }
     }
 
     /**
      * If the entity has a movement component, set its cosine and sine to zero.
      */
     fun stopMovement() {
-        with(moveCmps[entity]) {
-            cos = 0f
-            sin = 0f
+        with(world) {
+            with(entity[MoveComponent]) {
+                cos = 0f
+                sin = 0f
+            }
         }
     }
 
@@ -354,17 +355,18 @@ data class AiEntity(
      * @return True if can attack.
      */
     fun canAttack(): Boolean {
-        val attackCmp = attackCmps[entity]
-        if (!attackCmp.isReady) {
-            return false
+        with(world) {
+            val attackCmp = entity[AttackComponent]
+            if (!attackCmp.isReady) {
+                return false
+            }
+
+            val enemy = nearbyEnemies().firstOrNull() ?: return false
+            val enemyPhysicCmp = enemy[PhysicComponent]
+            val (sourceX, sourceY) = enemyPhysicCmp.body.position
+            val (offX, offY) = enemyPhysicCmp.offset
+            return inRange(1.5f + attackCmp.extraRange, vec2(sourceX + offX, sourceY + offY))
         }
-
-        val enemy = nearbyEnemies().firstOrNull() ?: return false
-        val enemyPhysicCmp = physicCmps[enemy]
-        val (sourceX, sourceY) = enemyPhysicCmp.body.position
-        val (offX, offY) = enemyPhysicCmp.offset
-        return inRange(1.5f + attackCmp.extraRange, vec2(sourceX + offX, sourceY + offY))
-
     }
 
     /**
@@ -373,9 +375,11 @@ data class AiEntity(
      * @return A list of entities that are nearby, are players, and are not dead.
      */
     private fun nearbyEnemies(): List<Entity> {
-        val aiCmp = aiCmps[entity]
-        return aiCmp.nearbyEntitites
-            .filter { it in playerCmps && !lifeCmps[it].isDead }
+        with(world) {
+            val aiCmp = entity[AiComponent]
+            return aiCmp.nearbyEntitites
+                .filter { it has PlayerComponent && !it[LifeComponent].isDead }
+        }
     }
 
     /**

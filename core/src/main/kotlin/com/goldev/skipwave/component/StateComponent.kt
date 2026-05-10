@@ -5,9 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.ai.AiEntity
 import com.goldev.skipwave.ai.DefaultState
 import com.goldev.skipwave.ai.EntityState
-import com.github.quillraven.fleks.ComponentListener
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 
 /**
@@ -20,40 +20,20 @@ import com.github.quillraven.fleks.World
 data class StateComponent(
     var nextState: EntityState = DefaultState.IDLE,
     val stateMachine: DefaultStateMachine<AiEntity, EntityState> = DefaultStateMachine()
-) {
-    companion object {
-        /**
-         * It's a listener that listens for the addition of a StateComponent to an entity, and when it
-         * finds one, it sets the owner of the state machine to an AiEntity
-         *
-         *  @property world The world that the entity belongs to.
-         *  @property  gameStage The stage that the game is being rendered on.
-         *  @constructor Creates an StateComponentListener
-         */
-        class StateComponentListener(
-            private val world: World,
-            @Qualifier("gameStage") private val gameStage: Stage,
-        ) : ComponentListener<StateComponent> {
+) : Component<StateComponent> {
 
-            /**
-             * When a StateComponent is added to an entity, the StateComponent's state machine's owner
-             * is set to an AiEntity
-             *
-             * @param entity The entity that the component was added to.
-             * @param component The component that was added to the entity
-             */
-            override fun onComponentAdded(entity: Entity, component: StateComponent) {
-                component.stateMachine.owner = AiEntity(entity, world, gameStage)
-            }
-
-            /**
-             * onComponentRemoved is called when a component is removed from an entity
-             *
-             * @param entity The entity that the component was removed from.
-             * @param component The component that was removed from the entity.
-             */
-            override fun onComponentRemoved(entity: Entity, component: StateComponent) = Unit
-
-        }
+    /**
+     * When this component is added to an entity, the state machine's owner is set to an AiEntity
+     * built around that entity.
+     *
+     * @param entity The entity that the component was added to.
+     */
+    override fun World.onAdd(entity: Entity) {
+        val gameStage = inject<Stage>("gameStage")
+        stateMachine.owner = AiEntity(entity, this, gameStage)
     }
+
+    override fun type() = StateComponent
+
+    companion object : ComponentType<StateComponent>()
 }

@@ -4,8 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.*
 import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.MovementEvent
 import com.goldev.skipwave.event.StartMovementEvent
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import com.goldev.skipwave.component.MoveComponent
 import com.goldev.skipwave.component.PlayerComponent
@@ -16,15 +14,13 @@ import ktx.math.vec2
 /**
  * The model of the Touchpad
  *
- * @param world The entities world.
- * @property gameStage The stage that the game is being rendered on.
- * @property moveCmps Entities with MoveComponent in the world.
+ * @property world The entities world.
+ * @property uiStage The stage that the UI is being rendered on.
  * @constructor Create empty Touchpad model
  */
 class TouchpadModel(
-    world: World,
-    @Qualifier("gameStage") val gameStage: Stage,
-    private val moveCmps: ComponentMapper<MoveComponent> = world.mapper(),
+    private val world: World,
+    val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
     /**
@@ -35,7 +31,7 @@ class TouchpadModel(
     /**
      *  A family of entities with the PlayerComponent.
      */
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val playerEntities = world.family { all(PlayerComponent) }
 
     /**
      *  A variable that is used to store the cosine of the angle of the touchpad.
@@ -78,7 +74,7 @@ class TouchpadModel(
     var disableTouchpad: Boolean = false
 
     init {
-        gameStage.addListener(this)
+        uiStage.addListener(this)
     }
 
     /**
@@ -126,10 +122,12 @@ class TouchpadModel(
         }
 
         tmpVec.set(playerCos, playerSin).nor()
-        playerEntities.forEach { player ->
-            with(moveCmps[player]) {
-                cos = tmpVec.x
-                sin = tmpVec.y
+        with(world) {
+            playerEntities.forEach { player ->
+                with(player[MoveComponent]) {
+                    cos = tmpVec.x
+                    sin = tmpVec.y
+                }
             }
         }
     }

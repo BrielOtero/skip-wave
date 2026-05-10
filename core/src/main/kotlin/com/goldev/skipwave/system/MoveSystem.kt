@@ -2,11 +2,9 @@ package com.goldev.skipwave.system
 
 import com.badlogic.gdx.math.Vector2
 import com.goldev.skipwave.component.*
-import com.github.quillraven.fleks.AllOf
-import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
-import com.goldev.skipwave.component.*
+import com.github.quillraven.fleks.World.Companion.family
 import ktx.math.component1
 import ktx.math.component2
 import ktx.log.logger
@@ -16,27 +14,16 @@ import ktx.tiled.*
 /**
  * System that takes care of the movement in the game.
  *
- * @property moveCmps Entities with MoveComponent in the world.
- * @property physicCmps Entities with PhysicComponent in the world.
- * @property imageCmps Entities with ImageComponent in the world.
- * @property weaponCmps Entities with WeaponComponent in the world.
- * @property playerCmps Entities with PlayerComponent in the world.
  * @constructor Create empty Move system
  */
-@AllOf([MoveComponent::class, PhysicComponent::class])
-class MoveSystem(
-    private val moveCmps: ComponentMapper<MoveComponent>,
-    private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val imageCmps: ComponentMapper<ImageComponent>,
-    private val weaponCmps: ComponentMapper<WeaponComponent>,
-    private val playerCmps: ComponentMapper<PlayerComponent>,
-
-    ) : IteratingSystem() {
+class MoveSystem : IteratingSystem(
+    family = family { all(MoveComponent, PhysicComponent) }
+) {
 
     /**
      *  A list of all entities with the WeaponComponent.
      */
-    private val weaponEntities = world.family(allOf = arrayOf(WeaponComponent::class))
+    private val weaponEntities = world.family { all(WeaponComponent) }
 
     /**
      * If the entity is rooted, stop it immediately. Otherwise, apply an impulse to the entity to
@@ -46,8 +33,8 @@ class MoveSystem(
      */
     override fun onTickEntity(entity: Entity) {
 
-        val moveCmp = moveCmps[entity]
-        val physicCmp = physicCmps[entity]
+        val moveCmp = entity[MoveComponent]
+        val physicCmp = entity[PhysicComponent]
         val mass = physicCmp.body.mass
         val (velX, velY) = physicCmp.body.linearVelocity
 
@@ -70,7 +57,7 @@ class MoveSystem(
 
         refreshWeaponPosition(entity, physicCmp)
 
-        imageCmps.getOrNull(entity)?.let { imageCmp ->
+        entity.getOrNull(ImageComponent)?.let { imageCmp ->
             if (moveCmp.cos != 0f) {
                 imageCmp.image.flipX = moveCmp.cos < 0
             }
@@ -84,16 +71,16 @@ class MoveSystem(
      * @param physicCmp PhysicComponent - The physic component of the entity
      */
     private fun refreshWeaponPosition(entity: Entity, physicCmp: PhysicComponent) {
-        if (entity in playerCmps) {
+        if (entity has PlayerComponent) {
             var pos: Vector2
             weaponEntities.forEach { weapon ->
-                if (imageCmps[weapon].image.flipX) {
+                if (weapon[ImageComponent].image.flipX) {
                     pos = vec2(physicCmp.body.position.x - 1.5f, physicCmp.body.position.y - 0.3f)
                 } else {
                     pos = vec2(physicCmp.body.position.x + 1.5f, physicCmp.body.position.y - 0.3f)
                 }
 
-                physicCmps[weapon].body.setTransform(pos.x, pos.y, physicCmps[weapon].body.angle)
+                weapon[PhysicComponent].body.setTransform(pos.x, pos.y, weapon[PhysicComponent].body.angle)
             }
         }
     }

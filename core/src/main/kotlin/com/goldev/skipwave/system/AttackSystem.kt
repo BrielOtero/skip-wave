@@ -8,8 +8,10 @@ import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.EntityAttackEvent
 import com.goldev.skipwave.event.fire
 import com.goldev.skipwave.system.EntitySpawnSystem.Companion.HIT_BOX_SENSOR
-import com.github.quillraven.fleks.*
-import com.goldev.skipwave.component.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import ktx.box2d.query
 import ktx.log.logger
 import ktx.math.component1
@@ -19,32 +21,16 @@ import ktx.math.component2
 /**
  * System that takes care of the attacks in the game.
  *
- * @property attackCmps Entities with AttackComponent in the world.
- * @property physicCmps Entities with PhysicComponent in the world.
- * @property imgCmps Entities with ImageComponent in the world.
- * @property lifeCmps Entities with LifeComponent in the world.
- * @property playerCmps Entities with PlayerComponent in the world.
- * @property weaponCmps Entities with WeaponComponent in the world.
- * @property lootCmps Entities with LootComponent in the world.
- * @property animationCmps Entities with AnimationComponent in the world.
  * @property phWorld The physics world.
  * @property gameStage The stage that the game is being rendered on.
  * @constructor Create empty Attack system
  */
-@AllOf([AttackComponent::class, PhysicComponent::class, ImageComponent::class])
 class AttackSystem(
-    private val attackCmps: ComponentMapper<AttackComponent>,
-    private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val imgCmps: ComponentMapper<ImageComponent>,
-    private val lifeCmps: ComponentMapper<LifeComponent>,
-    private val playerCmps: ComponentMapper<PlayerComponent>,
-    private val weaponCmps: ComponentMapper<WeaponComponent>,
-    private val lootCmps: ComponentMapper<LootComponent>,
-    private val animationCmps: ComponentMapper<AnimationComponent>,
-    private val phWorld: World,
-    @Qualifier("gameStage") private val gameStage: Stage,
-
-) : IteratingSystem() {
+    private val phWorld: World = inject(),
+    private val gameStage: Stage = inject("gameStage"),
+) : IteratingSystem(
+    family = family { all(AttackComponent, PhysicComponent, ImageComponent) }
+) {
 
     /**
      * If the entity is ready to attack, start the attack, otherwise if the attack is in progress, deal
@@ -53,7 +39,7 @@ class AttackSystem(
      * @param entity The entity that is being processed.
      */
     override fun onTickEntity(entity: Entity) {
-        val attackCmp = attackCmps[entity]
+        val attackCmp = entity[AttackComponent]
 
         if (attackCmp.isReady && !attackCmp.doAttack) {
             // entity does not want to attack and is not executing an attack -> do nothing
@@ -74,11 +60,11 @@ class AttackSystem(
         attackCmp.cooldown -= deltaTime
         if (attackCmp.cooldown <= 0f && attackCmp.isAttacking) {
             // deal damage to nearby enemies
-            gameStage.fire(EntityAttackEvent(animationCmps[entity].model))
+            gameStage.fire(EntityAttackEvent(entity[AnimationComponent].model))
             attackCmp.state = AttackState.DEAL_DAMAGE
 
-            val image = imgCmps[entity].image
-            val physicCmp = physicCmps[entity]
+            val image = entity[ImageComponent].image
+            val physicCmp = entity[PhysicComponent]
             val attackLeft = image.flipX
             val (x, y) = physicCmp.body.position
             val (offX, offY) = physicCmp.offset
@@ -114,22 +100,22 @@ class AttackSystem(
                 }
 
                 // turn off friendly fire
-                val isAttackerPlayer = entity in playerCmps
-                val isAttackerWeapon = entity in weaponCmps
-                if (isAttackerPlayer && fixtureEntity in playerCmps) {
+                val isAttackerPlayer = entity has PlayerComponent
+                val isAttackerWeapon = entity has WeaponComponent
+                if (isAttackerPlayer && fixtureEntity has PlayerComponent) {
                     return@query true
-                } else if (!isAttackerPlayer && !isAttackerWeapon && fixtureEntity !in playerCmps) {
+                } else if (!isAttackerPlayer && !isAttackerWeapon && fixtureEntity hasNo PlayerComponent) {
                     return@query true
-                } else if (isAttackerWeapon && fixtureEntity in playerCmps) {
+                } else if (isAttackerWeapon && fixtureEntity has PlayerComponent) {
                     return@query true
                 }
 
-                configureEntity(fixtureEntity) {
-                    lifeCmps.getOrNull(it)?.let { lifeCmp ->
+                fixtureEntity.configure {
+                    it.getOrNull(LifeComponent)?.let { lifeCmp ->
                         lifeCmp.takeDamage += attackCmp.damage * MathUtils.random(0.7f, 1.1f)
                     }
                     if (isAttackerPlayer) {
-                        lootCmps.getOrNull(it)?.let { lootCmp ->
+                        it.getOrNull(LootComponent)?.let { lootCmp ->
                             lootCmp.interactEntity = entity
                         }
                     }
@@ -139,7 +125,7 @@ class AttackSystem(
             }
         }
 
-        val isDone = animationCmps.getOrNull(entity)?.isAnimationDone ?: true
+        val isDone = entity.getOrNull(AnimationComponent)?.isAnimationDone ?: true
         if (isDone) {
             attackCmp.state = AttackState.READY
         }

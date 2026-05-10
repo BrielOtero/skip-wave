@@ -14,12 +14,15 @@ import ktx.app.gdxError
 import ktx.box2d.box
 import ktx.math.vec2
 import ktx.tiled.*
-import  com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.actors.FlipImage
 import com.goldev.skipwave.ai.DefaultGlobalState
 import com.goldev.skipwave.event.*
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.EnemyAddEvent
 import com.goldev.skipwave.event.EntityAddEvent
 import com.goldev.skipwave.event.MapChangeEvent
@@ -33,24 +36,16 @@ import kotlin.math.roundToInt
  *
  * @property phWorld The physic world.
  * @property textureAtlas The atlas with the textures.
- * @property spawnCmps Entities with SpawnComponent in the world.
- * @property physicCmps Entities with PhysicComponent in the world.
- * @property waveCmps Entities with WaveComponent in the world.
- * @property moveCmps Entities with MoveComponent in the world.
  * @property gameStage The stage that the game is being rendered on.
  * @constructor Create empty Entity spawn system
  */
-@AllOf([SpawnComponent::class])
 class EntitySpawnSystem(
-    private val phWorld: World,
-    private val textureAtlas: TextureAtlas,
-    private val spawnCmps: ComponentMapper<SpawnComponent>,
-    private val physicCmps: ComponentMapper<PhysicComponent>,
-    private val waveCmps: ComponentMapper<WaveComponent>,
-    private val moveCmps: ComponentMapper<MoveComponent>,
-    @Qualifier("gameStage") private val gameStage: Stage,
-
-    ) : EventListener, IteratingSystem() {
+    private val phWorld: World = inject(),
+    private val textureAtlas: TextureAtlas = inject(),
+    private val gameStage: Stage = inject("gameStage"),
+) : EventListener, IteratingSystem(
+    family = family { all(SpawnComponent) }
+) {
 
     /**
      *  Mutable map of SpawnCfg that cached.
@@ -65,7 +60,7 @@ class EntitySpawnSystem(
     /**
      *  A family of entities that have the PlayerComponent.
      */
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val playerEntities = world.family { all(PlayerComponent) }
 
     /**
      * It creates an entity with the components needed to make it work
@@ -74,13 +69,13 @@ class EntitySpawnSystem(
      */
     override fun onTickEntity(entity: Entity) {
         cachedCfgs.clear()
-        with(spawnCmps[entity]) {
+        with(entity[SpawnComponent]) {
 //            log.debug { "Entity: ${spawnCmps[entity].type} Location ${spawnCmps[entity].location}" }
             val cfg = spawnCfg(model)
             var relativeSize = size(cfg.model)
 
-            world.entity {
-                val imageCmp = add<ImageComponent> {
+            world.entity { newEntity ->
+                val imageCmp = ImageComponent().apply {
                     image = FlipImage().apply {
                         setPosition(location.x, location.y)
                         setSize(relativeSize.x, relativeSize.y)
@@ -88,12 +83,14 @@ class EntitySpawnSystem(
                     }
                     image.flipX = cfg.isFlip
                 }
+                newEntity += imageCmp
 
-                add<AnimationComponent> {
+                newEntity += AnimationComponent().apply {
                     nextAnimation(cfg.model, AnimationType.IDLE)
                 }
 
                 val physicCmp = physicCmpFromImage(
+                    newEntity,
                     phWorld,
                     imageCmp.image,
                     cfg.bodyType
@@ -123,13 +120,13 @@ class EntitySpawnSystem(
                 }
 
                 if (cfg.speedScaling > 0f) {
-                    add<MoveComponent> {
+                    newEntity += MoveComponent().apply {
                         speed = DEFAULT_SPEED * cfg.speedScaling
                     }
                 }
 
                 if (cfg.canAttack) {
-                    add<AttackComponent> {
+                    newEntity += AttackComponent().apply {
                         maxCooldown = cfg.attackDelay
                         damage = (DEFAULT_ATTACK_DAMAGE * cfg.attackScaling).roundToInt()
                         extraRange = cfg.attackExtraRange
@@ -137,7 +134,7 @@ class EntitySpawnSystem(
                 }
 
                 if (cfg.lifeScaling > 0f) {
-                    add<LifeComponent> {
+                    newEntity += LifeComponent().apply {
                         max = DEFAULT_LIFE * cfg.lifeScaling
                         life = max
                     }
@@ -145,25 +142,25 @@ class EntitySpawnSystem(
 
                 when (cfg.entityType) {
                     EntityType.PLAYER -> {
-                        add<PlayerComponent>()
-                        add<ExperienceComponent>() {
+                        newEntity += PlayerComponent()
+                        newEntity += ExperienceComponent().apply {
                             experienceToNextWave = 50f
                         }
-                        add<WaveComponent>()
-                        add<StateComponent>() {
+                        newEntity += WaveComponent()
+                        newEntity += StateComponent().apply {
                             stateMachine.globalState = DefaultGlobalState.CHECK_ALIVE
                         }
                     }
 
                     EntityType.ENEMY -> {
-                        add<EnemyComponent>()
-                        add<ExperienceComponent>() {
+                        newEntity += EnemyComponent()
+                        newEntity += ExperienceComponent().apply {
                             dropExperience = cfg.dropExperience
                         }
                     }
 
                     EntityType.WEAPON -> {
-                        add<WeaponComponent>()
+                        newEntity += WeaponComponent()
                     }
 
                     EntityType.SPAWN -> {
@@ -175,16 +172,16 @@ class EntitySpawnSystem(
 
 
                 if (cfg.lootable) {
-                    add<LootComponent>()
+                    newEntity += LootComponent()
                 }
 
                 if (cfg.bodyType != StaticBody) {
                     // such entities will create/remove collision objects
-                    add<CollisionComponent>()
+                    newEntity += CollisionComponent()
                 }
 
                 if (cfg.aiTreePath.isNotBlank()) {
-                    add<AiComponent> {
+                    newEntity += AiComponent().apply {
                         treePath = cfg.aiTreePath
                     }
                     physicCmp.body.box(1f, 1f) {
@@ -211,7 +208,7 @@ class EntitySpawnSystem(
                 )
             }
         }
-        world.remove(entity)
+        world -= entity
     }
 
 
@@ -234,11 +231,14 @@ class EntitySpawnSystem(
             life = 12f
             playerMoveSpeed = 3.6f
         } else {
-            val wave = waveCmps[playerEntities.first()].wave.toFloat() + 1f
-            attack = (wave / 0.3f).pow(1.1f)
-            life = (wave / 0.3f).pow(1.1f)
-            dropExperience = (wave / 0.3f).pow(1.1f)
-            playerMoveSpeed = moveCmps[playerEntities.first()].speed
+            with(world) {
+                val player = playerEntities.first()
+                val wave = player[WaveComponent].wave.toFloat() + 1f
+                attack = (wave / 0.3f).pow(1.1f)
+                life = (wave / 0.3f).pow(1.1f)
+                dropExperience = (wave / 0.3f).pow(1.1f)
+                playerMoveSpeed = player[MoveComponent].speed
+            }
         }
 
         val attackRange = 3f
@@ -628,8 +628,8 @@ class EntitySpawnSystem(
                 entityLayer.objects.forEach { mapObj ->
                     val typeStr = mapObj.name
                         ?: gdxError("MapObject ${mapObj.id} of 'entities' layer does not have a NAME! MapChangeEvent")
-                    world.entity {
-                        add<SpawnComponent> {
+                    world.entity { newEntity ->
+                        newEntity += SpawnComponent().apply {
                             this.model = enumValueOf<AnimationModel>(typeStr)
                             this.location.set(mapObj.x * UNIT_SCALE, mapObj.y * UNIT_SCALE)
                         }
@@ -639,8 +639,8 @@ class EntitySpawnSystem(
             }
 
             is EntityAddEvent -> {
-                world.entity {
-                    add<SpawnComponent> {
+                world.entity { newEntity ->
+                    newEntity += SpawnComponent().apply {
                         this.model = event.model
                         this.location.set(event.location.x, event.location.y)
                     }
@@ -648,16 +648,19 @@ class EntitySpawnSystem(
             }
 
             is EnemyAddEvent -> {
-                val physicCmp = physicCmps[playerEntities.first()]
-                val xPlayer = physicCmp.body.position.x
-                val yPlayer = physicCmp.body.position.y
-                world.entity {
-                    add<SpawnComponent> {
-                        this.model = event.model
-                        this.location.set(
-                            randomExcluded(2f, MAP_SIZE.x - 2f, xPlayer - 10f, xPlayer + 10f),
-                            randomExcluded(2f, MAP_SIZE.y - 2f, yPlayer - 10f, yPlayer + 10f),
-                        )
+                with(world) {
+                    val player = playerEntities.first()
+                    val physicCmp = player[PhysicComponent]
+                    val xPlayer = physicCmp.body.position.x
+                    val yPlayer = physicCmp.body.position.y
+                    world.entity { newEntity ->
+                        newEntity += SpawnComponent().apply {
+                            this.model = event.model
+                            this.location.set(
+                                randomExcluded(2f, MAP_SIZE.x - 2f, xPlayer - 10f, xPlayer + 10f),
+                                randomExcluded(2f, MAP_SIZE.y - 2f, yPlayer - 10f, yPlayer + 10f),
+                            )
+                        }
                     }
                 }
             }

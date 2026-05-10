@@ -14,7 +14,8 @@ import com.goldev.skipwave.SkipWave
 import com.goldev.skipwave.SkipWave.Companion.ANIMATION_DURATION
 import com.goldev.skipwave.input.PlayerTouchInputProcessor
 import com.goldev.skipwave.preferences.saveGamePreferences
-import com.github.quillraven.fleks.world
+import com.goldev.skipwave.ui.view.PauseView
+import com.github.quillraven.fleks.configureWorld
 import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.input.PlayerKeyboardInputProcessor
@@ -67,7 +68,7 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
     /**
      *  It's a property with the entities world.
      */
-    private val eWorld = world {
+    private val eWorld = configureWorld {
 
         /**
          * Add into the system common variables.
@@ -82,44 +83,33 @@ class GameScreen(private val game: SkipWave) : KtxScreen, EventListener {
         }
 
         /**
-         * Add into the system the listening components
-         */
-        components {
-            add<ImageComponent.Companion.ImageComponentListener>()
-            add<PhysicComponent.Companion.PhysicComponentListener>()
-            add<FloatingTextComponent.Companion.FloatingTextComponentListener>()
-            add<StateComponent.Companion.StateComponentListener>()
-            add<AiComponent.Companion.AiComponentListener>()
-        }
-
-        /**
          * Add into the system the listening systems that the game need.
          */
         systems {
-            add<EntitySpawnSystem>()
-            add<CollisionSpawnSystem>()
-            add<CollisionDespawnSystem>()
-            add<MoveSystem>()
-            add<AttackSystem>()
-            add<LootSystem>()
-            add<ExperienceSystem>()
-            add<DeadSystem>()
-            add<LifeSystem>()
-            add<WaveSystem>()
-            add<MapSystem>()
-            add<SkillUpgradeSystem>()
-            add<EnemySystem>()
-            add<PhysicSystem>()
-            add<AnimationSystem>()
-            add<StateSystem>()
-            add<AiSystem>()
-            add<CameraSystem>()
-            add<FloatingTextSystem>()
-            add<RenderSystem>()
-            add<VibrateSystem>()
-            add<AudioSystem>()
-            add<ShakeSystem>()
-            add<DebugSystem>()
+            add(EntitySpawnSystem())
+            add(CollisionSpawnSystem())
+            add(CollisionDespawnSystem())
+            add(MoveSystem())
+            add(AttackSystem())
+            add(LootSystem())
+            add(ExperienceSystem())
+            add(DeadSystem())
+            add(LifeSystem())
+            add(WaveSystem())
+            add(MapSystem())
+            add(SkillUpgradeSystem())
+            add(EnemySystem())
+            add(PhysicSystem())
+            add(AnimationSystem())
+            add(StateSystem())
+            add(AiSystem())
+            add(CameraSystem())
+            add(FloatingTextSystem())
+            add(RenderSystem())
+            add(VibrateSystem())
+            add(AudioSystem())
+            add(ShakeSystem())
+            add(DebugSystem())
         }
     }
 

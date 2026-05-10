@@ -6,23 +6,22 @@ import com.goldev.skipwave.component.AnimationComponent
 import com.goldev.skipwave.component.LootComponent
 import com.goldev.skipwave.event.EntityLootEvent
 import com.goldev.skipwave.event.fire
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 
 /**
  * System that takes care of the loot in the game.
  *
- * @property lootCmps Entities with LootComponent in the world.
- * @property animationCmps Entities with AnimationComponent in the world.
  * @property gameStage The stage that the game is being rendered on.
  * @constructor Create empty Loot system
  */
-@AllOf([LootComponent::class])
 class LootSystem(
-    private val lootCmps: ComponentMapper<LootComponent>,
-    private val animationCmps: ComponentMapper<AnimationComponent>,
-    @Qualifier("gameStage") private val gameStage: Stage,
-
-    ) : IteratingSystem() {
+    private val gameStage: Stage = inject("gameStage"),
+) : IteratingSystem(
+    family = family { all(LootComponent) }
+) {
 
     /**
      * If the entity has a loot component, and the loot component has an interact entity, then fire a
@@ -31,14 +30,14 @@ class LootSystem(
      * @param entity The entity that is being ticked.
      */
     override fun onTickEntity(entity: Entity) {
-        with(lootCmps[entity]) {
+        with(entity[LootComponent]) {
             if (interactEntity == null) {
                 return
             }
 
-            gameStage.fire(EntityLootEvent(animationCmps[entity].model))
-            configureEntity(entity) { lootCmps.remove(it) }
-            animationCmps.getOrNull(entity)?.let { aniCmp ->
+            gameStage.fire(EntityLootEvent(entity[AnimationComponent].model))
+            entity.configure { it -= LootComponent }
+            entity.getOrNull(AnimationComponent)?.let { aniCmp ->
                 aniCmp.nextAnimation(com.goldev.skipwave.component.AnimationType.OPEN)
                 aniCmp.playMode = Animation.PlayMode.NORMAL
             }

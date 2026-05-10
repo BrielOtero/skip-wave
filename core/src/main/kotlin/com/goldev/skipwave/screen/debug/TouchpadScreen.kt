@@ -11,7 +11,7 @@ import com.goldev.skipwave.ui.model.TouchpadModel
 import com.goldev.skipwave.ui.view.TouchpadView
 import com.goldev.skipwave.ui.view.touchpadView
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.world
+import com.github.quillraven.fleks.configureWorld
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.scene2d.actors
@@ -27,7 +27,7 @@ class TouchpadScreen : KtxScreen {
     /**
      *  Property with world for entities.
      */
-    private val eWorld = world { }
+    private val eWorld = configureWorld { }
     /**
      *  Property that contains player entity.
      */
@@ -38,9 +38,9 @@ class TouchpadScreen : KtxScreen {
     private val model = TouchpadModel(eWorld, stage)
 
     init {
-        playerEntity = eWorld.entity {
-            add<PlayerComponent>()
-            add<MoveComponent>()
+        playerEntity = eWorld.entity { newEntity ->
+            newEntity += PlayerComponent()
+            newEntity += MoveComponent()
         }
     }
 

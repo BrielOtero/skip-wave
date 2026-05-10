@@ -5,9 +5,9 @@ import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.ai.btree.utils.BehaviorTreeParser
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.ai.AiEntity
-import com.github.quillraven.fleks.ComponentListener
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 
 /**
@@ -20,7 +20,7 @@ import com.github.quillraven.fleks.World
 data class AiComponent(
     val nearbyEntitites: MutableSet<Entity> = mutableSetOf(),
     var treePath: String = "",
-) {
+) : Component<AiComponent> {
     /**
      * It is a variable that is not initialized with Behavior Tree of AiEntity.
      */
@@ -31,48 +31,28 @@ data class AiComponent(
      */
     var target: Entity = NO_TARGET
 
-    companion object {
-        val NO_TARGET = Entity(-1)
+    /**
+     * When this component is added to an entity, the behavior tree file is parsed and the result is
+     * stored in the component.
+     *
+     * @param entity The entity that the component was added to.
+     */
+    override fun World.onAdd(entity: Entity) {
+        val gameStage = inject<Stage>("gameStage")
+        behaviorTree = treeParser.parse(
+            Gdx.files.internal(treePath),
+            AiEntity(entity, this, gameStage)
+        )
+    }
+
+    override fun type() = AiComponent
+
+    companion object : ComponentType<AiComponent>() {
+        val NO_TARGET = Entity.NONE
 
         /**
-         *  It listens for the addition of an AiComponent to an Entity, and when it finds one,
-         *  it parses the behavior tree file and stores the result in the AiComponent.
-         *
-         *  @property world The world that the entity belongs to.
-         *  @property  gameStage The stage that the game is being rendered on.
-         *  @constructor Creates an AiComponentListener
+         *  Creating a BehaviorTreeParser object.
          */
-        class AiComponentListener(
-            private val world: World,
-            @Qualifier("gameStage") private val gameStage: Stage,
-        ) : ComponentListener<AiComponent> {
-
-            /**
-             *  Creating a BehaviorTreeParser object.
-             */
-            private val treeParser = BehaviorTreeParser<AiEntity>()
-
-            /**
-             * When a component is added to an entity, parse the behavior tree file and assign it to
-             * the component
-             *
-             * @param entity The entity that the component was added to.
-             * @param component The component that was added to the entity
-             */
-            override fun onComponentAdded(entity: Entity, component: AiComponent) {
-                component.behaviorTree = treeParser.parse(
-                    Gdx.files.internal(component.treePath),
-                    AiEntity(entity, world, gameStage)
-                )
-            }
-
-            /**
-             * onComponentRemoved is called when a component is removed from an entity
-             *
-             * @param entity The entity that the component was removed from.
-             * @param component The component that was removed from the entity.
-             */
-            override fun onComponentRemoved(entity: Entity, component: AiComponent) = Unit
-        }
+        private val treeParser = BehaviorTreeParser<AiEntity>()
     }
 }

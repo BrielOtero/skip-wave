@@ -1,5 +1,8 @@
 package com.goldev.skipwave.component
 
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+
 /**
  * LifeComponent is a data class that holds the life data for entity
  *
@@ -14,11 +17,15 @@ data class LifeComponent(
     var max: Float = 30f,
     var regeneration: Float = 1f,
     var takeDamage: Float = 0f,
-) {
+) : Component<LifeComponent> {
     /**
      * It's a getter for isDead property.
      * @return true if entity is dead.
      */
     val isDead: Boolean
         get() = life <= 0f
+
+    override fun type() = LifeComponent
+
+    companion object : ComponentType<LifeComponent>()
 }

@@ -6,10 +6,10 @@ import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
-import com.github.quillraven.fleks.AllOf
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
-import com.github.quillraven.fleks.ComponentMapper
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.component.PhysicComponent
 import com.goldev.skipwave.component.PhysicComponent.Companion.physicCmpFromShape2D
 import com.goldev.skipwave.component.CollisionComponent
@@ -29,15 +29,13 @@ import ktx.math.vec2
  * System that takes care of the collision spawn of the game.
  *
  * @property phWorld The physic world.
- * @property physicCmps Entities with PhysicComponent in the world.
  * @constructor Create empty Collision spawn system.
  */
-@AllOf([PhysicComponent::class, CollisionComponent::class])
 class CollisionSpawnSystem(
-    private val phWorld: World,
-    private val physicCmps: ComponentMapper<PhysicComponent>,
-
-) : EventListener, IteratingSystem() {
+    private val phWorld: World = inject(),
+) : EventListener, IteratingSystem(
+    family = family { all(PhysicComponent, CollisionComponent) }
+) {
 
     /**
      *  Array of tiled layers.
@@ -78,7 +76,7 @@ class CollisionSpawnSystem(
      * @param entity The entity that is currently being processed.
      */
     override fun onTickEntity(entity: Entity) {
-        val (entityX, entityY) = physicCmps[entity].body.position
+        val (entityX, entityY) = entity[PhysicComponent].body.position
 
         tiledLayers.forEach { layer ->
             layer.forEachCell(entityX.toInt(), entityY.toInt(), SPAWN_AREA_SIZE) { cell, x, y ->
@@ -92,9 +90,9 @@ class CollisionSpawnSystem(
 
                 processedCells.add(cell)
                 cell.tile.objects.forEach { mapObject ->
-                    world.entity {
-                        physicCmpFromShape2D(phWorld, x, y, mapObject.shape)
-                        add<TiledComponent> {
+                    world.entity { newEntity ->
+                        physicCmpFromShape2D(newEntity, phWorld, x, y, mapObject.shape)
+                        newEntity += TiledComponent().apply {
                             this.cell = cell
                             nearbyEntities.add(entity)
                         }
@@ -116,11 +114,11 @@ class CollisionSpawnSystem(
                 event.map.layers.getByType(TiledMapTileLayer::class.java, tiledLayers)
 
                 // world boundary chain shape to restrict movement within tiled map
-                world.entity {
+                world.entity { newEntity ->
                     val w = event.map.width.toFloat()
                     val h = event.map.height.toFloat()
 
-                    add<PhysicComponent> {
+                    newEntity += PhysicComponent().apply {
                         body = phWorld.body(StaticBody) {
                             position.set(0f, 0f)
                             fixedRotation = true

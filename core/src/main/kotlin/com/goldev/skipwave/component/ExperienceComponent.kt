@@ -1,5 +1,8 @@
 package com.goldev.skipwave.component
 
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+
 /**
  * ExperienceComponent is a data class that holds the data for experience.
  *
@@ -12,5 +15,8 @@ data class ExperienceComponent(
     var experience: Float = 0f,
     var dropExperience: Float = 0f,
     var experienceToNextWave: Float = 0f,
-) {
+) : Component<ExperienceComponent> {
+    override fun type() = ExperienceComponent
+
+    companion object : ComponentType<ExperienceComponent>()
 }

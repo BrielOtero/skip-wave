@@ -1,5 +1,8 @@
 package com.goldev.skipwave.component
 
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+
 /**
  * WaveComponent is a data class that holds the data of wave.
  *
@@ -8,5 +11,8 @@ package com.goldev.skipwave.component
  */
 data class WaveComponent(
     var wave: Int = 0
-) {
+) : Component<WaveComponent> {
+    override fun type() = WaveComponent
+
+    companion object : ComponentType<WaveComponent>()
 }

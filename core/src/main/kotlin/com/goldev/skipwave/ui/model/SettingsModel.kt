@@ -10,7 +10,6 @@ import com.goldev.skipwave.event.fire
 import com.goldev.skipwave.preferences.GamePreferences
 import com.goldev.skipwave.ui.view.MainMenuView
 import com.goldev.skipwave.ui.view.SettingsView
-import com.github.quillraven.fleks.Qualifier
 import ktx.log.logger
 
 /**
@@ -25,8 +24,8 @@ import ktx.log.logger
 class SettingsModel(
     val bundle: I18NBundle,
     val gamePreferences: GamePreferences,
-    @Qualifier("gameStage") val gameStage: Stage,
-    @Qualifier("uiStage") val uiStage: Stage,
+    val gameStage: Stage,
+    val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
     /**

@@ -7,9 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.ExperienceComponent
 import com.goldev.skipwave.component.WaveComponent
 import com.goldev.skipwave.event.*
-import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.IntervalSystem
-import com.github.quillraven.fleks.Qualifier
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.event.EntityExperienceEvent
 import com.goldev.skipwave.event.NewMapEvent
 import com.goldev.skipwave.event.fire
@@ -19,16 +18,11 @@ import ktx.log.logger
  * System that takes care of the map change in the game.
  *
  * @property gameStage The stage that the game is being rendered on.
- * @property waveCmps Entities with WaveComponent in the world.
- * @property experienceCmps Entities with ExperienceComponent in the world.
  * @constructor Create empty Map system
  */
 class MapSystem(
-    @Qualifier("gameStage") private val gameStage: Stage,
-    private val waveCmps: ComponentMapper<WaveComponent>,
-    private val experienceCmps: ComponentMapper<ExperienceComponent>,
-
-    ) : IntervalSystem(), EventListener {
+    private val gameStage: Stage = inject("gameStage"),
+) : IntervalSystem(), EventListener {
 
     /**
      *  A list of all MAPS.
@@ -57,14 +51,16 @@ class MapSystem(
         when (event) {
             is EntityExperienceEvent -> {
 
-                val waveCmp = waveCmps[event.entity]
-                val experienceCmp = experienceCmps[event.entity]
+                with(world) {
+                    val waveCmp = event.entity[WaveComponent]
+                    val experienceCmp = event.entity[ExperienceComponent]
 
-                if ((waveCmps[event.entity].wave % 5 == 0) && experienceCmp.experience >= (experienceCmp.experienceToNextWave) / 2) {
-                    if (waveCmp.wave != lastWaveChange) {
-                        gameStage.fire(NewMapEvent(maps.shuffled()[0].path))
-                        log.debug { "MAP CHANGE ON ${waveCmp.wave} with ${experienceCmp.experience} exp" }
-                        lastWaveChange = waveCmp.wave
+                    if ((waveCmp.wave % 5 == 0) && experienceCmp.experience >= (experienceCmp.experienceToNextWave) / 2) {
+                        if (waveCmp.wave != lastWaveChange) {
+                            gameStage.fire(NewMapEvent(maps.shuffled()[0].path))
+                            log.debug { "MAP CHANGE ON ${waveCmp.wave} with ${experienceCmp.experience} exp" }
+                            lastWaveChange = waveCmp.wave
+                        }
                     }
                 }
 

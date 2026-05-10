@@ -8,9 +8,11 @@ import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.goldev.skipwave.SkipWave.Companion.UNIT_SCALE
 import com.goldev.skipwave.system.CollisionSpawnSystem.Companion.SPAWN_AREA_SIZE
-import com.github.quillraven.fleks.ComponentListener
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.EntityCreateCfg
+import com.github.quillraven.fleks.EntityCreateContext
+import com.github.quillraven.fleks.World as FleksWorld
 import ktx.app.gdxError
 import ktx.box2d.*
 import ktx.math.vec2
@@ -18,7 +20,7 @@ import ktx.math.vec2
 /**
  *  It's a component that holds a reference to a Box2D body
  */
-class PhysicComponent {
+class PhysicComponent : Component<PhysicComponent> {
     /**
      *  It's a vector that holds the previous position of the body.
      */
@@ -44,7 +46,30 @@ class PhysicComponent {
      */
     lateinit var body: Body
 
-    companion object {
+    /**
+     * When a PhysicComponent is added to an Entity, set the body's userData to the Entity.
+     *
+     * @param entity The entity that the component was added to.
+     */
+    override fun FleksWorld.onAdd(entity: Entity) {
+        body.userData = entity
+    }
+
+    /**
+     * When a PhysicComponent is removed from an Entity, destroy the Body and set its userData
+     * to null.
+     *
+     * @param entity The entity that the component was removed from.
+     */
+    override fun FleksWorld.onRemove(entity: Entity) {
+        val phWorld = body.world
+        phWorld.destroyBody(body)
+        body.userData = null
+    }
+
+    override fun type() = PhysicComponent
+
+    companion object : ComponentType<PhysicComponent>() {
         /**
          *  It's a vector that holds the offset of the body.
          */
@@ -58,7 +83,8 @@ class PhysicComponent {
          *  @param y The y position
          *  @param shape The shape for entity
          */
-        fun EntityCreateCfg.physicCmpFromShape2D(
+        fun EntityCreateContext.physicCmpFromShape2D(
+            entity: Entity,
             world: World,
             x: Int,
             y: Int,
@@ -71,7 +97,7 @@ class PhysicComponent {
                     val bodyW = shape.width * UNIT_SCALE
                     val bodyH = shape.height * UNIT_SCALE
 
-                    return add {
+                    val cmp = PhysicComponent().apply {
                         body = world.body(BodyType.StaticBody) {
                             position.set(bodyX, bodyY)
                             fixedRotation = true
@@ -89,6 +115,8 @@ class PhysicComponent {
                             }
                         }
                     }
+                    entity += cmp
+                    return cmp
                 }
 
                 else -> gdxError("Shape $shape is not supported!")
@@ -103,7 +131,8 @@ class PhysicComponent {
          *  @param bodyType The bodyType of the entity
          *  @param fixtureAction The fixtureAction of the entity
          */
-        fun EntityCreateCfg.physicCmpFromImage(
+        fun EntityCreateContext.physicCmpFromImage(
+            entity: Entity,
             world: World,
             image: Image,
             bodyType: BodyType,
@@ -114,44 +143,15 @@ class PhysicComponent {
             val w = image.width
             val h = image.height
 
-            return add {
-                body = world.body(bodyType) {
-                    position.set(x + w * 0.5f, y + h * 0.5f)
-                    fixedRotation = true
-                    allowSleep = false
-                    this.fixtureAction(this@add, w, h)
-                }
+            val cmp = PhysicComponent()
+            cmp.body = world.body(bodyType) {
+                position.set(x + w * 0.5f, y + h * 0.5f)
+                fixedRotation = true
+                allowSleep = false
+                this.fixtureAction(cmp, w, h)
             }
-        }
-
-        /**
-         * When a PhysicComponent is added to an Entity, set the body's userData to the Entity.
-         */
-        class PhysicComponentListener : ComponentListener<PhysicComponent> {
-            /**
-             * When a component is added to an entity, set the user data of the component's body to the
-             * entity
-             *
-             * @param entity The entity that the component was added to.
-             * @param component The component that was added to the entity
-             */
-            override fun onComponentAdded(entity: Entity, component: PhysicComponent) {
-                component.body.userData = entity
-            }
-
-            /**
-             * When a PhysicComponent is removed from an Entity, destroy the Body and set its userData
-             * to null.
-             *
-             * @param entity The entity that the component was removed from.
-             * @param component The component that was removed from the entity.
-             */
-            override fun onComponentRemoved(entity: Entity, component: PhysicComponent) {
-                val body = component.body
-                body.world.destroyBody(body)
-                body.userData = null
-            }
-
+            entity += cmp
+            return cmp
         }
     }
 }

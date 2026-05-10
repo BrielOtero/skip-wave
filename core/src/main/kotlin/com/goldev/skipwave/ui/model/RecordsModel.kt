@@ -12,8 +12,6 @@ import com.goldev.skipwave.ui.view.GameView
 import com.goldev.skipwave.ui.view.RecordsView
 import com.goldev.skipwave.ui.view.SkillUpgradeView
 import com.goldev.skipwave.ui.view.TouchpadView
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import com.goldev.skipwave.event.GamePauseEvent
 import com.goldev.skipwave.event.PlayerDeathEvent
@@ -24,7 +22,7 @@ import ktx.log.logger
 /**
  * The model of the Records
  *
- * @param world The entities world.
+ * @property world The entities world.
  * @property bundle The bundle with text to show in the UI.
  * @property gamePreferences The preferences of the game.
  * @property gameStage The stage that the game is being rendered on.
@@ -33,17 +31,12 @@ import ktx.log.logger
  *
  */
 class RecordsModel(
-    world: World,
+    private val world: World,
     val bundle: I18NBundle,
     val gamePreferences: GamePreferences,
-    @Qualifier("gameStage") val gameStage: Stage,
-    @Qualifier("uiStage") val uiStage: Stage,
+    val gameStage: Stage,
+    val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
-
-    /**
-     *  Component mapper with the entities with WaveComponent
-     */
-    private val waveCmps: ComponentMapper<WaveComponent> = world.mapper()
 
     /**
      *  Notifiable property with new record.
@@ -76,7 +69,7 @@ class RecordsModel(
             is PlayerDeathEvent -> {
                 log.debug { "SHOW RECORDS" }
 
-                val tempReachWave = waveCmps[event.entity].wave
+                val tempReachWave = with(world) { event.entity[WaveComponent].wave }
                 val tempRecordWave = gamePreferences.game.wave
                 isNewRecord = tempReachWave > tempRecordWave
                 if (isNewRecord) {

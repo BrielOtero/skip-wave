@@ -6,8 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.*
-import com.github.quillraven.fleks.ComponentMapper
-import com.github.quillraven.fleks.Qualifier
 import com.github.quillraven.fleks.World
 import com.goldev.skipwave.component.ExperienceComponent
 import com.goldev.skipwave.component.LifeComponent
@@ -22,7 +20,7 @@ import ktx.log.logger
 /**
  * The model of the Game
  *
- * @param world The entities world.
+ * @property world The entities world.
  * @property bundle The bundle with text to show in the UI.
  * @property gameStage The stage that the game is being rendered on.
  * @property uiStage The stage that the UI is being rendered on.
@@ -30,31 +28,11 @@ import ktx.log.logger
  *
  */
 class GameModel(
-    world: World,
+    private val world: World,
     val bundle: I18NBundle,
-    @Qualifier("gameStage") val gameStage: Stage,
-    @Qualifier("uiStage") val uiStage: Stage,
+    val gameStage: Stage,
+    val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
-
-    /**
-     *  Component mapper with the entities with PlayerComponent
-     */
-    private val playerCmps: ComponentMapper<PlayerComponent> = world.mapper()
-
-    /**
-     *  Component mapper with the entities with lifeComponent
-     */
-    private val lifeCmps: ComponentMapper<LifeComponent> = world.mapper()
-
-    /**
-     *  Component mapper with the entities with ExperienceComponent
-     */
-    private val experienceCmps: ComponentMapper<ExperienceComponent> = world.mapper()
-
-    /**
-     *  Component mapper with the entities with WaveComponent
-     */
-    private val waveCmps: ComponentMapper<WaveComponent> = world.mapper()
 
     /**
      *  Notifiable property with the player life.
@@ -115,37 +93,42 @@ class GameModel(
     override fun handle(event: Event): Boolean {
         when (event) {
             is EntityDamageEvent -> {
-                val isPlayer = event.entity in playerCmps
-                val lifeCmp = lifeCmps[event.entity]
-                if (isPlayer) {
-                    playerLife = lifeCmp.life
-                    playerLifeMax = lifeCmp.max
-                    playerLifeBar = lifeCmp.life / lifeCmp.max
+                with(world) {
+                    val isPlayer = event.entity has PlayerComponent
+                    val lifeCmp = event.entity[LifeComponent]
+                    if (isPlayer) {
+                        playerLife = lifeCmp.life
+                        playerLifeMax = lifeCmp.max
+                        playerLifeBar = lifeCmp.life / lifeCmp.max
+                    }
                 }
             }
 
             is EntityExperienceEvent -> {
-                val isPlayer = event.entity in playerCmps
-                val experienceCmp = experienceCmps[event.entity]
-                if (isPlayer) {
-                    playerExperience = experienceCmp.experience - playerExperienceTempValue
-                    playerExperienceBar = playerExperience / playerExperienceToNextWave
+                with(world) {
+                    val isPlayer = event.entity has PlayerComponent
+                    val experienceCmp = event.entity[ExperienceComponent]
+                    if (isPlayer) {
+                        playerExperience = experienceCmp.experience - playerExperienceTempValue
+                        playerExperienceBar = playerExperience / playerExperienceToNextWave
+                    }
                 }
             }
 
             is EntityLevelEvent -> {
-                val isPlayer = event.entity in playerCmps
-                val experienceCmp = experienceCmps[event.entity]
-                val levelCmp = waveCmps[event.entity]
-                if (isPlayer) {
-                    playerExperienceToNextWave =
-                        experienceCmp.experienceToNextWave - experienceCmp.experience
-                    playerExperienceTempValue = experienceCmp.experience
-                    playerExperience = 0f
-                    playerWave = levelCmp.wave
-                    playerExperienceBar = playerExperience / playerExperienceToNextWave
+                with(world) {
+                    val isPlayer = event.entity has PlayerComponent
+                    val experienceCmp = event.entity[ExperienceComponent]
+                    val levelCmp = event.entity[WaveComponent]
+                    if (isPlayer) {
+                        playerExperienceToNextWave =
+                            experienceCmp.experienceToNextWave - experienceCmp.experience
+                        playerExperienceTempValue = experienceCmp.experience
+                        playerExperience = 0f
+                        playerWave = levelCmp.wave
+                        playerExperienceBar = playerExperience / playerExperienceToNextWave
+                    }
                 }
-
             }
 
             is EntityLootEvent -> {

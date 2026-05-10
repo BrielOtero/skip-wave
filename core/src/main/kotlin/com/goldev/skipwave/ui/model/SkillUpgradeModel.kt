@@ -8,9 +8,6 @@ import com.goldev.skipwave.system.SkillUpgradeSystem.*
 import com.goldev.skipwave.event.*
 import com.goldev.skipwave.ui.view.GameView
 import com.goldev.skipwave.ui.view.TouchpadView
-import com.github.quillraven.fleks.Qualifier
-import com.github.quillraven.fleks.World
-import com.goldev.skipwave.event.*
 import ktx.log.logger
 
 /**
@@ -23,8 +20,8 @@ import ktx.log.logger
  */
 class SkillUpgradeModel(
     val bundle: I18NBundle,
-    @Qualifier("gameStage") val gameStage: Stage,
-    @Qualifier("uiStage") val uiStage: Stage,
+    val gameStage: Stage,
+    val uiStage: Stage,
 ) : PropertyChangeSource(), EventListener {
 
     /**

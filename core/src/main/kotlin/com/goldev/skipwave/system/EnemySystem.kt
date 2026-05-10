@@ -4,9 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.goldev.skipwave.component.*
 import com.goldev.skipwave.event.EnemyAddEvent
 import com.goldev.skipwave.event.fire
-import com.github.quillraven.fleks.ComponentMapper
 import com.github.quillraven.fleks.IntervalSystem
-import com.github.quillraven.fleks.Qualifier
+import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.goldev.skipwave.component.AnimationModel
 import com.goldev.skipwave.component.EnemyComponent
 import com.goldev.skipwave.component.PlayerComponent
@@ -19,26 +19,23 @@ import ktx.log.logger
  * System that takes care of the enemies in the game.
  *
  * @property gameStage The stage that the game is being rendered on.
- * @property waveCmps Entities with WaveComponent in the world.
  * @property gamePreferences The preferences of the game.
  * @constructor Create empty Enemy system
  */
 class EnemySystem(
-    @Qualifier("gameStage") private var gameStage: Stage,
-    private var waveCmps: ComponentMapper<WaveComponent>,
-    private val gamePreferences: GamePreferences
-
+    private var gameStage: Stage = inject("gameStage"),
+    private val gamePreferences: GamePreferences = inject(),
 ) : IntervalSystem() {
 
     /**
      *  Variable with all the entities with the EnemyComponent.
      */
-    private val enemyEntities = world.family(allOf = arrayOf(EnemyComponent::class))
+    private val enemyEntities = world.family { all(EnemyComponent) }
 
     /**
      * Variable with all the entities with the PlayerComponent.
      */
-    private val playerEntities = world.family(allOf = arrayOf(PlayerComponent::class))
+    private val playerEntities = world.family { all(PlayerComponent) }
 
     /**
      *  It's a variable that stores the last level that the player was.
@@ -71,7 +68,7 @@ class EnemySystem(
      * Spawn new enemies when they dead.
      */
     override fun onTick() {
-        val currentWave = waveCmps[playerEntities.first()].wave
+        val currentWave = with(world) { playerEntities.first()[WaveComponent].wave }
         log.debug { " ENEMY AMOUNT ${ENEMY_AMOUNT}" }
 
         //AMOUNT ENEMIES

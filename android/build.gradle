@@ -2,10 +2,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.gradle.api.JavaVersion
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 
 android {
-	compileSdk 36
+	compileSdk 37
 	sourceSets {
 		main {
 			manifest.srcFile 'AndroidManifest.xml'
@@ -17,44 +16,51 @@ android {
 			jniLibs.srcDirs = ['libs']
 		}
 	}
-	packagingOptions {
-		// Preventing from license violations (more or less):
-		pickFirst 'META-INF/LICENSE.txt'
-		pickFirst 'META-INF/LICENSE'
-		pickFirst 'META-INF/license.txt'
-		pickFirst 'META-INF/LGPL2.1'
-		pickFirst 'META-INF/NOTICE.txt'
-		pickFirst 'META-INF/NOTICE'
-		pickFirst 'META-INF/notice.txt'
-		// Excluding unnecessary meta-data:
-		exclude 'META-INF/robovm/ios/robovm.xml'
-		exclude 'META-INF/DEPENDENCIES.txt'
-		exclude 'META-INF/DEPENDENCIES'
-		exclude 'META-INF/dependencies.txt'
+	packaging {
+		resources {
+			pickFirsts += [
+				'META-INF/LICENSE.txt',
+				'META-INF/LICENSE',
+				'META-INF/license.txt',
+				'META-INF/LGPL2.1',
+				'META-INF/NOTICE.txt',
+				'META-INF/NOTICE',
+				'META-INF/notice.txt',
+			]
+			excludes += [
+				'META-INF/robovm/ios/robovm.xml',
+				'META-INF/DEPENDENCIES.txt',
+				'META-INF/DEPENDENCIES',
+				'META-INF/dependencies.txt',
+			]
+		}
+		jniLibs {
+			useLegacyPackaging = false
+		}
 	}
 	defaultConfig {
 		applicationId 'com.goldev.skipwave'
 		namespace 'com.goldev.skipwave'
-		minSdkVersion 19
-		targetSdkVersion 36
-		versionCode 11
-		versionName "1.9"
+		minSdkVersion 21
+		targetSdkVersion 37
+		versionCode 13
+		versionName "2.1"
 		multiDexEnabled true
 	}
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
+		sourceCompatibility JavaVersion.VERSION_17
+		targetCompatibility JavaVersion.VERSION_17
 		coreLibraryDesugaringEnabled true
 	}
 	kotlin {
 		compilerOptions {
-			jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+			jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
 		}
 	}
 	buildTypes {
 		release {
 			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 		}
 	}
 
@@ -68,7 +74,7 @@ repositories {
 configurations { natives }
 
 dependencies {
-	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 	implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
 	implementation project(':core')
 

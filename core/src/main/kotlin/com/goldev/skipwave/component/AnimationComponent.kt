@@ -2,6 +2,8 @@ package com.goldev.skipwave.component
 
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
 
 /**
  * It's an enum class that contains all the possible animation models that can be used in the game
@@ -78,7 +80,7 @@ data class AnimationComponent(
     var model: AnimationModel = AnimationModel.UNDEFINED,
     var stateTime: Float = 0f,
     var playMode: Animation.PlayMode = Animation.PlayMode.LOOP
-) {
+) : Component<AnimationComponent> {
     /**
      *  It's a lateinit variable that is used to store the animation.
      */
@@ -118,7 +120,9 @@ data class AnimationComponent(
         nextAnimation = "${model.atlasKey}/${type.atlasKey}"
     }
 
-    companion object {
+    override fun type() = AnimationComponent
+
+    companion object : ComponentType<AnimationComponent>() {
         /**
          *  It's a constant that is used to store the value of no animation.
          */
